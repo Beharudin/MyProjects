@@ -1,0 +1,73 @@
+.contact {
+  -webkit-box-shadow: 2px 4px 10px 1px #999b9d1f;
+  box-shadow: 2px 4px 10px 1px #8c8a8978;
+  margin: 10px;
+  padding: 10px;
+  .meetUs {
+    -webkit-box-shadow: 2px 4px 10px 1px #999b9d1f;
+    box-shadow: 2px 4px 10px 1px #8c8a8978;
+    padding: 10px;
+    background-color: #2830c8b8;
+    .addresses {
+      margin: 10px;
+      margin-top: 50px;
+
+      .address {
+        color: rgb(32, 220, 32);
+        font-family: "Times New Roman", Times, serif;
+        font-size: 16px;
+        line-height: 32px;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+      }
+      .addressLists {
+        margin: 5px;
+        font-weight: 400;
+        font-style: italic;
+        padding: 7px;
+        color: cyan;
+        text-decoration: none;
+        list-style: none;
+        .meetIcon {
+          font-size: 18px;
+          font-weight: bold;
+          border-radius: 10px;
+          margin: 5px;
+          padding: 5px;
+          color: cyan;
+        }
+      }
+    }
+  }
+
+  .contactUs {
+    -webkit-box-shadow: 2px 4px 10px 1px #999b9d1f;
+    box-shadow: 2px 4px 10px 1px #8c8a8978;
+    padding: 10px;
+    background-color: rgb(7, 105, 81);
+    .contactForm {
+      margin: 10px;
+      padding: 10px;
+    }
+    .submit {
+      width: 160px;
+      background-color: rgb(180, 49, 49);
+      color: white;
+    }
+
+    .inputs {
+      border-radius: 10px;
+      height: 55px;
+      font-weight: 500px;
+      font-size: 16px;
+      margin: 10px;
+    }
+  }
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    color: rgb(244, 232, 232);
+    text-align: center;
+    border-bottom: 1px solid rgb(241, 234, 234);
+  }
+}

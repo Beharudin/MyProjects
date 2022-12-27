@@ -1,0 +1,84 @@
+.services {
+  padding: 5px;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 25px;
+  -webkit-box-shadow: 2px 4px 10px 1px #999b9d1f;
+  box-shadow: 2px 4px 10px 1px #8c8a8978;
+
+  .heading {
+    font-size: 24px;
+    color: rgb(225, 13, 194);
+    font-weight: bold;
+    font-family: "Times New Roman", Times, serif;
+    line-height: 30px;
+    align-self: center;
+  }
+  .sub-heading {
+    font-size: 14px;
+    color: skyblue;
+    font-weight: 400px;
+    font-family: "Times New Roman", Times, serif;
+    font-style: italic;
+    align-items: center;
+    margin: 10px;
+    border-bottom: 1px solid rgb(245, 245, 245);
+  }
+
+  .rows {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .serviceBox {
+      -webkit-box-shadow: 2px 4px 10px 1px #999b9d1f;
+      box-shadow: 2px 4px 10px 1px #8c8a8978;
+      overflow-x: hidden;
+      margin: 10px 0px 20px 0px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid lightgray;
+      padding: 10px;
+      margin-right: 10px;
+      .serviceTitle {
+        font-size: 22px;
+        color: rgb(35, 163, 163);
+        font-family: "Times New Roman", Times, serif;
+        margin: 5px;
+        padding: 5px;
+        cursor: pointer;
+      }
+      .serviceImage {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .serviceDesc {
+        font-family: "Times New Roman", Times, serif;
+        font-size: 13px;
+        line-height: 30px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        cursor: pointer;
+      }
+      .serviceDesc::first-letter {
+        font-size: 22px;
+        color: rgb(36, 132, 216);
+      }
+      .readBtn {
+        color: rgb(31, 193, 193);
+        border: 1px solid rgb(191, 33, 191);
+        border-radius: 10px;
+        font-size: 10px;
+        font-family: "Times New Roman", Times, serif;
+        font-style: italic;
+      }
+    }
+  }
+}
