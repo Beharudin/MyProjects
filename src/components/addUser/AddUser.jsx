@@ -1,4 +1,4 @@
-import "./addUserStyle.scss";
+import StyledDiv from "./addUserStyle.js";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -120,9 +120,11 @@ const AddUser = () => {
     return <Navigate to="/Login" replace />;
   }
   return (
+    <StyledDiv>
     <div>
       <NewUserForm />
     </div>
+     </StyledDiv>
   );
 };
 
