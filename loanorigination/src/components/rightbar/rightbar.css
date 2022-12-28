@@ -1,0 +1,51 @@
+.rightbar {
+    flex: 12;
+    height: 100%;
+  }
+  
+  .rightbarWrapper {
+    padding: 10px 10px 0 0;
+  }
+  
+  .rightbarCard {
+    z-index: 0;
+    width: 50%;
+    height: 250px;
+    background-color: #eceff1;
+    margin-top: 40px;
+    margin-left: 10px;
+    border-radius: 10px;
+}
+
+
+.card-content{
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+
+button.btn{
+  width: 70px;
+  background-color: #00aeef;
+}
+
+button.btn:hover{
+  background-color: #00aeef;
+}
+
+@media (max-width: 800px) {
+  .rightbarCard {
+    width: 90%;
+  }
+}
+
+@media (max-width: 600px) {
+  .rightbarCard {
+    width: 100%;
+  }
+}
+

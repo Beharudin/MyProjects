@@ -1,0 +1,159 @@
+.login{
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+}
+
+.loginWrapper{
+    padding: 20px;
+    display: flex;
+}
+
+.loginLeftItems{
+    margin-top: 50px;
+    margin-left: 80px;
+    height: 80vh;
+    flex: 6;
+}
+.loginLeftBoxes{
+    display: flex;
+    margin-right: 50px;
+    margin-top: 20px;
+}
+
+.loginLeftItem{
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.loginImg{
+    margin: 0;
+    width: 170px;
+    height: 70px;
+}
+
+.loginTitle{
+    margin: 0;
+    margin-left: 20px;
+    font-weight: 550;
+}
+
+.loginDesc{
+    margin: 0;
+    margin-left: 20px;
+    font-weight: 300;
+}
+
+.loginLeftBox{
+    margin-left: 20px;
+    border-radius: 10px;
+    width: 200px;
+    height: 250px;
+    align-items: center;
+    justify-items: center;
+    -webkit-box-shadow: -12px -8px 18px -7px rgba(0,0,0,0.47);
+    -moz-box-shadow: -12px -8px 18px -7px rgba(0,0,0,0.47);
+    box-shadow: -12px -8px 18px -7px rgba(0,0,0,0.47);
+    display: flex;
+    flex-direction: column;
+}
+
+.recentProfile{
+    width: 100%;
+    height: 200px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.recentUsername{
+    margin-top: auto;
+    margin-bottom: 10px;
+}
+
+.addAcctImg{
+    width: 50px;
+    height: 50px;
+    margin-top: 75px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.loginRightItems{
+    margin-top: 50px;
+    margin-left: 50px;
+    height: 80vh;
+    flex: 6;
+}
+
+.loginRightItem{
+    margin: 40px;
+    width: 400px;
+    height: 400px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gray;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    -webkit-box-shadow: -12px -8px 18px -7px rgba(0,0,0,0.47);
+    -moz-box-shadow: -12px -8px 18px -7px rgba(0,0,0,0.47);
+    box-shadow: -12px -8px 18px -7px rgba(0,0,0,0.47);
+}
+
+.loginInput{
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 300;
+    width: 90%;
+    height: 35px;
+    margin-bottom: 20px;
+    border: 1px solid;
+    border-radius: 10px;
+}
+
+.loginInput:focus{
+    outline: none;
+    font-weight: 250;
+}
+
+.loginButton{
+    color:white;
+    background-color: #1775ee;
+    height: 50px;
+    width: 95%;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 300;
+    border: 1px solid;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.spanForgotPwd{
+    height: 50px;
+    font-size: 20px;
+    font-weight: 300;
+    color: #1775ee;
+    cursor: pointer;
+}
+
+.spanForgotPwd:hover{
+    text-decoration: underline;
+}
+
+.creataAcctButton{
+    color:white;
+    background-color: #42b72a;
+    height: 50px;
+    width: 250px;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 300;
+    border: 1px solid;
+    border-radius: 10px;
+    cursor: pointer;
+}

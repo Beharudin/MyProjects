@@ -1,0 +1,7 @@
+nav a{
+    text-decoration: none;  
+}
+nav a.active{
+    text-decoration: none;
+    background-color: white;
+}
