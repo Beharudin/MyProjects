@@ -121,10 +121,10 @@ const AddUser = () => {
   }
   return (
     <StyledDiv>
-    <div>
-      <NewUserForm />
-    </div>
-     </StyledDiv>
+      <div>
+        <NewUserForm />
+      </div>
+    </StyledDiv>
   );
 };
 

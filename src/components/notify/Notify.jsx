@@ -1,4 +1,4 @@
-import "./notifyStyle.scss";
+import StyledDiv from "./notifyStyle.js";
 import { useSelector } from "react-redux";
 
 const Notify = (props) => {
@@ -7,11 +7,13 @@ const Notify = (props) => {
   const classname = `alert-simple alert-${type}`;
   console.log("cname: ", classname);
   return (
-    <div className="notify">
-      <p className={classname} style={{ textAlign: "center" }}>
-        {msg}
-      </p>
-    </div>
+    <StyledDiv>
+      <div className="notify">
+        <p className={classname} style={{ textAlign: "center" }}>
+          {msg}
+        </p>
+      </div>
+    </StyledDiv>
   );
 };
 
