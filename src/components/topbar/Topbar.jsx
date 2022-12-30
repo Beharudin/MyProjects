@@ -5,6 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
 
 const Topbar = () => {
+  const path = window.location.pathname;
   return (
     <div class="topbar">
       <nav
@@ -73,21 +74,25 @@ const Topbar = () => {
               </div>
             </li>
           </ul>
-                
-          <Link className="Link" to="/login">
-            <li className="nav-item topList">
-              <a className="nav-link topListLink">
-                Login <span className="sr-only"></span>
-              </a>
-            </li>
-          </Link>
-          <Link className="Link" to="/signup">
-            <li className="nav-item topList">
-              <a className="nav-link topListLink">
-                Signup <span className="sr-only"></span>
-              </a>
-            </li>
-          </Link>
+          {!(path === "/login" || path === "/Login") && (
+            <>
+              <Link className="Link" to="/login">
+                <li className="nav-item topList">
+                  <a className="nav-link topListLink">
+                    Login <span className="sr-only"></span>
+                  </a>
+                </li>
+              </Link>
+              <Link className="Link" to="/signup">
+                <li className="nav-item topList">
+                  <a className="nav-link topListLink">
+                    Signup <span className="sr-only"></span>
+                  </a>
+                </li>
+              </Link>
+            </>
+          )}
+
           <form className="form-inline my-2 my-lg-0">
             <input
               className="form-control mr-sm-2 searchInput"

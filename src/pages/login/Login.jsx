@@ -21,6 +21,7 @@ import SpinLoader from "../../components/spinloader/SpinLoader";
 import { Navigate } from "react-router-dom";
 import { sbActions } from "../../store/sidebar";
 import { _host, AUTH_PORT, cookies } from "../../index.js";
+import Topbar from "../../components/topbar/Topbar";
 
 function Copyright(props) {
   return (
@@ -160,6 +161,7 @@ const Login = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <Topbar />
       {token && userData.role === "admin" && <Navigate to="/admin" replace />}
       <Container
         component="main"
