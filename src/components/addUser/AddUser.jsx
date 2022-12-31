@@ -4,21 +4,35 @@ import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Login from "../../pages/login/Login";
 import { uiActions } from "../../store/ui.js";
-import { _host, AUTH_PORT } from "../../index.js";
+import { _host, BASE_CAMADPTR_URL, BASE_AUTH_URL } from "../../index.js";
+import { useState } from "react";
 
 const AddUser = () => {
   const dispatch = useDispatch();
+  const [groups, setGroups] = useState([]);
   const userData = useSelector((state) => state.auth.userData);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
+  const unameIsValid = (uname) => {
+    return true;
+  };
+
   const enterNewUser = async (data) => {
     try {
-      const url = `http://${_host}:${AUTH_PORT}/api/v1/addUser`;
+      console.log("dataaa", data);
+      //create or get db user and save id
+      const url = `${BASE_AUTH_URL}/addUser`;
       await axios.post(url, data);
+
       return { status: 200, msg: "user added successfully" };
     } catch (err) {
       console.log(err);
-      return { status: 500, msg: "something went wrong" };
+      const msg =
+        err.response?.data?.error &&
+        typeof err.response?.data?.error === "string"
+          ? err.response?.data?.error
+          : "something went wrong";
+      return { status: 500, msg };
     }
   };
 
@@ -32,8 +46,9 @@ const AddUser = () => {
       password: data.get("password"),
       cpassword: data.get("cpassword"),
       role: data.get("role"),
+      groups: data.getAll("group"),
     };
-    if (!(await Login.unameIsValid(data.email))) {
+    if (!(await unameIsValid(data.email))) {
       dispatch(uiActions.notif({ type: "danger", msg: "invalid email" }));
     } else if (data.password.length != 8 || data.password.includes("*")) {
       dispatch(uiActions.notif({ type: "danger", msg: "invalid password" }));
@@ -108,6 +123,19 @@ const AddUser = () => {
               <option>finance</option>
             </select>
             <br />
+            group
+            {groups.map((el) => (
+              <div>
+                <input
+                  type="checkbox"
+                  id={`${el.id}-id`}
+                  name="group"
+                  value={el.id}
+                />
+                <label for={`${el.id}-id`}>{el.id}</label>
+              </div>
+            ))}
+            <br />
             <br />
             <input type="submit" value="Submit" />
           </form>
@@ -116,9 +144,34 @@ const AddUser = () => {
     );
   };
 
+  if (groups.length < 1)
+    (async () => {
+      try {
+        const resp = await axios.get(`${BASE_CAMADPTR_URL}/getAllGroups`);
+        const loadedGroups = resp.data.data.filter((el) => el.type != "SYSTEM");
+        setGroups(loadedGroups);
+      } catch (error) {
+        dispatch(uiActions.stopLoad());
+        // handle error
+        const msg =
+          error?.response?.data?.error &&
+          typeof error?.response?.data?.error === "string"
+            ? error.response.data.error
+            : "check your internet connection";
+        dispatch(
+          uiActions.notif({
+            type: "danger",
+            msg,
+          })
+        );
+        console.log(error);
+      }
+    })();
+
   if (!isLoggedIn) {
     return <Navigate to="/Login" replace />;
   }
+
   return (
     <StyledDiv>
       <div>

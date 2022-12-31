@@ -20,7 +20,7 @@ import Notify from "../../components/notify/Notify";
 import SpinLoader from "../../components/spinloader/SpinLoader";
 import { Navigate } from "react-router-dom";
 import { sbActions } from "../../store/sidebar";
-import { _host, AUTH_PORT, cookies } from "../../index.js";
+import { _host, cookies, BASE_AUTH_URL } from "../../index.js";
 import Topbar from "../../components/topbar/Topbar";
 
 function Copyright(props) {
@@ -85,9 +85,7 @@ const Login = () => {
       notFirstTime = true;
       //auth is at front-end.port + 1
       axios
-        .post(
-          `http://${_host}:${AUTH_PORT}/api/v1/verifyToken?token=${token}&middleware=0`
-        )
+        .post(`${BASE_AUTH_URL}/verifyToken?token=${token}&middleware=0`)
         .then(function (response) {
           // handle success
           dispatch(uiActions.stopLoad());
@@ -109,7 +107,7 @@ const Login = () => {
   useEffect(() => {
     //auth&admin at front-end.port + 1 && zkt basic/hr/ at front-end.port + 2 && finance at front-end.port + 3
     if (notFirstTime && isPending) {
-      const url = `http://${_host}:${AUTH_PORT}/api/v1/login`;
+      const url = `${BASE_AUTH_URL}/login`;
       //auth is at front-end.port + 1
       axios
         .post(url, {

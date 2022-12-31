@@ -5,7 +5,6 @@ const StyledDiv = styled.div`
   justify-content: center;
   font-family: Roboto, Arial, sans-serif;
   font-size: 15px;
-
   form {
     border: 5px solid #f1f1f1;
   }

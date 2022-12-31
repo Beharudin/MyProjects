@@ -9,11 +9,15 @@ import "@fontsource/roboto/700.css";
 import Cookies from "universal-cookie";
 import { Provider } from "react-redux";
 import store from "./store/index.js";
+import { Axios } from "axios";
 export const cookies = new Cookies();
-
 export const _host = window.location.host.split(":")[0];
 export const _port = window.location.host.split(":")[1];
-export const AUTH_PORT = Number(_port) + 1;
+const AUTH_PORT = Number(_port) + 1;
+const CAMUNDA_ADP_PORT = Number(_port) + 2;
+
+export const BASE_AUTH_URL = `http://localhost:${AUTH_PORT}/api/v1`;
+export const BASE_CAMADPTR_URL = `http://localhost:${CAMUNDA_ADP_PORT}/api/v1`;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
