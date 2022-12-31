@@ -5,6 +5,7 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import { sbActions } from "../../store/sidebar.js";
 import AddUser from "../../components/addUser/AddUser";
 import SpinLoader from "../../components/spinloader/SpinLoader";
+import AddGroup from "../../components/addGroup/AddGroup";
 
 const AdminHome = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,10 @@ const AdminHome = () => {
     event.preventDefault();
     dispatch(sbActions.switch({ option: "addUser" }));
   };
+  const addGroupHandler = (event) => {
+    event.preventDefault();
+    dispatch(sbActions.switch({ option: "addGroup" }));
+  };
 
   if (userData.role != "admin" || !isLoggedIn) {
     return <Navigate to="/Login" replace />;
@@ -30,6 +35,12 @@ const AdminHome = () => {
         <span className="nav-text">Add user</span>
       </a>
     </li>,
+    <li className="has-subnav" key={2}>
+      <a href="#" onClick={addGroupHandler}>
+        <i className="fa fa-folder-plus"></i>
+        <span className="nav-text">Add Group</span>
+      </a>
+    </li>,
   ];
 
   return (
@@ -38,6 +49,7 @@ const AdminHome = () => {
       {isPending && <SpinLoader />}
       <Sidebar sidebarOptions={sidebarOptions} />
       {sb && sb === "addUser" && <AddUser />}
+      {sb && sb === "addGroup" && <AddGroup />}
     </div>
   );
 };
