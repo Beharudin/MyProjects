@@ -8,6 +8,7 @@ import Contact from "./pages/contact/Contact";
 import Service from "./pages/service/Service";
 import Login from "./pages/login/Login";
 import AdminHome from "./pages/adminHome/AdminHome";
+import CustomerHome from "./pages/customerHome/CustomerHome";
 
 function App() {
   return (
@@ -15,7 +16,9 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/staff/login" element={<Login />} />
         <Route path="/admin" element={<AdminHome />} />
+        <Route path="/home" element={<CustomerHome />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/service" element={<Service />} />

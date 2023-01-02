@@ -43,11 +43,7 @@ let notFirstTime = false;
 let data = {};
 
 const unameIsValid = async (uname) => {
-  if (!uname) return false;
-  const valid = await /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-    String(uname).toLowerCase()
-  );
-  return valid;
+  return true;
 };
 
 const Login = () => {
@@ -65,15 +61,12 @@ const Login = () => {
     event.preventDefault();
     data = new FormData(event.currentTarget);
     data = {
-      email: data.get("email"),
+      uname: data.get("uname"),
       password: data.get("password"),
     };
-    data.role = data.email.length === 5 ? "officer" : "driver";
     //on submit validation
-    if (!(await unameIsValid(data.email))) {
-      dispatch(uiActions.notif({ type: "danger", msg: "invalid email" }));
-      // } else if (data.password.length != 8 || data.password.includes("*")) {
-      //   dispatch(uiActions.notif({ type: "danger", msg: "invalid password" }));
+    if (!(await unameIsValid(data.uname))) {
+      dispatch(uiActions.notif({ type: "danger", msg: "invalid username" }));
     } else {
       dispatch(uiActions.notif({ type: "", msg: "" }));
       dispatch(uiActions.startLoad());
@@ -112,12 +105,14 @@ const Login = () => {
     if (notFirstTime && isPending) {
       const url = `${BASE_AUTH_URL}${path}`;
       //auth is at front-end.port + 1
+
       axios
         .post(url, {
-          uname: data.email,
+          uname: data.uname,
           password: data.password,
         })
         .then(function (response) {
+          console.log("role is ", response.data.userData.role);
           // handle success
           dispatch(uiActions.stopLoad());
           dispatch(
@@ -129,9 +124,7 @@ const Login = () => {
           cookies.set("token", response.data.accessToken, { path: "/" });
           cookies.set("role", response.data.userData.role, { path: "/" });
 
-          if (response.data.userData.role === "finance")
-            dispatch(sbActions.switch({ option: "fa_dashboard" }));
-          else dispatch(sbActions.switch({ option: "dashboard" }));
+          dispatch(sbActions.switch({ option: "dashboard" }));
         })
         .catch(function (error) {
           dispatch(uiActions.stopLoad());
@@ -164,6 +157,7 @@ const Login = () => {
     <ThemeProvider theme={theme}>
       <Topbar />
       {token && userData.role === "admin" && <Navigate to="/admin" replace />}
+      {token && userData.role === "customer" && <Navigate to="/home" replace />}
       <Container
         component="main"
         maxWidth="xs"
@@ -196,9 +190,11 @@ const Login = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="email"
-              name="email"
+              id={path === "/login" || path === "/Login" ? "mobile" : "email"}
+              label={
+                path === "/login" || path === "/Login" ? "mobile" : "email"
+              }
+              name="uname"
               autoFocus
             />
             <TextField
