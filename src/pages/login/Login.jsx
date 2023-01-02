@@ -51,6 +51,8 @@ const unameIsValid = async (uname) => {
 };
 
 const Login = () => {
+  const path = window.location.pathname;
+
   const dispatch = useDispatch();
   const errType = useSelector((state) => state.ui.notif.type);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -105,13 +107,14 @@ const Login = () => {
   }, [notFirstTime, isLoggedIn, isPending, dispatch]);
 
   useEffect(() => {
+    console.log(path);
     //auth&admin at front-end.port + 1 && zkt basic/hr/ at front-end.port + 2 && finance at front-end.port + 3
     if (notFirstTime && isPending) {
-      const url = `${BASE_AUTH_URL}/login`;
+      const url = `${BASE_AUTH_URL}${path}`;
       //auth is at front-end.port + 1
       axios
         .post(url, {
-          email: data.email,
+          uname: data.email,
           password: data.password,
         })
         .then(function (response) {
