@@ -6,6 +6,7 @@ import { sbActions } from "../../store/sidebar.js";
 import AddUser from "../../components/addUser/AddUser";
 import SpinLoader from "../../components/spinloader/SpinLoader";
 import AddGroup from "../../components/addGroup/AddGroup";
+// import ManageUsers from "../manageUsers/ManageUsers";
 
 const AdminHome = () => {
   const dispatch = useDispatch();
@@ -24,18 +25,28 @@ const AdminHome = () => {
     event.preventDefault();
     dispatch(sbActions.switch({ option: "addGroup" }));
   };
+  const manageUsersHanlder = (event) => {
+    event.preventDefault();
+    dispatch(sbActions.switch({ option: "manageUsers" }));
+  };
 
   if (userData.role != "admin" || !isLoggedIn) {
     return <Navigate to="/Login" replace />;
   }
   const sidebarOptions = [
     <li className="has-subnav" key={1}>
+      <a href="#" onClick={manageUsersHanlder}>
+        <i className="fa fas fa-user-plus"></i>
+        <span className="nav-text">Manage</span>
+      </a>
+    </li>,
+    <li className="has-subnav" key={2}>
       <a href="#" onClick={addUserHanlder}>
         <i className="fa fas fa-user-plus"></i>
         <span className="nav-text">Add user</span>
       </a>
     </li>,
-    <li className="has-subnav" key={2}>
+    <li className="has-subnav" key={3}>
       <a href="#" onClick={addGroupHandler}>
         <i className="fa fa-folder-plus"></i>
         <span className="nav-text">Add Group</span>
