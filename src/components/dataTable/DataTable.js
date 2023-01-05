@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import _DataTable from "react-data-table-component";
 import { StyledDiv, StyledModal } from "./DataTableStyle.js";
 import { useSelector, useDispatch } from "react-redux";
@@ -121,7 +121,7 @@ const DataTable = (_props) => {
     return { id: i + 1, ...el };
   });
 
-  const subHeaderComponentMemo = React.useMemo(() => {
+  const subHeaderComponentMemo = useMemo(() => {
     const filter = (e) => {
       if (e.target.value) {
         setFilterText(e.target.value);
@@ -139,7 +139,7 @@ const DataTable = (_props) => {
     return <FilterComponent onFilter={filter} filterText={filterText} />;
   }, [filterText, resetPaginationToggle]);
 
-  const actionsMemo = React.useMemo(
+  const actionsMemo = useMemo(
     () => (
       <Export
         onExport={() => {
@@ -194,23 +194,23 @@ const DataTable = (_props) => {
         dispatch(uiActions.startLoad());
         const result = await editUserInfo(data);
         if (result.status === 200) {
+          _props.loadData();
+          dispatch(uiActions.stopLoad());
           dispatch(
             uiActions.notif({
               type: "success",
               msg: result.msg ? result.msg : "operation successfull",
             })
           );
-          dispatch(uiActions.stopLoad());
-          _props.loadData();
           props.setIsOpen(false);
         } else if (result.status === 500) {
+          dispatch(uiActions.stopLoad());
           dispatch(
             uiActions.notif({
               type: "danger",
               msg: result.msg ? result.msg : "operation unsuccessfull",
             })
           );
-          dispatch(uiActions.stopLoad());
           props.setIsOpen(false);
         }
       }
@@ -391,6 +391,7 @@ const DataTable = (_props) => {
         expandableRowsComponent={ExpandedComponent}
         pagination
         fixedHeader
+        paginationResetDefaultPage={resetPaginationToggle}
         subHeader
         subHeaderComponent={subHeaderComponentMemo}
         fixedHeaderScrollHeight="450px"
