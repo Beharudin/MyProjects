@@ -143,7 +143,7 @@ const DataTable = (_props) => {
     () => (
       <Export
         onExport={() => {
-          downloadCSV(data, sb);
+          downloadCSV(filteredItems, sb);
         }}
       />
     ),
