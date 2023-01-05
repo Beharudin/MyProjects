@@ -1,7 +1,7 @@
 import StyledDiv from "./sidebarStyle.js";
 
 import Logout from "../logout/Logout";
-import logo from "../../img/no-logo.PNG";
+import logo from "../../img/no-logo.JPG";
 
 const Sidebar = (props) => {
   return (

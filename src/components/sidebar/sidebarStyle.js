@@ -23,7 +23,7 @@ const StyledDiv = styled.div`
     }
 
     .main-menu {
-      background: #212121;
+      background: #34aadc;
       border-right: 1px solid #e5e5e5;
       position: absolute;
       top: 0;
@@ -53,7 +53,7 @@ const StyledDiv = styled.div`
       display: table;
       border-collapse: collapse;
       border-spacing: 0;
-      color: #999;
+      color: #000;
       font-family: arial;
       font-size: 14px;
       text-decoration: none;
@@ -73,6 +73,8 @@ const StyledDiv = styled.div`
     }
 
     .main-menu .nav-text {
+      color: #000;
+
       position: relative;
       display: table-cell;
       vertical-align: middle;

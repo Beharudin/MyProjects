@@ -6,12 +6,12 @@ import { sbActions } from "../../store/sidebar.js";
 import AddUser from "../../components/addUser/AddUser";
 import SpinLoader from "../../components/spinloader/SpinLoader";
 import AddGroup from "../../components/addGroup/AddGroup";
-// import ManageUsers from "../manageUsers/ManageUsers";
+import ManageUsers from "../manageUsers/ManageUsers";
 
 const AdminHome = () => {
   const dispatch = useDispatch();
 
-  const errType = useSelector((state) => state.ui.notif.type);
+  const notifType = useSelector((state) => state.ui.notif.type);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userData = useSelector((state) => state.auth.userData);
   const sb = useSelector((state) => state.sb.option);
@@ -36,7 +36,7 @@ const AdminHome = () => {
   const sidebarOptions = [
     <li className="has-subnav" key={1}>
       <a href="#" onClick={manageUsersHanlder}>
-        <i className="fa fas fa-user-plus"></i>
+        <i className="fa fas fa-tasks-alt"></i>
         <span className="nav-text">Manage</span>
       </a>
     </li>,
@@ -56,11 +56,12 @@ const AdminHome = () => {
 
   return (
     <div>
-      {errType && <Notify />}
+      {notifType && <Notify />}
       {isPending && <SpinLoader />}
       <Sidebar sidebarOptions={sidebarOptions} />
       {sb && sb === "addUser" && <AddUser />}
       {sb && sb === "addGroup" && <AddGroup />}
+      {sb && sb === "manageUsers" && <ManageUsers />}
     </div>
   );
 };

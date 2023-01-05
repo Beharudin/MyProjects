@@ -5,11 +5,14 @@ import { useSelector, useDispatch } from "react-redux";
 import Login from "../../pages/login/Login";
 import { uiActions } from "../../store/ui.js";
 import { _host, BASE_CAMADPTR_URL, BASE_AUTH_URL } from "../../index.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const AddUser = () => {
   const dispatch = useDispatch();
   const [groups, setGroups] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const sb = useSelector((state) => state.sb.option);
+
   const userData = useSelector((state) => state.auth.userData);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
@@ -80,14 +83,6 @@ const AddUser = () => {
         <div className="form1">
           <br />
           <form onSubmit={submitHandler}>
-            <label>Firstname:</label>
-            <br />
-            <input name="firstName" type="text" id="fname" placeholder="" />
-            <br />
-            <label>Lastname:</label>
-            <br />
-            <input name="lastName" type="text" id="lname" placeholder="" />
-            <br />
             <label>Email:</label>
             <br />
             <input
@@ -116,11 +111,11 @@ const AddUser = () => {
             />
             <br />
             <br />
-            role___
+            role
             <select name="role" id="selection">
-              <option>admin</option>
-              <option>hr</option>
-              <option>finance</option>
+              {roles.map((el) => (
+                <option>{el}</option>
+              ))}
             </select>
             <br />
             group
@@ -143,13 +138,16 @@ const AddUser = () => {
       </div>
     );
   };
-
-  if (groups.length < 1)
+  useEffect(() => {
     (async () => {
       try {
         const resp = await axios.get(`${BASE_CAMADPTR_URL}/getAllGroups`);
-        const loadedGroups = resp.data.data.filter((el) => el.type != "SYSTEM");
+        const loadedGroups = resp.data.filter((el) => el.type != "SYSTEM");
         setGroups(loadedGroups);
+
+        const resp2 = await axios.get(`${BASE_AUTH_URL}/getRoles`);
+        const _roles = resp2.data;
+        setRoles(_roles);
       } catch (error) {
         dispatch(uiActions.stopLoad());
         // handle error
@@ -167,6 +165,7 @@ const AddUser = () => {
         console.log(error);
       }
     })();
+  }, [sb]);
 
   if (!isLoggedIn) {
     return <Navigate to="/Login" replace />;
