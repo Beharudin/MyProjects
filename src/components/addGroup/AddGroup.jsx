@@ -50,7 +50,7 @@ const AddGroup = () => {
       groupName: data.get("groupName"),
     };
     if (!groupNameIsValid(data.groupName)) {
-      dispatch(uiActions.notif({ type: "danger", msg: "invalid group name" }));
+      dispatch(uiActions.notif({ type: "error", msg: "invalid group name" }));
     } else {
       //spin
       dispatch(uiActions.startLoad());
@@ -60,7 +60,7 @@ const AddGroup = () => {
         dispatch(uiActions.notif({ type: "success", msg: result.msg }));
         dispatch(uiActions.stopLoad());
       } else if (result.status === 500) {
-        dispatch(uiActions.notif({ type: "danger", msg: result.msg }));
+        dispatch(uiActions.notif({ type: "error", msg: result.msg }));
         dispatch(uiActions.stopLoad());
       }
     }

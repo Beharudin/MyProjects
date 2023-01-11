@@ -1,32 +1,29 @@
-import StyledDiv from "./notifyStyle.js";
 import { useDispatch, useSelector } from "react-redux";
 import { uiActions } from "../../store/ui.js";
+import { Alert } from "@mui/material";
 
-const Notify = (props) => {
+const Notify = () => {
   const msg = useSelector((state) => state.ui.notif.msg);
   const type = useSelector((state) => state.ui.notif.type);
   const dispatch = useDispatch();
 
-  if (type) {
-    setTimeout(() => {
-      dispatch(
-        uiActions.notif({
-          type: "",
-          msg: "",
-        })
-      );
-    }, 3000);
-  }
-
-  const classname = `alert-simple alert-${type}`;
+  const closeHandler = () => {
+    dispatch(
+      uiActions.notif({
+        type: "",
+        msg: "",
+      })
+    );
+  };
+  const _msg = msg
+    ? msg
+    : type === "error"
+    ? "something went wrong"
+    : "operation successful";
   return (
-    <StyledDiv>
-      <div className="notify">
-        <p className={classname} style={{ textAlign: "center" }}>
-          {msg}
-        </p>
-      </div>
-    </StyledDiv>
+    <Alert onClose={closeHandler} severity={type}>
+      {_msg}
+    </Alert>
   );
 };
 

@@ -189,7 +189,7 @@ const DataTable = (_props) => {
       };
 
       if (!emailIsValid(data.email)) {
-        dispatch(uiActions.notif({ type: "danger", msg: "invalid email" }));
+        dispatch(uiActions.notif({ type: "error", msg: "invalid email" }));
       } else {
         dispatch(uiActions.startLoad());
         const result = await editUserInfo(data);
@@ -207,7 +207,7 @@ const DataTable = (_props) => {
           dispatch(uiActions.stopLoad());
           dispatch(
             uiActions.notif({
-              type: "danger",
+              type: "error",
               msg: result.msg ? result.msg : "operation unsuccessfull",
             })
           );
@@ -340,7 +340,7 @@ const DataTable = (_props) => {
           </li>
           <li className="list-inline-item">
             <button
-              className="btn btn-danger btn-sm rounded-0"
+              className="btn btn-error btn-sm rounded-0"
               type="button"
               data-toggle="tooltip"
               data-placement="top"

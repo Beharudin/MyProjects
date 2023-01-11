@@ -52,12 +52,12 @@ const AddUser = () => {
       groups: data.getAll("group"),
     };
     if (!(await unameIsValid(data.email))) {
-      dispatch(uiActions.notif({ type: "danger", msg: "invalid email" }));
+      dispatch(uiActions.notif({ type: "error", msg: "invalid email" }));
     } else if (data.password.length != 8 || data.password.includes("*")) {
-      dispatch(uiActions.notif({ type: "danger", msg: "invalid password" }));
+      dispatch(uiActions.notif({ type: "error", msg: "invalid password" }));
     } else if (data.password != data.cpassword) {
       dispatch(
-        uiActions.notif({ type: "danger", msg: "passwords don't match" })
+        uiActions.notif({ type: "error", msg: "passwords don't match" })
       );
     } else {
       //spin
@@ -68,7 +68,7 @@ const AddUser = () => {
         dispatch(uiActions.notif({ type: "success", msg: result.msg }));
         dispatch(uiActions.stopLoad());
       } else if (result.status === 500) {
-        dispatch(uiActions.notif({ type: "danger", msg: result.msg }));
+        dispatch(uiActions.notif({ type: "error", msg: result.msg }));
         dispatch(uiActions.stopLoad());
       }
     }
@@ -158,7 +158,7 @@ const AddUser = () => {
             : "check your internet connection";
         dispatch(
           uiActions.notif({
-            type: "danger",
+            type: "error",
             msg,
           })
         );

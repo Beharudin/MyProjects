@@ -14,17 +14,11 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import HistoryIcon from "@mui/icons-material/History";
-import MapIcon from "@mui/icons-material/Map";
-import Header from "../header/Header";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import LoanForm from "../loanForm/LoanForm";
-
-const custFeatures = [
-  { text: "New Loan", icon: [<AddCircleIcon />] },
-  { text: "See Loan Status", icon: [<MapIcon />] },
-  { text: "History", icon: [<HistoryIcon />] },
-];
+import Header from "../header/Header";
+import Notify from "../../components/notify/Notify";
+import SpinLoader from "../../components/spinloader/SpinLoader";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -94,10 +88,13 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function SideDrawer() {
+export default function SideDrawer({ drawerOptions, reloadDrawerOptions }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  const [option, setOption] = React.useState("dashboard");
+  const [bodyOption, setBodyOption] = React.useState("dashboard");
+  const isPending = useSelector((state) => state.ui.isLoading);
+  const notifType = useSelector((state) => state.ui.notif.type);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -122,7 +119,7 @@ export default function SideDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {custFeatures.map(({ text, icon }) => (
+          {drawerOptions.map(({ text, icon }) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{
@@ -130,7 +127,7 @@ export default function SideDrawer() {
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
-                onClick={() => setOption(text)}
+                onClick={() => setBodyOption(text)}
               >
                 <ListItemIcon
                   sx={{
@@ -149,7 +146,14 @@ export default function SideDrawer() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        {option && option === "New Loan" && <LoanForm />}
+        {notifType && <Notify />}
+        {isPending && <SpinLoader />}
+        {bodyOption && bodyOption === "New Loan" && (
+          <LoanForm
+            reloadDrawerOptions={reloadDrawerOptions}
+            reloadBodyOption={setBodyOption}
+          />
+        )}
         {/* {option && option === "See Loan Status" && <LoanStatus />} */}
         {/* {option && option === "History" && <LoanHistory />} */}
       </Box>

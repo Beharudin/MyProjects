@@ -74,7 +74,7 @@ const Login = () => {
     };
     //on submit validation
     if (!(await unameIsValid(data.uname))) {
-      dispatch(uiActions.notif({ type: "danger", msg: "invalid username" }));
+      dispatch(uiActions.notif({ type: "error", msg: "invalid username" }));
     } else {
       dispatch(uiActions.notif({ type: "", msg: "" }));
       dispatch(uiActions.startLoad());
@@ -108,7 +108,6 @@ const Login = () => {
   }, [notFirstTime, isLoggedIn, isPending, dispatch]);
 
   useEffect(() => {
-    console.log(path);
     //auth&admin at front-end.port + 1 && zkt basic/hr/ at front-end.port + 2 && finance at front-end.port + 3
     if (notFirstTime && isPending) {
       const url = `${BASE_AUTH_URL}${path}`;
@@ -120,7 +119,6 @@ const Login = () => {
           password: data.password,
         })
         .then(function (response) {
-          console.log("role is ", response.data.userData.role);
           // handle success
           dispatch(uiActions.stopLoad());
           dispatch(
@@ -131,8 +129,7 @@ const Login = () => {
           );
           cookies.set("token", response.data.accessToken, { path: "/" });
           cookies.set("role", response.data.userData.role, { path: "/" });
-
-          dispatch(sbActions.switch({ option: "dashboard" }));
+          cookies.set("userId", response.data.userData.id, { path: "/" });
         })
         .catch(function (error) {
           dispatch(uiActions.stopLoad());
@@ -143,7 +140,7 @@ const Login = () => {
 
             dispatch(
               uiActions.notif({
-                type: "danger",
+                type: "error",
                 msg: error.response.data.error,
               })
             );
@@ -152,7 +149,7 @@ const Login = () => {
             dispatch(authActions.logout());
             dispatch(
               uiActions.notif({
-                type: "danger",
+                type: "error",
                 msg: "check your internet connection",
               })
             );
