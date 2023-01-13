@@ -85,6 +85,7 @@ const LoanForm = ({ reloadDrawerOptions, reloadBodyOption }) => {
         }
       }
     } catch (err) {
+      console.log("err catched");
       dispatch(uiActions.stopLoad());
 
       dispatch(

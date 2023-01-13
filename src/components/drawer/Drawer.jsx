@@ -21,6 +21,7 @@ import SpinLoader from "../../components/spinloader/SpinLoader";
 import { useSelector } from "react-redux";
 import LoanStatus from "../loanStatus/LoanStatus";
 import { Grid } from "@mui/material";
+import Legend from "../legend/Legend";
 
 const drawerWidth = 240;
 
