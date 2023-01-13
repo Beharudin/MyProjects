@@ -132,20 +132,19 @@ const Login = () => {
           cookies.set("userId", response.data.userData.id, { path: "/" });
         })
         .catch(function (error) {
+          console.log(error);
           dispatch(uiActions.stopLoad());
 
           // handle error
           if (error?.response?.data && error?.response?.data?.error) {
             dispatch(authActions.logout());
-
             dispatch(
               uiActions.notif({
                 type: "error",
-                msg: error.response.data.error,
+                msg: error?.response?.data?.error,
               })
             );
           } else {
-            console.log(error);
             dispatch(authActions.logout());
             dispatch(
               uiActions.notif({
@@ -161,8 +160,10 @@ const Login = () => {
   return (
     <ThemeProvider theme={theme}>
       <Topbar />
-      {token && userData.role === "admin" && <Navigate to="/admin" replace />}
-      {token && userData.role === "customer" && <Navigate to="/home" replace />}
+      {token && userData?.role === "admin" && <Navigate to="/admin" replace />}
+      {token && userData?.role === "customer" && (
+        <Navigate to="/home" replace />
+      )}
       <Container
         component="main"
         maxWidth="xs"

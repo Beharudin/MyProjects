@@ -15,11 +15,12 @@ const Notify = () => {
       })
     );
   };
-  const _msg = msg
-    ? msg
-    : type === "error"
-    ? "something went wrong"
-    : "operation successful";
+  const _msg =
+    typeof msg === "string"
+      ? msg
+      : type === "error"
+      ? "something went wrong"
+      : "operation successful";
   return (
     <Alert onClose={closeHandler} severity={type}>
       {_msg}

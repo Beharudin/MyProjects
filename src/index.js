@@ -24,8 +24,6 @@ export const BASE_BACKEND_URL = `http://${_host}:${BACKEND_PORT}/api/v1`;
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <App />
   </Provider>
 );

@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { BASE_CAMADPTR_URL, cookies } from "../..";
-import SideDrawer from "../../components/drawer/Drawer";
+import Drawer from "../../components/drawer/Drawer";
 import Header from "../../components/header/Header";
 import HistoryIcon from "@mui/icons-material/History";
 import MapIcon from "@mui/icons-material/Map";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { Box } from "@mui/material";
 
 const opts = [
   { text: "New Loan", icon: [<AddCircleIcon />] },
@@ -42,13 +43,19 @@ const CustHome = () => {
     return <Navigate to="/Login" replace />;
   }
   return (
-    <>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        flexWrap: "nowrap",
+      }}
+    >
       <Header />
-      <SideDrawer
+      <Drawer
         drawerOptions={drawerOptions}
         reloadDrawerOptions={reloadDrawerOptions}
       />
-    </>
+    </Box>
   );
 };
 export default CustHome;
