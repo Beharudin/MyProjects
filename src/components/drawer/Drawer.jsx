@@ -16,8 +16,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import LoanForm from "../loanForm/LoanForm";
 import Header from "../header/Header";
-import Notify from "../../components/notify/Notify";
-import SpinLoader from "../../components/spinloader/SpinLoader";
 import { useSelector } from "react-redux";
 import LoanStatus from "../loanStatus/LoanStatus";
 import { Grid } from "@mui/material";
@@ -91,7 +89,12 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function SideDrawer({ drawerOptions, reloadDrawerOptions }) {
+export default function SideDrawer({
+  drawerOptions,
+  reloadDrawerOptions,
+  children,
+}) {
+  console.log("children", children);
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const [bodyOption, setBodyOption] = React.useState("dashboard");
@@ -102,7 +105,7 @@ export default function SideDrawer({ drawerOptions, reloadDrawerOptions }) {
     setOpen(!open);
   };
   return (
-    <Box container sx={{ display: "flex", alignItems: "stretch" }}>
+    <Box container display="flex">
       <Box>
         <Drawer variant="permanent" open={open}>
           <DrawerHeader>
@@ -138,9 +141,9 @@ export default function SideDrawer({ drawerOptions, reloadDrawerOptions }) {
           </List>
         </Drawer>
       </Box>
-      <Box>
-        {notifType && <Notify />}
-        {isPending && <SpinLoader />}
+      <Box width="100%">
+        {notifType && children[0]}
+        {isPending && children[1]}
         {bodyOption && bodyOption === "New Loan" && (
           <LoanForm
             reloadDrawerOptions={reloadDrawerOptions}

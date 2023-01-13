@@ -22,9 +22,13 @@ const Notify = () => {
       ? "something went wrong"
       : "operation successful";
   return (
-    <Alert onClose={closeHandler} severity={type}>
-      {_msg}
-    </Alert>
+    <div>
+      {type && (
+        <Alert sx={{ margin: 2 }} onClose={closeHandler} severity={type}>
+          {_msg}
+        </Alert>
+      )}
+    </div>
   );
 };
 
