@@ -22,6 +22,14 @@ const LoanStatus = () => {
       const { warnings } = await viewer.importXML(resp.data);
       viewer.get("canvas").zoom("fit-viewport");
 
+      const resp2 = await axios.get(
+        `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}`
+      );
+
+      document.querySelector(
+        `[data-element-id=${resp2.data.taskDefId}]`
+      ).children[0].children[0].style.fill = "rgb(100, 240, 95)";
+
       console.log("warnings!", warnings);
       dispatch(uiActions.stopLoad());
     } catch (err) {
