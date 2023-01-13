@@ -21,9 +21,14 @@ const LoanStatus = () => {
       const resp = await axios.get(
         `${BASE_CAMADPTR_URL}/getProcessDiagram?customerId=${userId}`
       );
-      const { warnings } = await viewer.importXML(resp.data);
+
+      //clear screen function needed here
+
+      //draw diagram
+      await viewer.importXML(resp.data);
       viewer.get("canvas").zoom("fit-viewport");
 
+      //color pending task
       const resp2 = await axios.get(
         `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}`
       );
@@ -31,6 +36,7 @@ const LoanStatus = () => {
         `[data-element-id=${resp2.data.taskDefId}]`
       ).children[0].children[0].style.fill = "rgb(252, 193, 2)";
 
+      //color completed tasks
       const resp3 = await axios.get(
         `${BASE_CAMADPTR_URL}/getFinishedTasksForCustomer?customerId=${userId}`
       );
@@ -69,7 +75,7 @@ const LoanStatus = () => {
         }}
         id="diagramContainer"
       >
-        <Box id="canvas" sx={{ order: 1 }}></Box>
+        <div id="canvas" sx={{ order: 1 }}></div>
         <Legend />
       </div>
     );

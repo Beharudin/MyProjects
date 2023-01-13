@@ -1,25 +1,19 @@
 import { AppBar, Grid, Toolbar } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { styled } from "@mui/system";
-import MenuIcon from "@mui/icons-material/Menu";
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { cookies } from "../../index.js";
 import { authActions } from "../../store/auth.js";
 
-// const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 const Header = ({ onClickFunction }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);

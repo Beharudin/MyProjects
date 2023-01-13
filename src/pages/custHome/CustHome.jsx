@@ -57,10 +57,11 @@ const CustHome = () => {
   useEffect(() => {
     reloadDrawerOptions();
   }, [isLoggedIn]);
+
   if (!isLoggedIn) {
     return <Navigate to="/Login" replace />;
   }
-  console.log(document.getElementById("alert"));
+
   return (
     <Box
       sx={{
