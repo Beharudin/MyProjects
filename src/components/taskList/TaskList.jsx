@@ -103,7 +103,8 @@ const TaskList = () => {
               </CardContent>
               <CardActions>
                 <Button size="small" id={el.id} onClick={seeListHandler}>
-                  List all <ChevronRightIcon />
+                  List all{" "}
+                  <ChevronRightIcon id={el.id} onClick={seeListHandler} />
                 </Button>
               </CardActions>
             </Card>
