@@ -41,7 +41,11 @@ const ListTask = ({ list, setList }) => {
                 </IconButton>
               }
               title={`requester: ${el.details?.cust?.full_name || "John Doe"}`}
-              subheader={new Date(el.details?.created_at).getUTCDate()}
+              subheader={`${new Date(
+                el.details?.created_at
+              ).getDay()}-${new Date(
+                el.details?.created_at
+              ).getDate()}-${new Date(el.details?.created_at).getFullYear()}`}
             />
             <CardContent>
               <Typography variant="body2" color="text.secondary">
