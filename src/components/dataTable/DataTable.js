@@ -26,10 +26,6 @@ const emailIsValid = () => {
   return true;
 };
 
-const editUserInfo = async (data) => {
-  return await axios.post(`${BASE_AUTH_URL}/editUserInfo`, data);
-};
-
 function convertArrayOfObjectsToCSV(array) {
   let result;
 
@@ -102,6 +98,8 @@ const FilterComponent = ({ filterText, onFilter }) => (
 );
 
 const DataTable = (_props) => {
+  const dispatch = useDispatch();
+
   const sb = useSelector((state) => state.sb.option);
   let data = _props.data;
   const [filteredItems, setFilteredItems] = useState(data);
@@ -149,6 +147,21 @@ const DataTable = (_props) => {
     ),
     [data, sb]
   );
+
+  const editUserInfo = async (data) => {
+    try {
+      return await axios.post(`${BASE_AUTH_URL}/editUserInfo`, data);
+    } catch (err) {
+      dispatch(uiActions.stopLoad());
+      const msg = err.response?.data?.error;
+      dispatch(
+        uiActions.notif({
+          type: "error",
+          msg,
+        })
+      );
+    }
+  };
 
   const EditForm = (props) => {
     const dispatch = useDispatch();
@@ -218,13 +231,24 @@ const DataTable = (_props) => {
 
     useEffect(() => {
       (async () => {
-        const resp = await axios.get(`${BASE_CAMADPTR_URL}/getAllGroups`);
-        const _groups = resp.data.map((el) => el.id);
-        setGroups(_groups);
+        try {
+          const resp = await axios.get(`${BASE_CAMADPTR_URL}/getAllGroups`);
+          const _groups = resp.data.map((el) => el.id);
+          setGroups(_groups);
 
-        const resp2 = await axios.get(`${BASE_AUTH_URL}/getRoles`);
-        const _roles = resp2.data;
-        setRoles(_roles);
+          const resp2 = await axios.get(`${BASE_AUTH_URL}/getRoles`);
+          const _roles = resp2.data;
+          setRoles(_roles);
+        } catch (err) {
+          dispatch(uiActions.stopLoad());
+          const msg = err.response?.data?.error;
+          dispatch(
+            uiActions.notif({
+              type: "error",
+              msg,
+            })
+          );
+        }
       })();
     }, [data]);
 

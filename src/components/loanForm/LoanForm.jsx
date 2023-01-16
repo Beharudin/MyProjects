@@ -91,7 +91,7 @@ const LoanForm = ({ reloadDrawerOptions, reloadBodyOption }) => {
       dispatch(
         uiActions.notif({
           type: "error",
-          msg: err.msg,
+          msg: err.response?.data ? err.response?.data : err,
         })
       );
       console.log(err);

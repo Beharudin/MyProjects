@@ -14,6 +14,8 @@ import ListItemText from "@mui/material/ListItemText";
 import LoanForm from "../loanForm/LoanForm";
 import { useSelector } from "react-redux";
 import LoanStatus from "../loanStatus/LoanStatus";
+import TaskList from "../taskList/TaskList";
+import MyTasks from "../myTasks/MyTasks";
 
 const drawerWidth = 240;
 
@@ -70,7 +72,6 @@ export default function SideDrawer({
   reloadDrawerOptions,
   children,
 }) {
-  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [bodyOption, setBodyOption] = React.useState("dashboard");
   const isPending = useSelector((state) => state.ui.isLoading);
@@ -126,6 +127,8 @@ export default function SideDrawer({
           />
         )}
         {bodyOption && bodyOption === "See Loan Status" && <LoanStatus />}
+        {bodyOption && bodyOption === "Task list" && <TaskList />}
+        {bodyOption && bodyOption === "My tasks" && <MyTasks />}
       </Box>
     </Box>
   );

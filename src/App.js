@@ -9,6 +9,7 @@ import Service from "./pages/service/Service";
 import Login from "./pages/login/Login";
 import AdminHome from "./pages/adminHome/AdminHome";
 import CustHome from "./pages/custHome/CustHome";
+import StaffHome from "./pages/staffHome/StaffHome";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/staff/login" element={<Login />} />
         <Route path="/admin" element={<AdminHome />} />
         <Route path="/home" element={<CustHome />} />
+        <Route path="/staff" element={<StaffHome />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/service" element={<Service />} />

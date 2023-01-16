@@ -164,6 +164,10 @@ const Login = () => {
       {token && userData?.role === "customer" && (
         <Navigate to="/home" replace />
       )}
+      {token &&
+        (userData?.role === "staff" || userData?.role === "manager") && (
+          <Navigate to="/staff" replace />
+        )}
       <Container
         component="main"
         maxWidth="xs"

@@ -11,29 +11,40 @@ const ManageUsers = () => {
   const sb = useSelector((state) => state.sb.option);
 
   const loadData = async () => {
-    dispatch(uiActions.startLoad());
-    const resp = await axios.get(`${BASE_AUTH_URL}/getUser?userType=staff`);
-    for (let el of resp.data) {
-      const resp2 = await axios.get(
-        `${BASE_CAMADPTR_URL}/getGroupsForUser?userId=${el.id}`
-      );
+    try {
+      dispatch(uiActions.startLoad());
+      const resp = await axios.get(`${BASE_AUTH_URL}/getUser?userType=staff`);
+      for (let el of resp.data) {
+        const resp2 = await axios.get(
+          `${BASE_CAMADPTR_URL}/getGroupsForUser?userId=${el.id}`
+        );
 
-      let groupsList = "";
-      resp2.data.map(
-        (el, i) =>
-          (groupsList =
-            i === 0 ? groupsList.concat(el) : groupsList.concat(`, ${el}`))
+        let groupsList = "";
+        resp2.data.map(
+          (el, i) =>
+            (groupsList =
+              i === 0 ? groupsList.concat(el) : groupsList.concat(`, ${el}`))
+        );
+        el.groups = groupsList;
+      }
+      resp.data = resp.data.map((el) => {
+        delete el.user_id;
+        delete el.created_at;
+        return el;
+      });
+
+      dispatch(uiActions.stopLoad());
+      setData(resp.data);
+    } catch (err) {
+      dispatch(uiActions.stopLoad());
+      const msg = err.response?.data?.error;
+      dispatch(
+        uiActions.notif({
+          type: "error",
+          msg,
+        })
       );
-      el.groups = groupsList;
     }
-    resp.data = resp.data.map((el) => {
-      delete el.user_id;
-      delete el.created_at;
-      return el;
-    });
-
-    dispatch(uiActions.stopLoad());
-    setData(resp.data);
   };
 
   useEffect(() => {
