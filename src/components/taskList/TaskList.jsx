@@ -14,14 +14,14 @@ import { BASE_BACKEND_URL, BASE_CAMADPTR_URL, cookies } from "../..";
 import { uiActions } from "../../store/ui";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListTask from "../listTask/ListTask";
+import MyTasks from "../myTasks/MyTasks";
 
-const TaskList = () => {
+const TaskList = ({ show }) => {
   const dispatch = useDispatch();
   const userId = cookies.get("userId");
   const [list, setList] = useState("");
   const [tasks, setTasks] = useState([]);
   const [taskGroups, setTaskGroups] = useState([]);
-  console.log(tasks);
 
   const seeListHandler = (e) => {
     setList(tasks.filter((el) => el.taskDefId === e.target.id));
@@ -29,10 +29,12 @@ const TaskList = () => {
   const loadTasks = async () => {
     try {
       dispatch(uiActions.startLoad());
+      setList("");
 
       //get tasks
+      const endpoint = show === "all" ? "getAllTasksForCustomer" : "getMyTasks";
       const resp = await axios.get(
-        `${BASE_CAMADPTR_URL}/getAllTasksForCustomer?userId=${userId}`
+        `${BASE_CAMADPTR_URL}/${endpoint}?userId=${userId}`
       );
       let _tasks = resp.data;
 
@@ -86,7 +88,12 @@ const TaskList = () => {
   }, [dispatch]);
   return (
     <Box>
-      {list && <ListTask list={list} setList={setList} />}
+      {list && show === "all" && (
+        <ListTask reloadTasks={loadTasks} list={list} setList={setList} />
+      )}
+      {list && show === "my" && (
+        <MyTasks reloadTasks={loadTasks} list={list} setList={setList} />
+      )}
       {!list && (
         <Grid display="flex">
           {taskGroups.map((el) => (

@@ -127,8 +127,8 @@ export default function SideDrawer({
           />
         )}
         {bodyOption && bodyOption === "See Loan Status" && <LoanStatus />}
-        {bodyOption && bodyOption === "Task list" && <TaskList />}
-        {bodyOption && bodyOption === "My tasks" && <MyTasks />}
+        {bodyOption && bodyOption === "Task list" && <TaskList show="all" />}
+        {bodyOption && bodyOption === "My tasks" && <TaskList show="my" />}
       </Box>
     </Box>
   );
