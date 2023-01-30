@@ -1,0 +1,5 @@
+const { add, subtract, divide, multiply } = require("./maths")
+const maths = require('./maths')
+console.log('hello world')
+console.log("5 + 6 = "+maths.add(5, 6))
+console.log("5 + 8 = "+add(5, 8))

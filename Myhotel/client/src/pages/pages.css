@@ -1,0 +1,65 @@
+.smallImg{
+    height: 200px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.bigImg{
+    height: 350px;
+    width: 100%;
+    border-radius: 5px; 
+}
+
+.row .col-md-7 h1{
+    font-size: 20px !important;
+}
+
+input, select, .ant-picker{
+    box-shadow: none !important;
+    margin-top: 10px !important;
+    border: 2px solid black !important;
+    width: 100% !important;
+    height: 35px !important;
+    border-radius: 5px !important;
+}
+
+.btn{
+    background-color: black !important;
+    color: white;
+    box-shadow: none !important;
+}
+
+.bs{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.top{
+    margin-top: 80px !important;
+}
+
+.ant-picker-input input{
+    border: none !important;
+}
+
+.landing{
+    background-color: #12b8e1 !important;
+    height: 100%;
+}
+
+.landing .col-md-9 h2, h5{
+    color: white;
+}
+
+.mybtn{
+    background-color: white !important;
+    color: black !important;
+    margin-top: 20px;
+}
+
+.landing .col-md-9{
+    border-right: 8px solid white !important;
+    color: white;
+}

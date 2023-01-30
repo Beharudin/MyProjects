@@ -1,0 +1,18 @@
+.mybtn{
+    background-color: red;
+    color: white;
+    width: 200px;
+}
+
+.gridItem{
+    justify-content: center;
+    align-items: center;
+}
+
+.gridBox{
+    width:'100%';
+    height: '100px';
+    color: 'white';
+    margin: '5px';
+    cursor: 'pointer';
+}

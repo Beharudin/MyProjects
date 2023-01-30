@@ -1,0 +1,31 @@
+.navbar{
+    background-color: #12b8e1 !important;
+    color: white !important;
+}
+
+.nav-link{
+    color: white !important;
+}
+
+.navbar-brand{
+    color: white !important;
+}
+
+.navbar-nav, .dropdown{
+    margin-left: auto !important;
+}
+
+
+#dropdownMenuButton{
+    background-color: #12b8e1 !important;
+    color: white !important;
+}
+
+.navbar-nav .nav-item .nav-link{
+    color: black !important;
+}
+
+.navbar-toggler{
+    color: white !important;  
+}
+
