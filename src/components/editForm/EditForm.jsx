@@ -1,105 +1,71 @@
-import { FormEditor } from '@bpmn-io/form-js-editor';
-import { Box, Button, ButtonGroup } from '@mui/material';
-import axios from 'axios';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { BASE_CAMADPTR_URL } from '../..';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { FormEditor } from "@bpmn-io/form-js-editor";
+import { AppBar, Button, ButtonGroup, Toolbar, Tooltip } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
+import { useEffect } from "react";
+import { BASE_BACKEND_URL } from "../..";
+
+const exampleSchema = {
+  schemaVersion: 3,
+  exporter: {
+    name: "form-js (https://demo.bpmn.io)",
+    version: "0.3.0",
+  },
+  components: [
+    {
+      key: "name",
+      label: "Text Field",
+      type: "textfield",
+      id: "Field_1jfqw1v",
+      description: "Enter your name ...",
+      validate: {
+        required: true,
+        minLength: 3,
+        maxLength: 50,
+      },
+    },
+  ],
+  type: "default",
+  id: "Form_1f88rws",
+};
 
 const EditForm = () => {
-  const [schemaIndex, setSchemaIndex] = useState(0);
-  const [schemas, setSchemas] = useState([]);
-
-  const formEditor = new FormEditor({
-    container: document.querySelector('#form-editor'),
-  });
   const handleSave = () => {};
   const handleReset = () => {};
-  const handleNext = async () => {
-    if (schemaIndex < schemas.length - 1) {
-      const newIndex = schemaIndex + 1;
-      setSchemaIndex(newIndex);
-      document.getElementById('form-editor').innerHTML = '<div></div>';
-      await formEditor.attachTo('#form-editor');
-
-      await formEditor.importSchema(schemas[newIndex]);
-    }
-  };
-  const handlePrev = async () => {
-    if (schemaIndex > 0) {
-      const newIndex = schemaIndex - 1;
-      setSchemaIndex(newIndex);
-      document.getElementById('form-editor').innerHTML = '<div></div>';
-      await formEditor.attachTo('#form-editor');
-
-      await formEditor.importSchema(schemas[newIndex]);
-    }
-  };
-
-  const loadSchemas = async () => {
-    const resp = await axios.get(`${BASE_CAMADPTR_URL}/getAllFormSchemas`);
-
-    //edit form & get new schema
-    setSchemas(JSON.parse(JSON.stringify(resp.data)));
-    await formEditor.attachTo('#form-editor');
-    await formEditor.importSchema(
-      JSON.parse(JSON.stringify(resp.data))[schemaIndex]
-    );
-  };
 
   useEffect(() => {
-    loadSchemas();
+    (async () => {
+      const schema = await axios.get(`${BASE_BACKEND_URL}/getAllSchemas`);
+      const formEditor = new FormEditor({
+        container: document.querySelector("#form-editor"),
+      });
+
+      //edit form & get new schema
+      await formEditor.importSchema(exampleSchema);
+    })();
   }, []);
 
   return (
     <>
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <ButtonGroup
-          sx={{
-            position: 'fixed',
-            zIndex: 1000,
-            width: '100%',
-            bottom: 0,
-            right: 0,
-            margin: 3,
-            marginBottom: 9,
-            justifyContent: 'end',
-          }}
-        >
-          <Button onClick={handlePrev} disabled={schemaIndex === 0}>
-            <ChevronLeftIcon />
-            previous
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={schemaIndex === schemas.length - 1}
-          >
-            next
-            <ChevronRightIcon />
-          </Button>
-        </ButtonGroup>
-
-        <ButtonGroup
-          sx={{
-            position: 'fixed',
-            zIndex: 1000,
-            width: '100%',
-            bottom: 0,
-            right: 0,
-            margin: 3,
-            justifyContent: 'end',
-          }}
-        >
-          <Button variant='contained' color='success' onClick={handleSave}>
-            Save
-          </Button>
-          <Button variant='contained' color='secondary' onClick={handleReset}>
-            Reset
-          </Button>
-        </ButtonGroup>
-      </Box>
-      <div id='form-editor'></div>
+      <ButtonGroup
+        sx={{
+          position: "fixed",
+          zIndex: 1000,
+          width: "100%",
+          bottom: 0,
+          right: 0,
+          margin: 3,
+          justifyContent: "end",
+        }}
+      >
+        <Button variant="contained" color="success" onClick={handleSave}>
+          Save
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleReset}>
+          Reset
+        </Button>
+      </ButtonGroup>
+      <div id="form-editor"></div>
     </>
   );
 };

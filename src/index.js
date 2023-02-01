@@ -17,9 +17,8 @@ const AUTH_PORT = Number(_port) + 1;
 const CAMUNDA_ADP_PORT = Number(_port) + 2;
 const BACKEND_PORT = Number(_port) + 3;
 
-export const BASE_AUTH_URL = `http://10.100.150.36:${AUTH_PORT}/api/v1`;
-export const BASE_CAMADPTR_URL = `http://10.100.150.36:${CAMUNDA_ADP_PORT}/api/v1`;
-export const BASE_BACKEND_URL = `http://10.100.150.36:${BACKEND_PORT}/api/v1`;
+export const BASE_AUTH_URL = `http://${_host}:${AUTH_PORT}/api/v1`;
+export const BASE_CAMADPTR_URL = `http://${_host}:${CAMUNDA_ADP_PORT}/api/v1`;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

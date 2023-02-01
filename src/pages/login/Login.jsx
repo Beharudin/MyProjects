@@ -47,15 +47,7 @@ const unameIsValid = async (uname) => {
 };
 
 const Login = () => {
-  const _path = window.location.pathname;
-  const [path, setPath] = React.useState(_path);
-  const toggleLoginPage = () => {
-    setPath(path === "/login" || path === "/Login" ? "/staff/login" : "/login");
-  };
-
-  useEffect(() => {
-    <Navigate to={path} replace />;
-  }, [path]);
+  const path = window.location.pathname;
 
   const dispatch = useDispatch();
   const errType = useSelector((state) => state.ui.notif.type);
@@ -185,7 +177,7 @@ const Login = () => {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon onClick={toggleLoginPage} />
+            <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
