@@ -18,7 +18,6 @@ const AUTH_PORT = Number(_port) + 1;
 const CAMUNDA_ADP_PORT = Number(_port) + 2;
 const BACKEND_PORT = Number(_port) + 3;
 const remote_host = '10.100.150.36';
-const remote_host2 = '192.168.100.18';
 export const BASE_AUTH_URL = `http://${remote_host}:${AUTH_PORT}/api/v1`;
 export const BASE_CAMADPTR_URL = `http://${_host}:${CAMUNDA_ADP_PORT}/api/v1`;
 export const BASE_BACKEND_URL = `http://${remote_host}:${BACKEND_PORT}/api/v1`;
