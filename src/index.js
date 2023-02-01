@@ -12,15 +12,16 @@ import store from './store/index.js';
 import { Axios } from 'axios';
 export const cookies = new Cookies();
 export const _host = window.location.host.split(':')[0];
+console.log(`host`, _host);
 export const _port = window.location.host.split(':')[1];
 const AUTH_PORT = Number(_port) + 1;
 const CAMUNDA_ADP_PORT = Number(_port) + 2;
 const BACKEND_PORT = Number(_port) + 3;
-
-export const BASE_AUTH_URL = `http://10.100.150.36:${AUTH_PORT}/api/v1`;
-export const BASE_CAMADPTR_URL = `http://10.100.150.36:${CAMUNDA_ADP_PORT}/api/v1`;
-export const BASE_BACKEND_URL = `http://10.100.150.36:${BACKEND_PORT}/api/v1`;
-
+const remote_host = '10.100.150.36';
+const remote_host2 = '192.168.100.18';
+export const BASE_AUTH_URL = `http://${remote_host}:${AUTH_PORT}/api/v1`;
+export const BASE_CAMADPTR_URL = `http://${_host}:${CAMUNDA_ADP_PORT}/api/v1`;
+export const BASE_BACKEND_URL = `http://${remote_host}:${BACKEND_PORT}/api/v1`;
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
