@@ -16,6 +16,11 @@ import { useSelector } from 'react-redux';
 import LoanStatus from '../loanStatus/LoanStatus';
 import TaskList from '../taskList/TaskList';
 import { Container } from '@mui/material';
+import { useEffect } from 'react';
+
+import HistoryIcon from '@mui/icons-material/History';
+import MapIcon from '@mui/icons-material/Map';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 const img = "url('/img/Pattern.svg')";
 
 const drawerWidth = 240;
@@ -67,16 +72,29 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function SideDrawer({
-  drawerOptions,
-  reloadDrawerOptions,
-  props,
-  children,
-}) {
+export default function SideDrawer({ reloadDrawerOptions, props, children }) {
   const [open, setOpen] = React.useState(false);
+  const [drawerOptions, setDrawerOptions] = React.useState([]);
   const [bodyOption, setBodyOption] = React.useState('dashboard');
   const isPending = useSelector((state) => state.ui.isLoading);
   const notifType = useSelector((state) => state.ui.notif.type);
+  const userData = useSelector((state) => state.auth.userData);
+  console.log('userData', userData);
+
+  const opts = [
+    { text: 'New Loan', icon: [<AddCircleIcon />] },
+    { text: 'See Loan Status', icon: [<MapIcon />] },
+    { text: 'History', icon: [<HistoryIcon />] },
+  ];
+  const optsWithOutNew = opts.filter((el) => el.text != 'New Loan');
+  const optsWithOutStatus = opts.filter((el) => el.text != 'See Loan Status');
+
+  useEffect(() => {
+    console.log('im running');
+    userData?.pId
+      ? setDrawerOptions(optsWithOutNew)
+      : setDrawerOptions(optsWithOutStatus);
+  }, [userData]);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -130,7 +148,7 @@ export default function SideDrawer({
           </List>
         </Drawer>
       </Box>
-      <Box width='100%'>
+      <Box sx={{ width: '100%' }}>
         {notifType && children[0]}
         {isPending && children[1]}
         {bodyOption && bodyOption === 'New Loan' && (

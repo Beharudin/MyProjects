@@ -5,20 +5,11 @@ import { Navigate } from 'react-router-dom';
 import { BASE_CAMADPTR_URL, cookies } from '../..';
 import Drawer from '../../components/drawer/Drawer';
 import Header from '../../components/header/Header';
-import HistoryIcon from '@mui/icons-material/History';
-import MapIcon from '@mui/icons-material/Map';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Box, imageListClasses } from '@mui/material';
 import SpinLoader from '../../components/spinloader/SpinLoader';
 import Notify from '../../components/notify/Notify';
 import { uiActions } from '../../store/ui';
 import { authActions } from '../../store/auth';
-
-const opts = [
-  { text: 'New Loan', icon: [<AddCircleIcon />] },
-  { text: 'See Loan Status', icon: [<MapIcon />] },
-  { text: 'History', icon: [<HistoryIcon />] },
-];
 
 const CustHome = () => {
   const userId = cookies.get('userId');
@@ -37,22 +28,12 @@ const CustHome = () => {
       const resp = await axios.get(
         `${BASE_CAMADPTR_URL}/getRunningProcessForCustomer?customerId=${userId}`
       );
-      //if cust has no running process then get processStarting task/form
-      if (resp.data.length < 1) {
-        const resp2 = await axios.get(`${BASE_CAMADPTR_URL}/getStartFormKey`);
-
-        setProps({ formKey: resp2.data });
-      }
-      // dispatch(authActions.updateUserData(payload: {...userData, currentTaskForm: }))
-      const optsWithOutNew = opts.filter((el) => el.text != 'New Loan');
-      const optsWithOutStatus = opts.filter(
-        (el) => el.text != 'See Loan Status'
-      );
-      if (resp.data.length > 0) {
-        setDrawerOptions(optsWithOutNew);
-      } else {
-        setDrawerOptions(optsWithOutStatus);
-      }
+      if (resp.data.length > 0)
+        dispatch(
+          authActions.updateUserData({
+            userData: { ...userData, pId: resp.data },
+          })
+        );
     } catch (err) {
       dispatch(uiActions.stopLoad());
       const msg = err.response?.data?.error;
@@ -81,11 +62,7 @@ const CustHome = () => {
       }}
     >
       <Header />
-      <Drawer
-        drawerOptions={drawerOptions}
-        reloadDrawerOptions={reloadDrawerOptions}
-        props={props}
-      >
+      <Drawer props={props}>
         <Notify />
         <SpinLoader />
       </Drawer>
