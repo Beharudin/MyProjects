@@ -6,8 +6,11 @@ import { useEffect } from 'react';
 import { BASE_CAMADPTR_URL } from '../..';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useDispatch } from 'react-redux';
+import { uiActions } from '../../store/ui';
 
 const EditForm = () => {
+  const dispatch = useDispatch();
   const [schemaIndex, setSchemaIndex] = useState(0);
   const [schemas, setSchemas] = useState([]);
 
@@ -32,12 +35,13 @@ const EditForm = () => {
       setSchemaIndex(newIndex);
       document.getElementById('form-editor').innerHTML = '<div></div>';
       await formEditor.attachTo('#form-editor');
-
       await formEditor.importSchema(schemas[newIndex]);
     }
   };
 
   const loadSchemas = async () => {
+    dispatch(uiActions.startLoad());
+
     const resp = await axios.get(`${BASE_CAMADPTR_URL}/getAllFormSchemas`);
 
     //edit form & get new schema
@@ -46,11 +50,12 @@ const EditForm = () => {
     await formEditor.importSchema(
       JSON.parse(JSON.stringify(resp.data))[schemaIndex]
     );
+    dispatch(uiActions.stopLoad());
   };
 
   useEffect(() => {
     loadSchemas();
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

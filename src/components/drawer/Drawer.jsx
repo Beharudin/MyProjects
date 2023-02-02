@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -15,7 +15,8 @@ import NewLoan from '../newLoan/NewLoan';
 import { useSelector } from 'react-redux';
 import LoanStatus from '../loanStatus/LoanStatus';
 import TaskList from '../taskList/TaskList';
-import MyTasks from '../myTasks/MyTasks';
+import { Container } from '@mui/material';
+const img = "url('/img/Pattern.svg')";
 
 const drawerWidth = 240;
 
@@ -52,7 +53,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
-  backgroundColor: '#00d4ff',
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: 'nowrap',
@@ -85,7 +85,16 @@ export default function SideDrawer({
     setBodyOption('dashboard');
   };
   return (
-    <Box container display='flex'>
+    <Container
+      sx={{
+        display: 'flex',
+        backgroundImage: img,
+        backgroundSize: 'cover',
+        width: '100vw',
+        height: '100vh',
+      }}
+      maxWidth='xl'
+    >
       <Box>
         <Drawer variant='permanent' open={open}>
           <DrawerHeader>
@@ -142,6 +151,6 @@ export default function SideDrawer({
           <TaskList show='my' props={props} />
         )}
       </Box>
-    </Box>
+    </Container>
   );
 }

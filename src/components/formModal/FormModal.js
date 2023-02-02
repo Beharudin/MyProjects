@@ -1,36 +1,42 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { BASE_CAMADPTR_URL } from '../..';
-import { StyledModal } from '../dataTable/DataTableStyle.js';
-import { ModalProvider } from 'styled-react-modal';
-import { FormEditor } from '@bpmn-io/form-js-editor';
-import { Box, Button, Dialog, Modal, Typography } from '@mui/material';
+import { Form } from '@bpmn-io/form-js';
+
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from '@mui/material';
 
 export const FormModal = ({ formKey, setToDashboard, taskId }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [formFetched, setFormFetched] = useState(false);
   const toggleModal = () => {
     setIsOpen(!isOpen);
     setToDashboard();
   };
-  const formEditor = new FormEditor({
-    container: document.querySelector('#modal-form'),
-  });
 
   const fetchFormSchema = async () => {
+    const form = new Form({
+      container: document.querySelector('#modal-form'),
+    });
+
     const resp = await axios.get(
       `${BASE_CAMADPTR_URL}/getStartFormSchema?formKey=${formKey}`
     );
     document.getElementById('modal-form').innerHTML = '<div></div>';
-    await formEditor.attachTo('#modal-form');
-    await formEditor.importSchema(resp.data);
+    await form.attachTo('#modal-form');
+    await form.importSchema(resp.data);
+    setFormFetched(true);
   };
 
   useEffect(() => {
-    console.log(
-      `document.getElementById('modal-form')`,
-      document.getElementById('modal-form')
-    );
-
     if (!taskId) fetchFormSchema();
   }, []);
 
@@ -43,55 +49,26 @@ export const FormModal = ({ formKey, setToDashboard, taskId }) => {
     );
   };
 
-  const TaskHeader = () => {
-    return (
-      <Box sx={{ flexDirection: 'column' }}>
-        <TaskDescription />
-        <Button sx={{ width: '100', margin: 'auto' }} onClick={toggleModal}>
-          close
-        </Button>
-      </Box>
-    );
-  };
-
   return (
-    <ModalProvider>
-      {isOpen && (
-        <Box>
+    <div>
+      <Dialog open={isOpen} onClose={toggleModal} maxWidth={'sm'}>
+        <DialogTitle>
           <TaskDescription />
-          <Button
-            sx={{ width: '100', justifyContent: 'center' }}
-            onClick={toggleModal}
-          >
-            close
-          </Button>
-        </Box>
-      )}
-      <div
-        id='modal-form'
-        style={{
-          display: isOpen ? 'flex' : 'none',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#F2FAFFE6',
-          borderRadius: '25px',
-          border: '2px solid  #00ADEF',
-          padding: '20px',
-          width: 'fit-content',
-          blockSize: 'fit-content',
-          margin: 'auto',
+        </DialogTitle>
 
-          input: {
-            borderRradius: '15px',
-            border: '2px solid #00adef',
-            padding: '10px',
-          },
-          container: {
-            display: 'grid',
-            gridTemplateColumns: '1fr',
-          },
-        }}
-      ></div>
-    </ModalProvider>
+        {!formFetched && (
+          <DialogContent sx={{ margin: 'auto' }}>
+            <Box sx={{ display: 'flex' }}>
+              <CircularProgress />
+            </Box>
+          </DialogContent>
+        )}
+        <DialogContent id='modal-form'></DialogContent>
+        <DialogActions>
+          <Button onClick={toggleModal}>Close</Button>
+          <Button>Sumbit</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 };
