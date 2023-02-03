@@ -6,20 +6,20 @@ import {
   CardContent,
   Grid,
   Typography,
-} from "@mui/material";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { BASE_BACKEND_URL, BASE_CAMADPTR_URL, cookies } from "../..";
-import { uiActions } from "../../store/ui";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListTask from "../listTask/ListTask";
-import MyTasks from "../myTasks/MyTasks";
+} from '@mui/material';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { BASE_BACKEND_URL, BASE_CAMADPTR_URL, cookies } from '../..';
+import { uiActions } from '../../store/ui';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ListTask from '../listTask/ListTask';
+import MyTasks from '../myTasks/MyTasks';
 
 const TaskList = ({ show }) => {
   const dispatch = useDispatch();
-  const userId = cookies.get("userId");
-  const [list, setList] = useState("");
+  const userId = cookies.get('userId');
+  const [list, setList] = useState('');
   const [tasks, setTasks] = useState([]);
   const [taskGroups, setTaskGroups] = useState([]);
 
@@ -29,10 +29,10 @@ const TaskList = ({ show }) => {
   const loadTasks = async () => {
     try {
       dispatch(uiActions.startLoad());
-      setList("");
+      setList('');
 
       //get tasks
-      const endpoint = show === "all" ? "getAllTasksForCustomer" : "getMyTasks";
+      const endpoint = show === 'all' ? 'getAllTasksForUser' : 'getMyTasks';
       const resp = await axios.get(
         `${BASE_CAMADPTR_URL}/${endpoint}?userId=${userId}`
       );
@@ -76,7 +76,7 @@ const TaskList = ({ show }) => {
       const msg = err.response?.data?.error;
       dispatch(
         uiActions.notif({
-          type: "error",
+          type: 'error',
           msg,
         })
       );
@@ -88,29 +88,29 @@ const TaskList = ({ show }) => {
   }, [dispatch]);
   return (
     <Box>
-      {list && show === "all" && (
+      {list && show === 'all' && (
         <ListTask reloadTasks={loadTasks} list={list} setList={setList} />
       )}
-      {list && show === "my" && (
+      {list && show === 'my' && (
         <MyTasks reloadTasks={loadTasks} list={list} setList={setList} />
       )}
       {!list && (
-        <Grid display="flex">
+        <Grid display='flex'>
           {taskGroups.map((el) => (
-            <Card xs="3" sx={{ margin: 3 }}>
+            <Card xs='3' sx={{ margin: 3 }}>
               <CardContent>
-                <Typography variant="h5" component="div">
+                <Typography variant='h5' component='div'>
                   {el.name}
                 </Typography>
-                <Typography variant="body2">{el.desc}</Typography>
+                <Typography variant='body2'>{el.desc}</Typography>
                 <br />
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                <Typography sx={{ mb: 1.5 }} color='text.secondary'>
                   total: {el.num}
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small" id={el.id} onClick={seeListHandler}>
-                  List all{" "}
+                <Button size='small' id={el.id} onClick={seeListHandler}>
+                  List all{' '}
                   <ChevronRightIcon id={el.id} onClick={seeListHandler} />
                 </Button>
               </CardActions>

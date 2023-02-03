@@ -29,16 +29,16 @@ export const FormModal = ({ setToDashboard, taskId }) => {
     container: document.querySelector('#modal-form'),
   });
 
-  const closeModal = () => {
+  const closeModal = (e, reason) => {
+    if (reason && reason === 'backdropClick') return;
     setIsOpen(!isOpen);
     setToDashboard();
   };
 
   const fetchFormSchema = async () => {
     const resp = taskId
-      ? ''
+      ? await axios.get(`${BASE_CAMADPTR_URL}/getFormSchema?taskId=${taskId}`)
       : await axios.get(`${BASE_CAMADPTR_URL}/getStartFormSchema`);
-
     document.getElementById('modal-form').innerHTML = '<div></div>';
     await form.attachTo('#modal-form');
     await form.importSchema(resp.data);
@@ -47,33 +47,43 @@ export const FormModal = ({ setToDashboard, taskId }) => {
   form.on('changed', (e) => console.log('eeee', e));
   form.on('submit', async (e) => {
     try {
-      setFormLoading(true);
       const error = form.validate();
       if (!Object.values(error)[0]) {
+        setFormLoading(true);
+
         const body = {
           customerId: userId,
           variables: e.data,
         };
         //post submitStartForm or submitTaskForm apis here
         const resp = taskId
-          ? await axios.post(`${BASE_CAMADPTR_URL}/submitFrom?taskId=x`)
+          ? await axios.post(`${BASE_CAMADPTR_URL}/submitForm?taskId=${taskId}`)
           : await axios.post(`${BASE_CAMADPTR_URL}/submitStartForm`, body);
-        console.log('resp.data', resp.data);
-        if (!taskId)
-          dispatch(
-            authActions.updateUserData({
-              userData: { ...userData, pId: resp.data },
-            })
-          );
+
+        //fetch latest taskId for customer
+        const resp2 = await axios.get(
+          `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}`
+        );
+        dispatch(
+          authActions.updateUserData({
+            userData: {
+              ...userData,
+              pId: taskId ? userData.pId : resp.data,
+              taskId: resp2.data.candidateGroupIsCustomer
+                ? resp2.data?.taskId
+                : null,
+            },
+          })
+        );
         dispatch(
           uiActions.notif({
             type: 'success',
-            msg: 'Loan process started successfully',
+            msg: 'Operation successfull',
           })
         );
+        setFormLoading(false);
+        closeModal();
       }
-      setFormLoading(false);
-      closeModal();
     } catch (err) {
       setFormLoading(false);
       closeModal();
@@ -87,7 +97,7 @@ export const FormModal = ({ setToDashboard, taskId }) => {
   });
 
   useEffect(() => {
-    if (!taskId) fetchFormSchema();
+    fetchFormSchema();
   }, []);
 
   const TaskDescription = () => {
