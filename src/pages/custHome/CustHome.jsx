@@ -5,53 +5,43 @@ import { Navigate } from 'react-router-dom';
 import { BASE_CAMADPTR_URL, cookies } from '../..';
 import Drawer from '../../components/drawer/Drawer';
 import Header from '../../components/header/Header';
-import HistoryIcon from '@mui/icons-material/History';
-import MapIcon from '@mui/icons-material/Map';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Box } from '@mui/material';
 import SpinLoader from '../../components/spinloader/SpinLoader';
 import Notify from '../../components/notify/Notify';
 import { uiActions } from '../../store/ui';
 import { authActions } from '../../store/auth';
 
-const opts = [
-  { text: 'New Loan', icon: [<AddCircleIcon />] },
-  { text: 'See Loan Status', icon: [<MapIcon />] },
-  { text: 'History', icon: [<HistoryIcon />] },
-];
-
 const CustHome = () => {
   const userId = cookies.get('userId');
   const dispatch = useDispatch();
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const [drawerOptions, setDrawerOptions] = useState([]);
-  const [pId, setPid] = useState('');
   const userData = useSelector((state) => state.auth.userData);
-  const [props, setProps] = useState({});
+  const [props] = useState({});
 
   //+ new loan option will diverge into new biz and new mortg options after
   //we include stage 6+
-  const reloadDrawerOptions = async () => {
+  const getProcessIdForCustomer = async () => {
     try {
       const resp = await axios.get(
         `${BASE_CAMADPTR_URL}/getRunningProcessForCustomer?customerId=${userId}`
       );
-      //if cust has no running process then get processStarting task/form
-      if (resp.data.length < 1) {
-        const resp2 = await axios.get(`${BASE_CAMADPTR_URL}/getStartFormKey`);
-
-        setProps({ formKey: resp2.data });
-      }
-      // dispatch(authActions.updateUserData(payload: {...userData, currentTaskForm: }))
-      const optsWithOutNew = opts.filter((el) => el.text != 'New Loan');
-      const optsWithOutStatus = opts.filter(
-        (el) => el.text != 'See Loan Status'
-      );
       if (resp.data.length > 0) {
-        setDrawerOptions(optsWithOutNew);
-      } else {
-        setDrawerOptions(optsWithOutStatus);
+        //fetch latest taskId for customer
+        const resp2 = await axios.get(
+          `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}`
+        );
+        dispatch(
+          authActions.updateUserData({
+            userData: {
+              ...userData,
+              pId: resp.data,
+              taskId: resp2.data.candidateGroupIsCustomer
+                ? resp2.data?.taskId
+                : null,
+            },
+          })
+        );
       }
     } catch (err) {
       dispatch(uiActions.stopLoad());
@@ -66,8 +56,8 @@ const CustHome = () => {
   };
 
   useEffect(() => {
-    reloadDrawerOptions();
-  }, [isLoggedIn]);
+    getProcessIdForCustomer();
+  }, []);
 
   if (!isLoggedIn) {
     return <Navigate to='/Login' replace />;
@@ -81,11 +71,7 @@ const CustHome = () => {
       }}
     >
       <Header />
-      <Drawer
-        drawerOptions={drawerOptions}
-        reloadDrawerOptions={reloadDrawerOptions}
-        props={props}
-      >
+      <Drawer props={props}>
         <Notify />
         <SpinLoader />
       </Drawer>

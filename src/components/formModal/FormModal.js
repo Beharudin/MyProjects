@@ -1,37 +1,103 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { BASE_CAMADPTR_URL } from '../..';
-import { StyledModal } from '../dataTable/DataTableStyle.js';
-import { ModalProvider } from 'styled-react-modal';
-import { FormEditor } from '@bpmn-io/form-js-editor';
-import { Box, Button, Dialog, Modal, Typography } from '@mui/material';
+import { BASE_CAMADPTR_URL, cookies } from '../..';
+import { Form } from '@bpmn-io/form-js-viewer';
 
-export const FormModal = ({ formKey, setToDashboard, taskId }) => {
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { uiActions } from '../../store/ui';
+import { authActions } from '../../store/auth';
+
+export const FormModal = ({ setToDashboard, taskId }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const toggleModal = () => {
-    setIsOpen(!isOpen);
-    setToDashboard();
-  };
-  const formEditor = new FormEditor({
+  const [formLoading, setFormLoading] = useState(false);
+  const [formFetched, setFormFetched] = useState(false);
+  const userId = cookies.get('userId');
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.auth.userData);
+
+  const form = new Form({
     container: document.querySelector('#modal-form'),
   });
 
-  const fetchFormSchema = async () => {
-    const resp = await axios.get(
-      `${BASE_CAMADPTR_URL}/getStartFormSchema?formKey=${formKey}`
-    );
-    document.getElementById('modal-form').innerHTML = '<div></div>';
-    await formEditor.attachTo('#modal-form');
-    await formEditor.importSchema(resp.data);
+  const closeModal = (e, reason) => {
+    if (reason && reason === 'backdropClick') return;
+    setIsOpen(!isOpen);
+    setToDashboard();
   };
 
-  useEffect(() => {
-    console.log(
-      `document.getElementById('modal-form')`,
-      document.getElementById('modal-form')
-    );
+  const fetchFormSchema = async () => {
+    const resp = taskId
+      ? await axios.get(`${BASE_CAMADPTR_URL}/getFormSchema?taskId=${taskId}`)
+      : await axios.get(`${BASE_CAMADPTR_URL}/getStartFormSchema`);
+    document.getElementById('modal-form').innerHTML = '<div></div>';
+    await form.attachTo('#modal-form');
+    await form.importSchema(resp.data);
+    setFormFetched(true);
+  };
+  form.on('changed', (e) => console.log('eeee', e));
+  form.on('submit', async (e) => {
+    try {
+      const error = form.validate();
+      if (!Object.values(error)[0]) {
+        setFormLoading(true);
 
-    if (!taskId) fetchFormSchema();
+        const body = {
+          customerId: userId,
+          variables: e.data,
+        };
+        //post submitStartForm or submitTaskForm apis here
+        const resp = taskId
+          ? await axios.post(`${BASE_CAMADPTR_URL}/submitForm?taskId=${taskId}`)
+          : await axios.post(`${BASE_CAMADPTR_URL}/submitStartForm`, body);
+
+        //fetch latest taskId for customer
+        const resp2 = await axios.get(
+          `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}`
+        );
+        dispatch(
+          authActions.updateUserData({
+            userData: {
+              ...userData,
+              pId: taskId ? userData.pId : resp.data,
+              taskId: resp2.data.candidateGroupIsCustomer
+                ? resp2.data?.taskId
+                : null,
+            },
+          })
+        );
+        dispatch(
+          uiActions.notif({
+            type: 'success',
+            msg: 'Operation successfull',
+          })
+        );
+        setFormLoading(false);
+        closeModal();
+      }
+    } catch (err) {
+      setFormLoading(false);
+      closeModal();
+      dispatch(
+        uiActions.notif({
+          type: 'error',
+          msg: err.response?.data,
+        })
+      );
+    }
+  });
+
+  useEffect(() => {
+    fetchFormSchema();
   }, []);
 
   const TaskDescription = () => {
@@ -43,55 +109,27 @@ export const FormModal = ({ formKey, setToDashboard, taskId }) => {
     );
   };
 
-  const TaskHeader = () => {
-    return (
-      <Box sx={{ flexDirection: 'column' }}>
-        <TaskDescription />
-        <Button sx={{ width: '100', margin: 'auto' }} onClick={toggleModal}>
-          close
-        </Button>
-      </Box>
-    );
-  };
-
   return (
-    <ModalProvider>
-      {isOpen && (
-        <Box>
+    <div>
+      <Dialog open={isOpen} onClose={closeModal} maxWidth={'sm'}>
+        <DialogTitle>
           <TaskDescription />
-          <Button
-            sx={{ width: '100', justifyContent: 'center' }}
-            onClick={toggleModal}
-          >
-            close
-          </Button>
-        </Box>
-      )}
-      <div
-        id='modal-form'
-        style={{
-          display: isOpen ? 'flex' : 'none',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#F2FAFFE6',
-          borderRadius: '25px',
-          border: '2px solid  #00ADEF',
-          padding: '20px',
-          width: 'fit-content',
-          blockSize: 'fit-content',
-          margin: 'auto',
+        </DialogTitle>
 
-          input: {
-            borderRradius: '15px',
-            border: '2px solid #00adef',
-            padding: '10px',
-          },
-          container: {
-            display: 'grid',
-            gridTemplateColumns: '1fr',
-          },
-        }}
-      ></div>
-    </ModalProvider>
+        {(!formFetched || formLoading) && (
+          <DialogContent sx={{ margin: 'auto' }}>
+            <Box sx={{ display: 'flex' }}>
+              <CircularProgress />
+            </Box>
+          </DialogContent>
+        )}
+        <DialogContent id='modal-form'></DialogContent>
+        <DialogActions>
+          <Button onClick={closeModal} color='error'>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -15,7 +15,16 @@ import NewLoan from '../newLoan/NewLoan';
 import { useSelector } from 'react-redux';
 import LoanStatus from '../loanStatus/LoanStatus';
 import TaskList from '../taskList/TaskList';
-import MyTasks from '../myTasks/MyTasks';
+import { Badge, Container } from '@mui/material';
+import { useEffect } from 'react';
+
+import HistoryIcon from '@mui/icons-material/History';
+import MapIcon from '@mui/icons-material/Map';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import { FormModal } from '../formModal/FormModal';
+const img = "url('/img/Pattern.svg')";
 
 const drawerWidth = 240;
 
@@ -52,7 +61,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
-  backgroundColor: '#00d4ff',
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: 'nowrap',
@@ -67,16 +75,36 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function SideDrawer({
-  drawerOptions,
-  reloadDrawerOptions,
-  props,
-  children,
-}) {
+export default function SideDrawer({ reloadDrawerOptions, props, children }) {
   const [open, setOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState(null);
   const [bodyOption, setBodyOption] = React.useState('dashboard');
+  const [optionalFeatures, setOptionalFeatures] = React.useState([
+    { text: '', icon: [] },
+  ]);
   const isPending = useSelector((state) => state.ui.isLoading);
   const notifType = useSelector((state) => state.ui.notif.type);
+  const userData = useSelector((state) => state.auth.userData);
+  console.log('userData @ drawer', userData);
+
+  const optionals = [
+    { text: 'New Loan', icon: [<AddCircleIcon />] },
+    { text: 'See Loan Status', icon: [<MapIcon />] },
+  ];
+
+  useEffect(() => {
+    console.log('here');
+    userData?.pId
+      ? setOptionalFeatures([optionals[1]])
+      : setOptionalFeatures([optionals[0]]);
+    userData?.taskId
+      ? setNotification(
+          <Badge badgeContent={1} color='secondary'>
+            <NotificationsActiveIcon color='error' />
+          </Badge>
+        )
+      : setNotification(<NotificationsIcon />);
+  }, [userData]);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -85,7 +113,16 @@ export default function SideDrawer({
     setBodyOption('dashboard');
   };
   return (
-    <Box container display='flex'>
+    <Container
+      sx={{
+        display: 'flex',
+        backgroundImage: img,
+        backgroundSize: 'cover',
+        width: '100vw',
+        height: '100vh',
+      }}
+      maxWidth='xl'
+    >
       <Box>
         <Drawer variant='permanent' open={open}>
           <DrawerHeader>
@@ -95,7 +132,11 @@ export default function SideDrawer({
           </DrawerHeader>
           <Divider />
           <List>
-            {drawerOptions.map(({ text, icon }) => (
+            {[
+              ...optionalFeatures,
+              { text: 'History', icon: [<HistoryIcon />] },
+              { text: 'Actions', icon: [notification] },
+            ].map(({ text, icon }) => (
               <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   sx={{
@@ -121,7 +162,7 @@ export default function SideDrawer({
           </List>
         </Drawer>
       </Box>
-      <Box width='100%'>
+      <Box sx={{ width: '100%' }}>
         {notifType && children[0]}
         {isPending && children[1]}
         {bodyOption && bodyOption === 'New Loan' && (
@@ -141,7 +182,10 @@ export default function SideDrawer({
         {bodyOption && bodyOption === 'My tasks' && (
           <TaskList show='my' props={props} />
         )}
+        {bodyOption && bodyOption === 'Actions' && (
+          <FormModal setToDashboard={setToDashboard} taskId={userData.taskId} />
+        )}
       </Box>
-    </Box>
+    </Container>
   );
 }
