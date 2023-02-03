@@ -60,7 +60,7 @@ export const FormModal = ({ setToDashboard, taskId }) => {
           ? await axios.post(`${BASE_CAMADPTR_URL}/submitForm?taskId=${taskId}`)
           : await axios.post(`${BASE_CAMADPTR_URL}/submitStartForm`, body);
 
-        //fetch latest taskId for customer
+        //fetch latest task for customer
         const resp2 = await axios.get(
           `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}`
         );
