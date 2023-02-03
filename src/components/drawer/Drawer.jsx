@@ -15,7 +15,7 @@ import NewLoan from '../newLoan/NewLoan';
 import { useSelector } from 'react-redux';
 import LoanStatus from '../loanStatus/LoanStatus';
 import TaskList from '../taskList/TaskList';
-import { Badge, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import { useEffect } from 'react';
 
 import HistoryIcon from '@mui/icons-material/History';
@@ -24,6 +24,10 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { FormModal } from '../formModal/FormModal';
+
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import StyledDiv from './shakeNotification';
 const img = "url('/img/Pattern.svg')";
 
 const drawerWidth = 240;
@@ -77,33 +81,41 @@ const Drawer = styled(MuiDrawer, {
 
 export default function SideDrawer({ reloadDrawerOptions, props, children }) {
   const [open, setOpen] = React.useState(false);
-  const [notification, setNotification] = React.useState(null);
   const [bodyOption, setBodyOption] = React.useState('dashboard');
-  const [optionalFeatures, setOptionalFeatures] = React.useState([
-    { text: '', icon: [] },
-  ]);
+  const [drawerOptions, setDrawerOptions] = React.useState([]);
+
   const isPending = useSelector((state) => state.ui.isLoading);
   const notifType = useSelector((state) => state.ui.notif.type);
   const userData = useSelector((state) => state.auth.userData);
-  console.log('userData @ drawer', userData);
-
   const optionals = [
     { text: 'New Loan', icon: [<AddCircleIcon />] },
     { text: 'See Loan Status', icon: [<MapIcon />] },
+    { text: 'History', icon: [<HistoryIcon />] },
+    { text: 'Task list', icon: [<PlaylistAddIcon />] },
+    { text: 'My tasks', icon: [<PlaylistAddCheckIcon />] },
+    { text: 'Actions', icon: [<NotificationsIcon />] },
+    {
+      text: 'Actions',
+      icon: [
+        <StyledDiv>
+          <span className='rise-shake'>
+            <NotificationsActiveIcon color='error' />
+          </span>
+        </StyledDiv>,
+      ],
+    },
   ];
 
   useEffect(() => {
-    console.log('here');
-    userData?.pId
-      ? setOptionalFeatures([optionals[1]])
-      : setOptionalFeatures([optionals[0]]);
-    userData?.taskId
-      ? setNotification(
-          <Badge badgeContent={1} color='secondary'>
-            <NotificationsActiveIcon color='error' />
-          </Badge>
-        )
-      : setNotification(<NotificationsIcon />);
+    const options = [];
+    if (userData.role === 'customer') {
+      userData?.pId ? options.push(optionals[1]) : options.push(optionals[0]);
+      userData?.taskId ? options.push(optionals[6]) : (() => {})();
+      options.push(optionals[2]);
+    } else {
+      options.push(optionals[3], optionals[4]);
+    }
+    setDrawerOptions(options);
   }, [userData]);
 
   const handleDrawerToggle = () => {
@@ -132,11 +144,7 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
           </DrawerHeader>
           <Divider />
           <List>
-            {[
-              ...optionalFeatures,
-              { text: 'History', icon: [<HistoryIcon />] },
-              { text: 'Actions', icon: [notification] },
-            ].map(({ text, icon }) => (
+            {drawerOptions.map(({ text, icon }) => (
               <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   sx={{
@@ -183,7 +191,10 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
           <TaskList show='my' props={props} />
         )}
         {bodyOption && bodyOption === 'Actions' && (
-          <FormModal setToDashboard={setToDashboard} taskId={userData.taskId} />
+          <FormModal
+            resetBackground={setToDashboard}
+            taskId={userData.taskId}
+          />
         )}
       </Box>
     </Container>

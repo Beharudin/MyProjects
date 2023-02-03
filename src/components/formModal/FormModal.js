@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../../store/ui';
 import { authActions } from '../../store/auth';
 
-export const FormModal = ({ setToDashboard, taskId }) => {
+export const FormModal = ({ resetBackground, taskId }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [formLoading, setFormLoading] = useState(false);
   const [formFetched, setFormFetched] = useState(false);
@@ -32,7 +32,7 @@ export const FormModal = ({ setToDashboard, taskId }) => {
   const closeModal = (e, reason) => {
     if (reason && reason === 'backdropClick') return;
     setIsOpen(!isOpen);
-    setToDashboard();
+    resetBackground();
   };
 
   const fetchFormSchema = async () => {
@@ -44,7 +44,6 @@ export const FormModal = ({ setToDashboard, taskId }) => {
     await form.importSchema(resp.data);
     setFormFetched(true);
   };
-  form.on('changed', (e) => console.log('eeee', e));
   form.on('submit', async (e) => {
     try {
       const error = form.validate();

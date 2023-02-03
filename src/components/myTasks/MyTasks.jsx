@@ -16,17 +16,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BASE_CAMADPTR_URL, cookies } from '../..';
 import axios from 'axios';
 import { uiActions } from '../../store/ui';
+import { FormModal } from '../formModal/FormModal';
+import { useState } from 'react';
 
 const MyTasks = ({ list, setList, reloadTasks }) => {
   const userData = useSelector((state) => state.auth.userData);
+  const [taskToPerform, setTaskToPerform] = useState('');
   const dispatch = useDispatch();
   const userId = cookies.get('userId');
 
   const unclaimHandler = async (e) => {
     try {
-      const id = e.target.id.split('ID-')[1];
+      const taskId = e.target.id.split('ID-')[1];
       dispatch(uiActions.startLoad());
-      const url = `${BASE_CAMADPTR_URL}/unclaimTask?taskId=${id}&userId=${userId}`;
+      const url = `${BASE_CAMADPTR_URL}/unclaimTask?taskId=${taskId}&userId=${userId}`;
       await axios.get(url);
       dispatch(
         uiActions.notif({ type: 'success', msg: 'Task unclaimed successfully' })
@@ -46,13 +49,14 @@ const MyTasks = ({ list, setList, reloadTasks }) => {
   };
   const completeHandler = async (e) => {
     try {
-      dispatch(uiActions.startLoad());
-
-      dispatch(
-        uiActions.notif({ type: 'success', msg: 'Task completed successfully' })
-      );
-      dispatch(uiActions.stopLoad());
+      console.log('a');
+      const taskId = e.target.id.split('ID-')[1];
+      setTaskToPerform(taskId);
+      return;
     } catch (err) {}
+  };
+  const resetCompleteTask = (e) => {
+    setTaskToPerform(null);
   };
 
   const backHandler = () => setList('');
@@ -116,6 +120,9 @@ const MyTasks = ({ list, setList, reloadTasks }) => {
           </Card>
         ))}
       </Grid>
+      {taskToPerform && (
+        <FormModal resetBackground={resetCompleteTask} taskId={taskToPerform} />
+      )}
     </>
   );
 };

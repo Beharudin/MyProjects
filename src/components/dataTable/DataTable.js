@@ -1,22 +1,22 @@
-import { useMemo, useEffect, useState } from "react";
-import _DataTable from "react-data-table-component";
-import { StyledDiv, StyledModal } from "./DataTableStyle.js";
-import { useSelector, useDispatch } from "react-redux";
-import { ModalProvider } from "styled-react-modal";
-import Multiselect from "react-bootstrap-multiselect";
-import { Col, Form } from "react-bootstrap";
-import axios from "axios";
-import { BASE_AUTH_URL, BASE_CAMADPTR_URL } from "../../index.js";
-import { uiActions } from "../../store/ui.js";
+import { useMemo, useEffect, useState } from 'react';
+import _DataTable from 'react-data-table-component';
+import { StyledDiv, StyledModal } from './DataTableStyle.js';
+import { useSelector, useDispatch } from 'react-redux';
+import { ModalProvider } from 'styled-react-modal';
+import Multiselect from 'react-bootstrap-multiselect';
+import { Col, Form } from 'react-bootstrap';
+import axios from 'axios';
+import { BASE_AUTH_URL, BASE_CAMADPTR_URL } from '../../index.js';
+import { uiActions } from '../../store/ui.js';
 
 let columns = [
   {
-    name: "Title",
+    name: 'Title',
     selector: (row) => row.title,
     sortable: true,
   },
   {
-    name: "Year",
+    name: 'Year',
     selector: (row) => row.year,
     sortable: true,
   },
@@ -29,11 +29,11 @@ const emailIsValid = () => {
 function convertArrayOfObjectsToCSV(array) {
   let result;
 
-  const columnDelimiter = ",";
-  const lineDelimiter = "\n";
+  const columnDelimiter = ',';
+  const lineDelimiter = '\n';
   const keys = Object.keys(array[0]);
 
-  result = "";
+  result = '';
   result += keys.join(columnDelimiter);
   result += lineDelimiter;
 
@@ -52,7 +52,7 @@ function convertArrayOfObjectsToCSV(array) {
   return result;
 }
 function downloadCSV(array, sb) {
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   let csv = convertArrayOfObjectsToCSV(array);
   if (csv == null) return;
 
@@ -62,17 +62,17 @@ function downloadCSV(array, sb) {
     csv = `data:text/csv;charset=utf-8,${csv}`;
   }
   const encodedURI = encodeURI(csv);
-  const fixedEncodedURI = encodedURI.replaceAll("#", "%23");
-  link.setAttribute("href", fixedEncodedURI);
-  link.setAttribute("download", filename);
+  const fixedEncodedURI = encodedURI.replaceAll('#', '%23');
+  link.setAttribute('href', fixedEncodedURI);
+  link.setAttribute('download', filename);
   link.click();
 }
 
 const Export = ({ onExport }) => (
   <button
-    type="button"
-    className="btn btn-primary"
-    style={{ position: "relative", right: "100px" }}
+    type='button'
+    className='btn btn-primary'
+    style={{ position: 'relative', right: '100px' }}
     onClick={(e) => {
       onExport(e.target.value);
     }}
@@ -85,11 +85,11 @@ const FilterComponent = ({ filterText, onFilter }) => (
   <StyledDiv>
     <div>
       <input
-        id="search"
-        className="searchInput"
-        type="text"
-        placeholder="Filter By Email"
-        aria-label="Search Input"
+        id='search'
+        className='searchInput'
+        type='text'
+        placeholder='Filter By Email'
+        aria-label='Search Input'
         value={filterText}
         onChange={onFilter}
       />
@@ -103,7 +103,7 @@ const DataTable = (_props) => {
   const sb = useSelector((state) => state.sb.option);
   let data = _props.data;
   const [filteredItems, setFilteredItems] = useState(data);
-  const [filterText, setFilterText] = useState("");
+  const [filterText, setFilterText] = useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
   columns = Object.entries(data[0]);
@@ -129,7 +129,7 @@ const DataTable = (_props) => {
         setFilteredItems(filteredData);
       } else {
         setResetPaginationToggle(!resetPaginationToggle);
-        setFilterText("");
+        setFilterText('');
         setFilteredItems(data);
       }
     };
@@ -156,7 +156,7 @@ const DataTable = (_props) => {
       const msg = err.response?.data?.error;
       dispatch(
         uiActions.notif({
-          type: "error",
+          type: 'error',
           msg,
         })
       );
@@ -175,9 +175,9 @@ const DataTable = (_props) => {
         <Form.Check
           inline
           label={props.el}
-          name="group"
+          name='group'
           value={props.el}
-          type="checkbox"
+          type='checkbox'
           onChange={() => setChecked(!checked)}
           checked={checked}
           id={`inline-checkbox-1`}
@@ -195,33 +195,34 @@ const DataTable = (_props) => {
       let data = new FormData(e.currentTarget);
 
       data = {
-        userId: data.get("id"),
-        email: data.get("email"),
-        role: data.get("role"),
-        groups: data.getAll("group"),
+        userId: data.get('id'),
+        email: data.get('email'),
+        role: data.get('role'),
+        groups: data.getAll('group'),
       };
 
       if (!emailIsValid(data.email)) {
-        dispatch(uiActions.notif({ type: "error", msg: "invalid email" }));
+        dispatch(uiActions.notif({ type: 'error', msg: 'invalid email' }));
       } else {
         dispatch(uiActions.startLoad());
         const result = await editUserInfo(data);
-        if (result.status === 200) {
+        try {
           _props.loadData();
           dispatch(uiActions.stopLoad());
           dispatch(
             uiActions.notif({
-              type: "success",
-              msg: result.msg ? result.msg : "operation successfull",
+              type: 'success',
+              msg: result.msg ? result.msg : 'operation successfull',
             })
           );
           props.setIsOpen(false);
-        } else if (result.status === 500) {
+        } catch (err) {
+          console.log(err);
           dispatch(uiActions.stopLoad());
           dispatch(
             uiActions.notif({
-              type: "error",
-              msg: result.msg ? result.msg : "operation unsuccessfull",
+              type: 'error',
+              msg: result.msg ? result.msg : 'operation unsuccessfull',
             })
           );
           props.setIsOpen(false);
@@ -244,7 +245,7 @@ const DataTable = (_props) => {
           const msg = err.response?.data?.error;
           dispatch(
             uiActions.notif({
-              type: "error",
+              type: 'error',
               msg,
             })
           );
@@ -257,15 +258,15 @@ const DataTable = (_props) => {
     return (
       <div>
         {groups.length > 0 && (
-          <form onSubmit={handleSubmit} className="container">
+          <form onSubmit={handleSubmit} className='container'>
             {keys.map((el) => {
-              if (el != "groups" && el != "role" && el != "id") {
+              if (el != 'groups' && el != 'role' && el != 'id') {
                 return (
                   <>
                     <label for={el}>{el}</label>
                     <input
                       id={el}
-                      type="text"
+                      type='text'
                       name={el}
                       value={data[el]}
                       onChange={handleChange}
@@ -274,27 +275,27 @@ const DataTable = (_props) => {
                   </>
                 );
               }
-              if (el === "id") {
+              if (el === 'id') {
                 return (
                   <>
                     <label for={el}>{el}</label>
                     <input
                       id={el}
-                      type="text"
+                      type='text'
                       name={el}
                       value={data[el]}
-                      readonly="readonly"
+                      readonly='readonly'
                     />
                     <br />
                   </>
                 );
               }
-              if (el === "role") {
+              if (el === 'role') {
                 const myRole = data[el];
                 return (
                   <>
                     <label>Role</label>
-                    <Form.Select name="role">
+                    <Form.Select name='role'>
                       {roles.map((el) => {
                         const selected = myRole === el ? true : false;
                         return <option selected={selected}>{el}</option>;
@@ -304,9 +305,9 @@ const DataTable = (_props) => {
                   </>
                 );
               }
-              if (el === "groups") {
-                const myGroups = data[el].split(", ");
-                console.log("myGroups", myGroups);
+              if (el === 'groups') {
+                const myGroups = data[el].split(', ');
+                console.log('myGroups', myGroups);
 
                 let groupOptions = { row1: [], row2: [] };
                 groups.map((el, i) => {
@@ -319,9 +320,9 @@ const DataTable = (_props) => {
 
                 return (
                   <>
-                    <label for="groupsForm">Groups</label>
-                    <Form as={Col} className="groupsForm">
-                      <div key={`inline-checkbox`} className="mb-3">
+                    <label for='groupsForm'>Groups</label>
+                    <Form as={Col} className='groupsForm'>
+                      <div key={`inline-checkbox`} className='mb-3'>
                         {groupOptions.row1}
                         <br />
                         {groupOptions.row2}
@@ -333,7 +334,7 @@ const DataTable = (_props) => {
               }
             })}
 
-            <button type="submit">save</button>
+            <button type='submit'>save</button>
           </form>
         )}
       </div>
@@ -349,28 +350,28 @@ const DataTable = (_props) => {
 
     return (
       <div>
-        <ul className="action-buttons">
-          <li className="list-inline-item">
+        <ul className='action-buttons'>
+          <li className='list-inline-item'>
             <button
               onClick={toggleModal}
-              class="btn btn-success btn-sm rounded-0"
-              type="button"
-              data-toggle="tooltip"
-              data-placement="top"
-              title="Edit"
+              class='btn btn-success btn-sm rounded-0'
+              type='button'
+              data-toggle='tooltip'
+              data-placement='top'
+              title='Edit'
             >
-              <i className="fa fa-edit"></i>
+              <i className='fa fa-edit'></i>
             </button>
           </li>
-          <li className="list-inline-item">
+          <li className='list-inline-item'>
             <button
-              className="btn btn-error btn-sm rounded-0"
-              type="button"
-              data-toggle="tooltip"
-              data-placement="top"
-              title="Delete"
+              className='btn btn-error btn-sm rounded-0'
+              type='button'
+              data-toggle='tooltip'
+              data-placement='top'
+              title='Delete'
             >
-              <i className="fa fa-trash"></i>
+              <i className='fa fa-trash'></i>
             </button>
           </li>
         </ul>
@@ -391,7 +392,7 @@ const DataTable = (_props) => {
         <div>
           <pre>{JSON.stringify(props.data, null, 2)}</pre>
           <ModalProvider>
-            <FancyModalButton data={props.data} className="modalButton" />
+            <FancyModalButton data={props.data} className='modalButton' />
           </ModalProvider>
         </div>
       </StyledDiv>
@@ -401,9 +402,9 @@ const DataTable = (_props) => {
   return (
     <div
       style={{
-        position: "relative",
-        marginLeft: "50px",
-        marginTop: "30px",
+        position: 'relative',
+        marginLeft: '50px',
+        marginTop: '30px',
         marginRight: 0,
       }}
     >
@@ -418,7 +419,7 @@ const DataTable = (_props) => {
         paginationResetDefaultPage={resetPaginationToggle}
         subHeader
         subHeaderComponent={subHeaderComponentMemo}
-        fixedHeaderScrollHeight="450px"
+        fixedHeaderScrollHeight='450px'
       />
     </div>
   );

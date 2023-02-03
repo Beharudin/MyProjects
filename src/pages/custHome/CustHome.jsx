@@ -17,6 +17,8 @@ const CustHome = () => {
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userData = useSelector((state) => state.auth.userData);
+
+  const [count, setCount] = useState(0);
   const [props] = useState({});
 
   //+ new loan option will diverge into new biz and new mortg options after
@@ -43,6 +45,7 @@ const CustHome = () => {
           })
         );
       }
+      setCount(1);
     } catch (err) {
       dispatch(uiActions.stopLoad());
       const msg = err.response?.data?.error;
@@ -71,10 +74,12 @@ const CustHome = () => {
       }}
     >
       <Header />
-      <Drawer props={props}>
-        <Notify />
-        <SpinLoader />
-      </Drawer>
+      {count > 0 && (
+        <Drawer props={props}>
+          <Notify />
+          <SpinLoader />
+        </Drawer>
+      )}
     </Box>
   );
 };

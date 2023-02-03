@@ -113,7 +113,7 @@ const AdminHome = () => {
       {userData.role === 'staff' && (
         <Sidebar sidebarOptions={sidebarOptions.staff} />
       )}
-      {sb && sb === 'addUser' && <AddUser />}
+      {sb && sb === 'manageUsers' && <ManageUsers />}
       {sb && sb === 'addUser' && <AddUser />}
       {sb && sb === 'addGroup' && <AddGroup />}
       {sb && sb === 'editForm' && (
