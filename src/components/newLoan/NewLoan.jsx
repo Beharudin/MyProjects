@@ -14,7 +14,7 @@ const NewLoan = ({
   reloadDrawerOptions,
   reloadBodyOption,
   props,
-  setToDashboard,
+  resetBackground,
 }) => {
   const dispatch = useDispatch();
   const [activeStep] = useState(0);
@@ -63,7 +63,7 @@ const NewLoan = ({
 
   return (
     <div className='loanFormPage'>
-      <FormModal formKey={props.formKey} setToDashboard={setToDashboard} />
+      <FormModal resetBackground={resetBackground} />
     </div>
   );
 };

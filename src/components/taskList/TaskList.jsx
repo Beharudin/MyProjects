@@ -32,7 +32,12 @@ const TaskList = ({ show }) => {
       setList('');
 
       //get tasks
-      const endpoint = show === 'all' ? 'getAllTasksForUser' : 'getMyTasks';
+      const endpoint =
+        show === 'all'
+          ? 'getAllTasksForUser'
+          : show === 'my'
+          ? 'getMyTasks'
+          : 'getLoanOfficerTasks';
       const resp = await axios.get(
         `${BASE_CAMADPTR_URL}/${endpoint}?userId=${userId}`
       );
@@ -94,19 +99,23 @@ const TaskList = ({ show }) => {
       {list && show === 'my' && (
         <MyTasks reloadTasks={loadTasks} list={list} setList={setList} />
       )}
+      {list && show === 'caseTasks' && (
+        <MyTasks
+          reloadTasks={loadTasks}
+          list={list}
+          setList={setList}
+          disableUnclaim
+        />
+      )}
       {!list && (
-        <Grid display='flex'>
+        <Grid container xs={12} sm={6} md={4} display='flex'>
           {taskGroups.map((el) => (
-            <Card xs='3' sx={{ margin: 3 }}>
+            <Card sx={{ margin: 3 }}>
               <CardContent>
-                <Typography variant='h5' component='div'>
-                  {el.name}
-                </Typography>
+                <Typography variant='h5'>{el.name}</Typography>
                 <Typography variant='body2'>{el.desc}</Typography>
                 <br />
-                <Typography sx={{ mb: 1.5 }} color='text.secondary'>
-                  total: {el.num}
-                </Typography>
+                <Typography color='text.secondary'>total: {el.num}</Typography>
               </CardContent>
               <CardActions>
                 <Button size='small' id={el.id} onClick={seeListHandler}>

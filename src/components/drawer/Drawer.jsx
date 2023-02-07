@@ -23,6 +23,7 @@ import MapIcon from '@mui/icons-material/Map';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import WorkIcon from '@mui/icons-material/Work';
 import { FormModal } from '../formModal/FormModal';
 
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
@@ -104,6 +105,7 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
         </StyledDiv>,
       ],
     },
+    { text: 'Tasks for my cases', icon: [<WorkIcon />] },
   ];
 
   useEffect(() => {
@@ -113,7 +115,7 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
       userData?.taskId ? options.push(optionals[6]) : (() => {})();
       options.push(optionals[2]);
     } else {
-      options.push(optionals[3], optionals[4]);
+      options.push(optionals[3], optionals[4], optionals[7]);
     }
     setDrawerOptions(options);
   }, [userData]);
@@ -177,7 +179,7 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
           <NewLoan
             reloadDrawerOptions={reloadDrawerOptions}
             reloadBodyOption={setBodyOption}
-            setToDashboard={setToDashboard}
+            resetBackground={setToDashboard}
             props={props}
           />
         )}
@@ -190,10 +192,14 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
         {bodyOption && bodyOption === 'My tasks' && (
           <TaskList show='my' props={props} />
         )}
+        {bodyOption && bodyOption === 'Tasks for my cases' && (
+          <TaskList show='caseTasks' props={props} />
+        )}
         {bodyOption && bodyOption === 'Actions' && (
           <FormModal
             resetBackground={setToDashboard}
             taskId={userData.taskId}
+            taskDesc={userData.taskDesc}
           />
         )}
       </Box>

@@ -19,7 +19,7 @@ import { uiActions } from '../../store/ui';
 import { FormModal } from '../formModal/FormModal';
 import { useState } from 'react';
 
-const MyTasks = ({ list, setList, reloadTasks }) => {
+const MyTasks = ({ list, setList, reloadTasks, disableUnclaim }) => {
   const userData = useSelector((state) => state.auth.userData);
   const [taskToPerform, setTaskToPerform] = useState('');
   const dispatch = useDispatch();
@@ -49,7 +49,6 @@ const MyTasks = ({ list, setList, reloadTasks }) => {
   };
   const completeHandler = async (e) => {
     try {
-      console.log('a');
       const taskId = e.target.id.split('ID-')[1];
       setTaskToPerform(taskId);
       return;
@@ -57,6 +56,7 @@ const MyTasks = ({ list, setList, reloadTasks }) => {
   };
   const resetCompleteTask = (e) => {
     setTaskToPerform(null);
+    reloadTasks();
   };
 
   const backHandler = () => setList('');
@@ -95,15 +95,17 @@ const MyTasks = ({ list, setList, reloadTasks }) => {
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
-              <Button
-                id={`ID-${el.taskId}`}
-                aria-label='claim'
-                onClick={unclaimHandler}
-                variant='outlined'
-                color='primary'
-              >
-                Unclaim
-              </Button>
+              {!disableUnclaim && (
+                <Button
+                  id={`ID-${el.taskId}`}
+                  aria-label='claim'
+                  onClick={unclaimHandler}
+                  variant='outlined'
+                  color='primary'
+                >
+                  Unclaim
+                </Button>
+              )}
               {userData.role === 'staff' && (
                 <Button
                   id={`ID-${el.taskId}`}

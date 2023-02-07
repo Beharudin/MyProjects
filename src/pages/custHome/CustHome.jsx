@@ -28,6 +28,7 @@ const CustHome = () => {
       const resp = await axios.get(
         `${BASE_CAMADPTR_URL}/getRunningProcessForCustomer?customerId=${userId}`
       );
+      console.log('run pro for xust', resp.data);
       if (resp.data.length > 0) {
         //fetch latest taskId for customer
         const resp2 = await axios.get(
@@ -37,14 +38,18 @@ const CustHome = () => {
           authActions.updateUserData({
             userData: {
               ...userData,
-              pId: resp.data,
+              pId: resp.data[0],
               taskId: resp2.data.candidateGroupIsCustomer
                 ? resp2.data?.taskId
+                : null,
+              taskDesc: resp2.data.candidateGroupIsCustomer
+                ? resp2.data?.desc
                 : null,
             },
           })
         );
       }
+
       setCount(1);
     } catch (err) {
       dispatch(uiActions.stopLoad());
