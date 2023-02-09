@@ -28,7 +28,7 @@ const CustHome = () => {
       const resp = await axios.get(
         `${BASE_CAMADPTR_URL}/getRunningProcessForCustomer?customerId=${userId}`
       );
-      console.log('run pro for xust', resp.data);
+      console.log('running proc for cust', resp.data);
       if (resp.data.length > 0) {
         //fetch latest taskId for customer
         const resp2 = await axios.get(

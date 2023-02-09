@@ -15,7 +15,7 @@ import NewLoan from '../newLoan/NewLoan';
 import { useSelector } from 'react-redux';
 import LoanStatus from '../loanStatus/LoanStatus';
 import TaskList from '../taskList/TaskList';
-import { Container } from '@mui/material';
+import { Badge, Container } from '@mui/material';
 import { useEffect } from 'react';
 
 import HistoryIcon from '@mui/icons-material/History';
@@ -24,11 +24,14 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import WorkIcon from '@mui/icons-material/Work';
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 import { FormModal } from '../formModal/FormModal';
 
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import StyledDiv from './shakeNotification';
+import axios from 'axios';
+import { BASE_CAMADPTR_URL, cookies } from '../..';
 const img = "url('/img/Pattern.svg')";
 
 const drawerWidth = 240;
@@ -84,16 +87,16 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
   const [open, setOpen] = React.useState(false);
   const [bodyOption, setBodyOption] = React.useState('dashboard');
   const [drawerOptions, setDrawerOptions] = React.useState([]);
+  const [drawerState, setDrawerState] = React.useState(true);
+  const userId = cookies.get('userId');
 
   const isPending = useSelector((state) => state.ui.isLoading);
   const notifType = useSelector((state) => state.ui.notif.type);
   const userData = useSelector((state) => state.auth.userData);
-  const optionals = [
+  const custOpts = [
     { text: 'New Loan', icon: [<AddCircleIcon />] },
     { text: 'See Loan Status', icon: [<MapIcon />] },
     { text: 'History', icon: [<HistoryIcon />] },
-    { text: 'Task list', icon: [<PlaylistAddIcon />] },
-    { text: 'My tasks', icon: [<PlaylistAddCheckIcon />] },
     { text: 'Actions', icon: [<NotificationsIcon />] },
     {
       text: 'Actions',
@@ -105,20 +108,55 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
         </StyledDiv>,
       ],
     },
-    { text: 'Tasks for my cases', icon: [<WorkIcon />] },
+  ];
+  const staffOpts = [
+    {
+      text: 'Task list',
+      icon: [<PlaylistAddIcon />],
+      endpoint: 'getAllTasksForUser',
+    },
+    {
+      text: 'My tasks',
+      icon: [<PlaylistAddCheckIcon />],
+      endpoint: 'getMyTasks',
+    },
+    {
+      text: 'Tasks for my cases',
+      icon: [<WorkIcon />],
+      endpoint: 'getLoanOfficerTasks',
+    },
+    {
+      text: 'Estimation tasks',
+      icon: [<LocalAtmIcon />],
+      endpoint: 'getEstimationTasks',
+    },
   ];
 
-  useEffect(() => {
-    const options = [];
-    if (userData.role === 'customer') {
-      userData?.pId ? options.push(optionals[1]) : options.push(optionals[0]);
-      userData?.taskId ? options.push(optionals[6]) : (() => {})();
-      options.push(optionals[2]);
-    } else {
-      options.push(optionals[3], optionals[4], optionals[7]);
+  const loadTaskCounts = async () => {
+    for (let el of staffOpts) {
+      const resp = await axios.get(
+        `${BASE_CAMADPTR_URL}/${el.endpoint}/count?userId=${userId}`
+      );
+      el.count = resp.data;
     }
-    setDrawerOptions(options);
-  }, [userData]);
+  };
+  const reloadTaskListCount = () => {
+    setDrawerState(!drawerState);
+  };
+  useEffect(() => {
+    (async () => {
+      const options = [];
+      if (userData.role === 'customer') {
+        userData?.pId ? options.push(custOpts[1]) : options.push(custOpts[0]);
+        userData?.taskId ? options.push(custOpts[4]) : (() => {})();
+        options.push(custOpts[2]);
+      } else {
+        await loadTaskCounts();
+        options.push(...staffOpts);
+      }
+      setDrawerOptions(options);
+    })();
+  }, [userData, drawerState]);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -126,18 +164,23 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
   const setToDashboard = async () => {
     setBodyOption('dashboard');
   };
+
   return (
     <Container
       sx={{
         display: 'flex',
         backgroundImage: img,
+        backgroundAttachment: 'fixed',
         backgroundSize: 'cover',
         width: '100vw',
-        height: '100vh',
       }}
       maxWidth='xl'
     >
-      <Box>
+      <Box
+        sx={{
+          height: '100vh',
+        }}
+      >
         <Drawer variant='permanent' open={open}>
           <DrawerHeader>
             <IconButton onClick={handleDrawerToggle}>
@@ -146,7 +189,7 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
           </DrawerHeader>
           <Divider />
           <List>
-            {drawerOptions.map(({ text, icon }) => (
+            {drawerOptions.map(({ text, icon, count }) => (
               <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   sx={{
@@ -163,7 +206,13 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
                       justifyContent: 'center',
                     }}
                   >
-                    {icon}
+                    <Badge
+                      badgeContent={count && String(count)}
+                      color={count && count === 0 ? 'primary' : 'error'}
+                      disable
+                    >
+                      {icon}
+                    </Badge>
                   </ListItemIcon>
                   <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
@@ -172,7 +221,11 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
           </List>
         </Drawer>
       </Box>
-      <Box sx={{ width: '100%' }}>
+      <Box
+        sx={{
+          width: '100%',
+        }}
+      >
         {notifType && children[0]}
         {isPending && children[1]}
         {bodyOption && bodyOption === 'New Loan' && (
@@ -187,13 +240,22 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
           <LoanStatus props={props} />
         )}
         {bodyOption && bodyOption === 'Task list' && (
-          <TaskList show='all' props={props} />
+          <TaskList show='all' reloadTaskListCount={reloadTaskListCount} />
         )}
         {bodyOption && bodyOption === 'My tasks' && (
-          <TaskList show='my' props={props} />
+          <TaskList show='my' reloadTaskListCount={reloadTaskListCount} />
         )}
         {bodyOption && bodyOption === 'Tasks for my cases' && (
-          <TaskList show='caseTasks' props={props} />
+          <TaskList
+            show='caseTasks'
+            reloadTaskListCount={reloadTaskListCount}
+          />
+        )}
+        {bodyOption && bodyOption === 'Estimation tasks' && (
+          <TaskList
+            show='estimationTasks'
+            reloadTaskListCount={reloadTaskListCount}
+          />
         )}
         {bodyOption && bodyOption === 'Actions' && (
           <FormModal

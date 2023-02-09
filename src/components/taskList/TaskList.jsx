@@ -13,10 +13,10 @@ import { useDispatch } from 'react-redux';
 import { BASE_BACKEND_URL, BASE_CAMADPTR_URL, cookies } from '../..';
 import { uiActions } from '../../store/ui';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListTask from '../listTask/ListTask';
+import SeeAllTasks from '../seeAllTasks/SeeAllTasks';
 import MyTasks from '../myTasks/MyTasks';
 
-const TaskList = ({ show }) => {
+const TaskList = ({ show, reloadTaskListCount }) => {
   const dispatch = useDispatch();
   const userId = cookies.get('userId');
   const [list, setList] = useState('');
@@ -30,6 +30,7 @@ const TaskList = ({ show }) => {
     try {
       dispatch(uiActions.startLoad());
       setList('');
+      reloadTaskListCount();
 
       //get tasks
       const endpoint =
@@ -37,6 +38,8 @@ const TaskList = ({ show }) => {
           ? 'getAllTasksForUser'
           : show === 'my'
           ? 'getMyTasks'
+          : show === 'estimationTasks'
+          ? 'getEstimationTasks'
           : 'getLoanOfficerTasks';
       const resp = await axios.get(
         `${BASE_CAMADPTR_URL}/${endpoint}?userId=${userId}`
@@ -94,12 +97,12 @@ const TaskList = ({ show }) => {
   return (
     <Box>
       {list && show === 'all' && (
-        <ListTask reloadTasks={loadTasks} list={list} setList={setList} />
+        <SeeAllTasks reloadTasks={loadTasks} list={list} setList={setList} />
       )}
       {list && show === 'my' && (
         <MyTasks reloadTasks={loadTasks} list={list} setList={setList} />
       )}
-      {list && show === 'caseTasks' && (
+      {list && (show === 'caseTasks' || show === 'estimationTasks') && (
         <MyTasks
           reloadTasks={loadTasks}
           list={list}
@@ -108,9 +111,9 @@ const TaskList = ({ show }) => {
         />
       )}
       {!list && (
-        <Grid container xs={12} sm={6} md={4} display='flex'>
+        <Grid container display='flex'>
           {taskGroups.map((el) => (
-            <Card sx={{ margin: 3 }}>
+            <Card xs={3} sx={{ margin: 3 }}>
               <CardContent>
                 <Typography variant='h5'>{el.name}</Typography>
                 <Typography variant='body2'>{el.desc}</Typography>

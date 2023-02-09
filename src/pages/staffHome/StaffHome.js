@@ -5,6 +5,7 @@ import Header from '../../components/header/Header';
 import { Box } from '@mui/material';
 import SpinLoader from '../../components/spinloader/SpinLoader';
 import Notify from '../../components/notify/Notify';
+const img = "url('/img/Pattern.svg')";
 
 const StaffHome = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -21,10 +22,12 @@ const StaffHome = () => {
       }}
     >
       <Header />
-      <Drawer>
-        <Notify />
-        <SpinLoader />
-      </Drawer>
+      <div>
+        <Drawer>
+          <Notify />
+          <SpinLoader />
+        </Drawer>
+      </div>
     </Box>
   );
 };

@@ -60,10 +60,10 @@ export const FormModal = ({ resetBackground, taskId, taskDesc }) => {
         setFecthedFormData(resp.data);
         if (taskId) loadDisplayVariables();
       } else {
+        //assuming we'll only ever use userId as the value for variables
         const resp2 = await axios.get(
           `${BASE_CAMADPTR_URL}/getTaskVariables?taskId=${taskId}`
         );
-        //assuming this is a special case we'll write its own specific solution
         const variable = resp2.data;
         Object.keys(resp2.data).forEach((key) => {
           variable[key] = { value: userId };
@@ -71,9 +71,8 @@ export const FormModal = ({ resetBackground, taskId, taskDesc }) => {
         const body = {
           variables: variable,
         };
-        console.log(body);
         await axios.post(
-          `${BASE_CAMADPTR_URL}/completeTask?taskId=${taskId}`,
+          `${BASE_CAMADPTR_URL}/completeTask?taskId=${taskId}&userId=${userId}`,
           body
         );
         dispatch(

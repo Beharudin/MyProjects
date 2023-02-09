@@ -12,7 +12,6 @@ import store from './store/index.js';
 import { Axios } from 'axios';
 export const cookies = new Cookies();
 export const _host = window.location.host.split(':')[0];
-console.log(`host`, _host);
 export const _port = window.location.host.split(':')[1];
 const AUTH_PORT = Number(_port) + 1;
 const CAMUNDA_ADP_PORT = Number(_port) + 2;
