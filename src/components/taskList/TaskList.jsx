@@ -111,22 +111,36 @@ const TaskList = ({ show, reloadTaskListCount }) => {
         />
       )}
       {!list && (
-        <Grid container display='flex'>
+        <Grid container>
           {taskGroups.map((el) => (
-            <Card xs={3} sx={{ margin: 3 }}>
-              <CardContent>
-                <Typography variant='h5'>{el.name}</Typography>
-                <Typography variant='body2'>{el.desc}</Typography>
-                <br />
-                <Typography color='text.secondary'>total: {el.num}</Typography>
-              </CardContent>
-              <CardActions>
-                <Button size='small' id={el.id} onClick={seeListHandler}>
-                  List all{' '}
-                  <ChevronRightIcon id={el.id} onClick={seeListHandler} />
-                </Button>
-              </CardActions>
-            </Card>
+            <Grid item xs={6} sm={4} md={3}>
+              <Card
+                sx={{
+                  margin: 3,
+                  display: 'grid',
+                  // height: '100%',
+                }}
+              >
+                <CardContent>
+                  <Typography variant='h5'>{el.name}</Typography>
+                  <Typography variant='body2'>{el.desc}</Typography>
+                  <br />
+                  <Typography color='text.secondary'>
+                    total: {el.num}
+                  </Typography>
+                </CardContent>
+                <CardActions
+                  sx={{
+                    alignItems: 'end',
+                  }}
+                >
+                  <Button size='small' id={el.id} onClick={seeListHandler}>
+                    List all{' '}
+                    <ChevronRightIcon id={el.id} onClick={seeListHandler} />
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
           ))}
         </Grid>
       )}

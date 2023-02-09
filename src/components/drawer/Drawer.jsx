@@ -164,6 +164,10 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
   const setToDashboard = async () => {
     setBodyOption('dashboard');
   };
+  const resetBackground = () => {
+    setToDashboard();
+    reloadTaskListCount();
+  };
 
   return (
     <Container
@@ -259,7 +263,7 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
         )}
         {bodyOption && bodyOption === 'Actions' && (
           <FormModal
-            resetBackground={setToDashboard}
+            resetBackground={resetBackground}
             taskId={userData.taskId}
             taskDesc={userData.taskDesc}
           />
