@@ -185,10 +185,9 @@ const Login = () => {
           (userData?.role === 'staff' || userData?.role === 'manager') && (
             <Navigate to='/staff' replace />
           )}
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <Paper
             variant='outlined'
-            maxWidth='xs'
             sx={{
               padding: 2,
               display: 'flex',
