@@ -32,6 +32,7 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import StyledDiv from './shakeNotification';
 import axios from 'axios';
 import { BASE_CAMADPTR_URL, cookies } from '../..';
+import { Dashboard } from '../dashboard/Dashboard.js';
 const img = "url('/img/Pattern.svg')";
 
 const drawerWidth = 240;
@@ -83,9 +84,14 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function SideDrawer({ reloadDrawerOptions, props, children }) {
+export default function SideDrawer({
+  reloadDrawerOptions,
+  props,
+  children,
+  bodyOption,
+  setBodyOption,
+}) {
   const [open, setOpen] = React.useState(false);
-  const [bodyOption, setBodyOption] = React.useState('dashboard');
   const [drawerOptions, setDrawerOptions] = React.useState([]);
   const [drawerState, setDrawerState] = React.useState(true);
   const userId = cookies.get('userId');
@@ -201,7 +207,9 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
                   }}
-                  onClick={() => setBodyOption(text)}
+                  onClick={() => {
+                    setBodyOption(text);
+                  }}
                 >
                   <ListItemIcon
                     sx={{
@@ -235,7 +243,9 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
         {bodyOption && bodyOption === 'New Loan' && (
           <NewLoan
             reloadDrawerOptions={reloadDrawerOptions}
-            reloadBodyOption={setBodyOption}
+            reloadBodyOption={(args) => {
+              setBodyOption(args);
+            }}
             resetBackground={setToDashboard}
             props={props}
           />
@@ -266,6 +276,14 @@ export default function SideDrawer({ reloadDrawerOptions, props, children }) {
             resetBackground={resetBackground}
             taskId={userData.taskId}
             taskDesc={userData.taskDesc}
+          />
+        )}
+        {bodyOption && bodyOption === 'dashboard' && (
+          <Dashboard
+            drawerOptions={drawerOptions}
+            setBodyOption={(args) => {
+              setBodyOption(args);
+            }}
           />
         )}
       </Box>

@@ -77,7 +77,7 @@ const TaskList = ({ show, reloadTaskListCount }) => {
         desc: _tasks.filter((_el) => _el.taskDefId === el)[0].desc,
         num: _tasks.filter((_el) => _el.taskDefId === el).length,
       }));
-      setTaskGroups(_taskGroups);
+      await setTaskGroups(_taskGroups);
       dispatch(uiActions.stopLoad());
     } catch (err) {
       dispatch(uiActions.stopLoad());

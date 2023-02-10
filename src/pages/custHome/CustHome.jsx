@@ -17,6 +17,7 @@ const CustHome = () => {
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userData = useSelector((state) => state.auth.userData);
+  const [bodyOption, setBodyOption] = useState('dashboard');
 
   const [count, setCount] = useState(0);
   const [props] = useState({});
@@ -78,9 +79,13 @@ const CustHome = () => {
         flexDirection: 'column',
       }}
     >
-      <Header />
+      <Header bodyOption={bodyOption} setBodyOption={setBodyOption} />
       {count > 0 && (
-        <Drawer props={props}>
+        <Drawer
+          props={props}
+          setBodyOption={setBodyOption}
+          bodyOption={bodyOption}
+        >
           <Notify />
           <SpinLoader />
         </Drawer>

@@ -1,22 +1,18 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const StyledDiv = styled.div`
   .lds-spinner {
     color: official;
     display: inline-block;
     position: relative;
-    width: 80px;
     height: 80px;
-    display: flex;
-    justify-content: center;
-    margin: 0 auto;
   }
   .lds-spinner div {
     transform-origin: 40px 40px;
     animation: lds-spinner 1.2s linear infinite;
   }
   .lds-spinner div:after {
-    content: " ";
+    content: ' ';
     display: block;
     position: absolute;
     top: 3px;

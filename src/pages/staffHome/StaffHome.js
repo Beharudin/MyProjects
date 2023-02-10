@@ -5,11 +5,12 @@ import Header from '../../components/header/Header';
 import { Box } from '@mui/material';
 import SpinLoader from '../../components/spinloader/SpinLoader';
 import Notify from '../../components/notify/Notify';
+import { useState } from 'react';
 const img = "url('/img/Pattern.svg')";
 
 const StaffHome = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
+  const [bodyOption, setBodyOption] = useState('dashboard');
   if (!isLoggedIn) {
     return <Navigate to='/Login' replace />;
   }
@@ -21,9 +22,9 @@ const StaffHome = () => {
         flexDirection: 'column',
       }}
     >
-      <Header />
+      <Header bodyOption={bodyOption} setBodyOption={setBodyOption} />
       <div>
-        <Drawer>
+        <Drawer setBodyOption={setBodyOption} bodyOption={bodyOption}>
           <Notify />
           <SpinLoader />
         </Drawer>
