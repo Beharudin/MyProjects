@@ -46,7 +46,7 @@ const unameIsValid = async (uname) => {
 
 const Login = () => {
   const _path = window.location.pathname;
-  const [path, setPath] = React.useState(_path);
+  const [path, setPath] = React.useState(_path != '/' ? _path : '/login');
   const toggleLoginPage = () => {
     setPath(path === '/login' || path === '/Login' ? '/staff/login' : '/login');
   };
