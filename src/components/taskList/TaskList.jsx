@@ -113,7 +113,7 @@ const TaskList = ({ show, reloadTaskListCount }) => {
       {!list && (
         <Grid container>
           {taskGroups.map((el) => (
-            <Grid item xs={6} sm={4} md={3}>
+            <Grid item xs={12} sm={6} md={3}>
               <Card
                 sx={{
                   margin: 3,
