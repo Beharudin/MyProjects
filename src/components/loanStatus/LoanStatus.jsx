@@ -1,103 +1,136 @@
+import React, { useEffect, useState } from 'react';
+import {
+  Stepper,
+  Step,
+  Container,
+  Paper,
+  StepLabel,
+  Typography,
+  Box,
+} from '@mui/material';
+import { AccountBalance, People, CheckCircle } from '@mui/icons-material';
 import axios from 'axios';
-import bpmnJs from 'bpmn-js';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { BASE_CAMADPTR_URL, cookies } from '../..';
-import { authActions } from '../../store/auth';
-import { uiActions } from '../../store/ui';
-import Legend from '../legend/Legend';
 
-const LoanStatus = () => {
+export default function LoanStatus({ loanType }) {
+  const [activeStep, setActiveStep] = useState(0);
+  const [status, setStatus] = useState([]);
+  const [data, setData] = useState(null);
   const userId = cookies.get('userId');
-  const dispatch = useDispatch();
-  const userData = useSelector((state) => state.auth.userData);
 
-  const fetchDiagram = async () => {
-    try {
-      const viewer = new bpmnJs({
-        container: '#diagramContainer',
-      });
+  const steps = ['User', 'Branch', 'District', 'HO', 'Final'];
 
-      dispatch(uiActions.startLoad());
-
-      const resp2 = await axios.get(
-        `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}`
-      );
-      //set pId to null if customer has no pending task
-      if (!resp2?.data?.taskDefId) {
-        dispatch(
-          authActions.updateUserData({
-            userData: {
-              ...userData,
-              pId: null,
-            },
-          })
-        );
-        document.getElementById('diagramContainer').innerHTML = '<div></div>';
-        dispatch(uiActions.stopLoad());
-        return;
-      }
-
-      const resp = await axios.get(
-        `${BASE_CAMADPTR_URL}/getProcessDiagram?customerId=${userId}`
-      );
-
-      //clear screen
-      document.getElementById('canvas').innerHTML = '<div></div>';
-      await viewer.attachTo('#diagramContainer');
-
-      //draw diagram
-      await viewer.importXML(resp.data);
-      viewer.get('canvas').zoom('fit-viewport');
-
-      //color completed tasks
-      const resp3 = await axios.get(
-        `${BASE_CAMADPTR_URL}/getFinishedTasksForCustomer?customerId=${userId}`
-      );
-      resp3.data.map(
-        (el) =>
-          (document.querySelector(
-            `[data-element-id=${el.taskDefId}]`
-          ).children[0].children[0].style.fill = 'rgb(100, 240, 95)')
-      );
-
-      //color pending task
-      document.querySelector(
-        `[data-element-id=${resp2.data.taskDefId}]`
-      ).children[0].children[0].style.fill = 'rgb(252, 193, 2)';
-
-      dispatch(uiActions.stopLoad());
-    } catch (err) {
-      dispatch(uiActions.stopLoad());
-      const msg = err.response?.data?.error;
-      dispatch(
-        uiActions.notif({
-          type: 'error',
-          msg,
-        })
-      );
-      console.log(err);
-    }
+  const stepIcon = (index) => {
+    return index === 0 ? (
+      <People />
+    ) : index === 1 ? (
+      <AccountBalance />
+    ) : index === 2 ? (
+      <AccountBalance />
+    ) : index === 3 ? (
+      <AccountBalance />
+    ) : (
+      <CheckCircle />
+    );
   };
 
+  const fetchStatus = async (loanType) => {
+    const resp = await axios.get(
+      `${BASE_CAMADPTR_URL}/getProcessStatus?customerId=${userId}&loanType=${loanType}`
+    );
+    console.log('resp.data', resp.data);
+    setData(resp.data);
+  };
   useEffect(() => {
-    fetchDiagram();
-  }, [dispatch]);
+    fetchStatus(loanType);
+    if (activeStep === 0) {
+      setStatus(['Starting', 'Waiting', 'Waiting', 'Waiting', 'Waiting']);
+    } else if (activeStep === 1) {
+      setStatus(['Approved', 'Reviewing', 'Waiting', 'Waiting', 'Waiting']);
+    } else if (activeStep === 2) {
+      setStatus(['Approved', 'Approved', 'Reviewing', 'Waiting', 'Waiting']);
+    } else if (activeStep === 3) {
+      setStatus(['Approved', 'Approved', 'Approved', 'Reviewing', 'Waiting']);
+    } else {
+      setStatus(['Approved', 'Approved', 'Approved', 'Approved', 'Approved']);
+    }
+  }, [activeStep, loanType]);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
+    <Container
+      component='main'
+      sx={{
+        mb: 4,
       }}
-      id='diagramContainer'
     >
-      <div id='canvas' sx={{ order: 1 }}></div>
-      <Legend />
-    </div>
+      <Paper
+        variant='outlined'
+        sx={{
+          my: { xs: 3, md: 6 },
+          p: { xs: 2, md: 3 },
+          boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+          overflow: 'hidden',
+          overflowX: 'scroll',
+        }}
+      >
+        <Stepper
+          alternativeLabel
+          activeStep={activeStep}
+          sx={{
+            width: '100%',
+            marginTop: '22px',
+            marginBottom: '22px',
+            '& .MuiStepConnector-line': { marginTop: '52px' },
+            textAlign: 'center',
+          }}
+        >
+          {steps.map((label, index) => (
+            <Step
+              key={label}
+              sx={{
+                '& .MuiStepLabel-root .Mui-completed': {
+                  color: 'success.light', // circle color (COMPLETED)
+                },
+                '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel':
+                  {
+                    color: 'grey.700', // Just text label (COMPLETED)
+                  },
+                '& .MuiStepLabel-root .Mui-active': {
+                  color: index !== 4 ? 'orange' : 'success.light', // circle color (ACTIVE)
+                },
+                '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel':
+                  {
+                    color: 'common.black', // Just text label (ACTIVE)
+                  },
+                '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
+                  fill: 'black', // circle's number (ACTIVE)
+                },
+              }}
+            >
+              <div style={{ marginBottom: '30px' }}>
+                <Typography
+                  align='center'
+                  sx={{
+                    zIndex: '2',
+                    background: '#FFF',
+                    display: 'inline',
+                    position: 'relative',
+                    padding: '0 15px',
+                  }}
+                >
+                  {label}
+                </Typography>
+              </div>
+              <StepLabel
+                StepIconComponent={() => stepIcon(index)}
+                onClick={() => setActiveStep(index)}
+              >
+                {status[index]}
+              </StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Paper>
+    </Container>
   );
-};
-export default LoanStatus;
+}

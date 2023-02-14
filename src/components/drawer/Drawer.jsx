@@ -13,7 +13,6 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import NewLoan from '../newLoan/NewLoan';
 import { useSelector } from 'react-redux';
-import LoanStatus from '../loanStatus/LoanStatus';
 import TaskList from '../taskList/TaskList';
 import { Badge, Container } from '@mui/material';
 import { useEffect } from 'react';
@@ -33,6 +32,7 @@ import StyledDiv from './shakeNotification';
 import axios from 'axios';
 import { BASE_CAMADPTR_URL, cookies } from '../..';
 import { Dashboard } from '../dashboard/Dashboard.js';
+import LoanStatus from '../loanStatus/LoanStatus';
 const img = "url('/img/Pattern.svg')";
 
 const drawerWidth = 240;
@@ -100,12 +100,23 @@ export default function SideDrawer({
   const notifType = useSelector((state) => state.ui.notif.type);
   const userData = useSelector((state) => state.auth.userData);
   const custOpts = [
-    { text: 'New Loan', icon: [<AddCircleIcon />] },
-    { text: 'See Loan Status', icon: [<MapIcon />] },
+    { text: 'New Personal Loan', icon: [<AddCircleIcon />] },
+    { text: 'See Personal Loan Status', icon: [<MapIcon />] },
     { text: 'History', icon: [<HistoryIcon />] },
-    { text: 'Actions', icon: [<NotificationsIcon />] },
     {
-      text: 'Actions',
+      text: 'Actions pers',
+      icon: [
+        <StyledDiv>
+          <span className='rise-shake'>
+            <NotificationsActiveIcon color='error' />
+          </span>
+        </StyledDiv>,
+      ],
+    },
+    { text: 'New Business Loan', icon: [<AddCircleIcon />] },
+    { text: 'See Business Loan Status', icon: [<MapIcon />] },
+    {
+      text: 'Actions biz',
       icon: [
         <StyledDiv>
           <span className='rise-shake'>
@@ -153,8 +164,14 @@ export default function SideDrawer({
     (async () => {
       const options = [];
       if (userData.role === 'customer') {
-        userData?.pId ? options.push(custOpts[1]) : options.push(custOpts[0]);
-        userData?.taskId ? options.push(custOpts[4]) : (() => {})();
+        userData?.biz_pId
+          ? options.push(custOpts[5])
+          : options.push(custOpts[4]);
+        userData?.biz_taskId ? options.push(custOpts[6]) : (() => {})();
+        userData?.pers_pId
+          ? options.push(custOpts[1])
+          : options.push(custOpts[0]);
+        userData?.pers_taskId ? options.push(custOpts[3]) : (() => {})();
         options.push(custOpts[2]);
       } else {
         await loadTaskCounts();
@@ -240,19 +257,28 @@ export default function SideDrawer({
       >
         {notifType && children[0]}
         {isPending && children[1]}
-        {bodyOption && bodyOption === 'New Loan' && (
-          <NewLoan
-            reloadDrawerOptions={reloadDrawerOptions}
-            reloadBodyOption={(args) => {
-              setBodyOption(args);
-            }}
-            resetBackground={setToDashboard}
-            props={props}
-          />
-        )}
-        {bodyOption && bodyOption === 'See Loan Status' && (
-          <LoanStatus props={props} />
-        )}
+        {bodyOption &&
+          `${bodyOption.split(' ')[0]} ${bodyOption.split(' ')[2]}` ===
+            'New Loan' && (
+            <NewLoan
+              reloadDrawerOptions={reloadDrawerOptions}
+              reloadBodyOption={(args) => {
+                setBodyOption(args);
+              }}
+              resetBackground={setToDashboard}
+              props={props}
+              loanType={bodyOption.split(' ')[1].toLowerCase()}
+            />
+          )}
+        {bodyOption &&
+          `${bodyOption.split(' ')[0]} ${bodyOption.split(' ')[2]} ${
+            bodyOption.split(' ')[3]
+          }` === 'See Loan Status' && (
+            <LoanStatus
+              props={props}
+              loanType={bodyOption.split(' ')[1].toLowerCase()}
+            />
+          )}
         {bodyOption && bodyOption === 'Task list' && (
           <TaskList show='all' reloadTaskListCount={reloadTaskListCount} />
         )}
@@ -271,11 +297,20 @@ export default function SideDrawer({
             reloadTaskListCount={reloadTaskListCount}
           />
         )}
-        {bodyOption && bodyOption === 'Actions' && (
+        {bodyOption && bodyOption === 'Actions biz' && (
           <FormModal
             resetBackground={resetBackground}
-            taskId={userData.taskId}
-            taskDesc={userData.taskDesc}
+            taskId={userData.biz_taskId}
+            taskDesc={userData.biz_taskDesc}
+            loanType='business'
+          />
+        )}
+        {bodyOption && bodyOption === 'Actions pers' && (
+          <FormModal
+            resetBackground={resetBackground}
+            taskId={userData.pers_taskId}
+            taskDesc={userData.pers_taskDesc}
+            loanType='personal'
           />
         )}
         {bodyOption && bodyOption === 'dashboard' && (

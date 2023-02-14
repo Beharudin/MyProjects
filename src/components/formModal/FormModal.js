@@ -20,7 +20,10 @@ import { uiActions } from '../../store/ui';
 import { authActions } from '../../store/auth';
 import { Label } from '@mui/icons-material';
 import { height } from '@mui/system';
-export const FormModal = ({ resetBackground, taskId, taskDesc }) => {
+
+let fecthedFormDataVar = null;
+
+export const FormModal = ({ resetBackground, taskId, taskDesc, loanType }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [formLoading, setFormLoading] = useState(false);
   const [fecthedFormData, setFecthedFormData] = useState(null);
@@ -58,6 +61,7 @@ export const FormModal = ({ resetBackground, taskId, taskDesc }) => {
         await form.attachTo('#modal-form');
         await form.importSchema(resp.data);
         setFecthedFormData(resp.data);
+        fecthedFormDataVar = resp.data;
         if (taskId) loadDisplayVariables();
       } else {
         //assuming we'll only ever use userId as the value for variables
@@ -116,6 +120,15 @@ export const FormModal = ({ resetBackground, taskId, taskDesc }) => {
               customerId: userId,
               variables: e.data,
             };
+        //if there is a hidden feild and the name of field is loanType:
+        if (
+          fecthedFormDataVar?.components
+            .map((el) => el.key)
+            .includes('loanType') &&
+          loanType
+        ) {
+          body.variables.loanType = loanType.toLowerCase();
+        }
         //post submitStartForm or submitTaskForm apis here
         const resp = taskId
           ? await axios.post(
@@ -126,20 +139,50 @@ export const FormModal = ({ resetBackground, taskId, taskDesc }) => {
 
         //fetch latest task for customer
         const resp2 = await axios.get(
-          `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}`
+          `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}&loanType=${loanType}`
         );
+        const uData = {
+          ...userData,
+          biz_pId:
+            loanType === 'business'
+              ? taskId
+                ? userData.biz_pId
+                : resp.data
+              : userData.biz_pId,
+          pers_pId:
+            loanType === 'personal'
+              ? taskId
+                ? userData.pers_pId
+                : resp.data
+              : userData.pers_pId,
+          biz_taskId:
+            loanType === 'business'
+              ? resp2.data.candidateGroupIsCustomer
+                ? resp2.data?.taskId
+                : null
+              : userData.biz_taskId,
+          pers_taskId:
+            loanType === 'personal'
+              ? resp2.data.candidateGroupIsCustomer
+                ? resp2.data?.taskId
+                : null
+              : userData.pers_taskId,
+          biz_taskDesc:
+            loanType === 'business'
+              ? resp2.data.candidateGroupIsCustomer
+                ? resp2.data?.desc
+                : null
+              : userData.biz_taskDesc,
+          pers_taskDesc:
+            loanType === 'personal'
+              ? resp2.data.candidateGroupIsCustomer
+                ? resp2.data?.desc
+                : null
+              : userData.pers_taskDesc,
+        };
         dispatch(
           authActions.updateUserData({
-            userData: {
-              ...userData,
-              pId: taskId ? userData.pId : resp.data,
-              taskId: resp2.data.candidateGroupIsCustomer
-                ? resp2.data?.taskId
-                : null,
-              taskDesc: resp2.data.candidateGroupIsCustomer
-                ? resp2.data?.desc
-                : null,
-            },
+            userData: uData,
           })
         );
         dispatch(

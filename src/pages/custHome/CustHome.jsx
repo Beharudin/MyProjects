@@ -26,30 +26,52 @@ const CustHome = () => {
   //we include stage 6+
   const getProcessIdForCustomer = async () => {
     try {
-      const resp = await axios.get(
-        `${BASE_CAMADPTR_URL}/getRunningProcessForCustomer?customerId=${userId}`
+      const biz_resp = await axios.get(
+        `${BASE_CAMADPTR_URL}/getRunningProcessForCustomer?customerId=${userId}&type=business`
       );
-      console.log('running proc for cust', resp.data);
-      if (resp.data.length > 0) {
+      const pers_resp = await axios.get(
+        `${BASE_CAMADPTR_URL}/getRunningProcessForCustomer?customerId=${userId}&type=personal`
+      );
+      let uData = {
+        userData: {
+          ...userData,
+        },
+      };
+      if (biz_resp.data.length > 0) {
         //fetch latest taskId for customer
         const resp2 = await axios.get(
-          `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}`
+          `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}&loanType=business`
         );
-        dispatch(
-          authActions.updateUserData({
-            userData: {
-              ...userData,
-              pId: resp.data[0],
-              taskId: resp2.data.candidateGroupIsCustomer
-                ? resp2.data?.taskId
-                : null,
-              taskDesc: resp2.data.candidateGroupIsCustomer
-                ? resp2.data?.desc
-                : null,
-            },
-          })
-        );
+        uData.userData = {
+          ...uData.userData,
+          biz_pId: biz_resp.data[0],
+          biz_taskId: resp2.data.candidateGroupIsCustomer
+            ? resp2.data?.taskId
+            : null,
+          biz_taskDesc: resp2.data.candidateGroupIsCustomer
+            ? resp2.data?.desc
+            : null,
+        };
       }
+
+      if (pers_resp.data.length > 0) {
+        //fetch latest taskId for customer
+        const resp2 = await axios.get(
+          `${BASE_CAMADPTR_URL}/getLatestTaskForCustomer?customerId=${userId}&loanType=personal`
+        );
+        uData.userData = {
+          ...uData.userData,
+          pers_pId: pers_resp.data[0],
+          pers_taskId: resp2.data.candidateGroupIsCustomer
+            ? resp2.data?.taskId
+            : null,
+          pers_taskDesc: resp2.data.candidateGroupIsCustomer
+            ? resp2.data?.desc
+            : null,
+        };
+      }
+
+      dispatch(authActions.updateUserData(uData));
 
       setCount(1);
     } catch (err) {

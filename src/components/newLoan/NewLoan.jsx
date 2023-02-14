@@ -15,6 +15,7 @@ const NewLoan = ({
   reloadBodyOption,
   props,
   resetBackground,
+  loanType,
 }) => {
   const dispatch = useDispatch();
   const [activeStep] = useState(0);
@@ -60,10 +61,9 @@ const NewLoan = ({
       console.log(err);
     }
   };
-
   return (
     <div className='loanFormPage'>
-      <FormModal resetBackground={resetBackground} />
+      <FormModal resetBackground={resetBackground} loanType={loanType} />
     </div>
   );
 };
