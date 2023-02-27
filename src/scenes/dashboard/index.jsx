@@ -28,7 +28,7 @@ const Dashboard = () => {
         {/* ROW 1 */}
         <Box
           gridColumn="span 3"
-          backgroundColor="success.main"
+          backgroundColor="info.main"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -47,7 +47,7 @@ const Dashboard = () => {
         </Box>
         <Box
           gridColumn="span 3"
-          backgroundColor="success.main"
+          backgroundColor="info.main"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -66,7 +66,7 @@ const Dashboard = () => {
         </Box>
         <Box
           gridColumn="span 3"
-          backgroundColor="success.main"
+          backgroundColor="info.main"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -85,7 +85,7 @@ const Dashboard = () => {
         </Box>
         <Box
           gridColumn="span 3"
-          backgroundColor="success.main"
+          backgroundColor="info.main"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -107,7 +107,7 @@ const Dashboard = () => {
         <Box
           gridColumn="span 8"
           gridRow="span 2"
-          backgroundColor="success.main"
+          backgroundColor="info.main"
         >
           <Box
             mt="25px"
