@@ -8,6 +8,10 @@ body,
   height: 100%;
   width: 100%;
   font-family: "Source Sans Pro", sans-serif;
+  max-height: 100vh;
+  max-width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .app {
@@ -33,4 +37,3 @@ body,
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-

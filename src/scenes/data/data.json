@@ -1,0 +1,215 @@
+{
+  "Header": {
+    "title": "COOP BANK LOS",
+    "paragraph": "Welcome to the future of lending. Streamline your loan origination process with our cutting-edge system"
+  },
+  "About": {
+    "paragraph": "Welcome to the future of lending. Streamline your loan origination process with our cutting-edge system. Say goodbye to paperwork, long wait times, and manual data entry. With our system, you can automate your workflows, reduce risk, and improve customer experience. Our platform is flexible, scalable, and customizable to your specific needs. Whether you're a lender, a broker, or a financial institution, our loan origination system can help you increase efficiency, reduce costs, and grow your business. Join the revolution in lending today.",
+    "Why": ["Personal Loan", "Mortgage Loan", "Student loan", "Auto loan"],
+    "Why2": [
+      "Payday loan",
+      "Pawn shop loan",
+      "Small business loan",
+      "Holiday loan"
+    ]
+  },
+  "Gallery": [
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/01-large.jpg",
+      "smallImage": "img/portfolio/01-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/02-large.jpg",
+      "smallImage": "img/portfolio/02-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/03-large.jpg",
+      "smallImage": "img/portfolio/03-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/04-large.jpg",
+      "smallImage": "img/portfolio/04-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/05-large.jpg",
+      "smallImage": "img/portfolio/05-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/06-large.jpg",
+      "smallImage": "img/portfolio/06-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/07-large.jpg",
+      "smallImage": "img/portfolio/07-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/08-large.jpg",
+      "smallImage": "img/portfolio/08-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/09-large.jpg",
+      "smallImage": "img/portfolio/09-small.jpg"
+    }
+  ],
+  "Services": [
+    {
+      "img": "https:/picsum.photos/201/",
+      "name": "Personal Loans",
+      "text": "These are unsecured loans that can be used for a variety of purposes, such as debt consolidation, home improvement, or major purchases."
+    },
+    {
+      "img": "https:/picsum.photos/202/",
+      "name": "Auto Loans",
+      "text": "These are secured loans that are used to finance the purchase of a vehicle. The car serves as collateral for the loan."
+    },
+    {
+      "img": "https:/picsum.photos/203/",
+      "name": "Mortgages",
+      "text": "These are long-term loans that are used to finance the purchase of a home. The home serves as collateral for the loan."
+    },
+    {
+      "img": "https:/picsum.photos/204/",
+      "name": "Business Loans",
+      "text": "These are loans that are used to finance a business or start-up. They may be secured or unsecured, depending on the lender's requirements."
+    },
+    {
+      "img": "https:/picsum.photos/205/",
+      "name": "Student Loans",
+      "text": "These are loans that are used to finance education expenses, such as tuition, room and board, and textbooks. They may be offered by the government or private lenders."
+    },
+    {
+      "img": "https:/picsum.photos/206/",
+      "name": "Payday Loans",
+      "text": "These are short-term, high-interest loans that are typically due on the borrower's next payday. They are often used by people who need to cover unexpected expenses or bills."
+    },
+    {
+      "img": "https:/picsum.photos/204/",
+      "name": "Home Equity Loans",
+      "text": "These are loans that allow homeowners to borrow against the equity in their home. They can be used for home improvement projects, debt consolidation, or other expenses."
+    },
+    {
+      "img": "https:/picsum.photos/205/",
+      "name": "Credit Builder Loans",
+      "text": "These are loans that are designed to help people establish or improve their credit score. They typically have low interest rates and are repaid over a set period of time."
+    },
+    {
+      "img": "https:/picsum.photos/206/",
+      "name": "Consolidation Loans",
+      "text": "These are loans that are used to combine multiple debts into one payment. They can simplify repayment and often have lower interest rates than the original debts."
+    }
+  ],
+  "Testimonials": [
+    {
+      "img": "https:/picsum.photos/211/",
+      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
+      "name": "Hana Tibebu"
+    },
+    {
+      "img": "https:/picsum.photos/212/",
+      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
+      "name": "Sara Abreham"
+    },
+    {
+      "img": "ihttps:/picsum.photos/213/",
+      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
+      "name": "Kemal Sheka"
+    },
+    {
+      "img": "https:/picsum.photos/214/",
+      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
+      "name": "Bini Man"
+    },
+    {
+      "img": "https:/picsum.photos/215/",
+      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
+      "name": "Helen Berihe"
+    },
+    {
+      "img": "https:/picsum.photos/226/",
+      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
+      "name": "Caara Fite"
+    }
+  ],
+  "Team": [
+    {
+      "img": "https:/picsum.photos/207/",
+      "name": "Temam Hashim",
+      "job": "Software Developer"
+    },
+    {
+      "img": "https:/picsum.photos/208/",
+      "name": "Baharudin Mohammed",
+      "job": "Software Developer"
+    },
+    {
+      "img": "https:/picsum.photos/209/",
+      "name": "Hunda Hunda",
+      "job": "Software Developer"
+    },
+    {
+      "img": "https:/picsum.photos/210/",
+      "name": "Elshu Elshu",
+      "job": "Software Developer"
+    }
+  ],
+
+  "Contact": {
+    "address": "Bole, Addis Ababa, Ethiopia",
+    "phone": "+251 923 79 92 32",
+    "email": "info@coopbank.com",
+    "facebook": "fb.com",
+    "twitter": "twitter.com",
+    "youtube": "youtube.com"
+  },
+  "Features": [
+    {
+      "icon": "fa fa-comments-o",
+      "title": "Interest Rate",
+      "text": "The interest rate is the cost of borrowing money, expressed as a percentage of the loan amount. It determines the total amount of interest that will be paid over the life of the loan."
+    },
+    {
+      "icon": "fa fa-bullhorn",
+      "title": "Loan Term",
+      "text": "The loan term is the length of time over which the loan will be repaid. This can range from a few months to several years, depending on the type of loan and the lender's terms."
+    },
+    {
+      "icon": "fa fa-group",
+      "title": "Loan Amount",
+      "text": "The loan amount is the total amount of money that is borrowed. This can vary based on the lender's policies, the borrower's creditworthiness, and the purpose of the loan."
+    },
+    {
+      "icon": "fa fa-magic",
+      "title": "Repayment Schedule",
+      "text": "The repayment schedule outlines the frequency and amount of payments that the borrower will need to make to repay the loan. This can be monthly, biweekly, or weekly, depending on the lender's policies."
+    },
+    {
+      "icon": "fa fa-bullhorn",
+      "title": "Fees and Charges",
+      "text": "Loans may come with various fees and charges, such as origination fees, prepayment penalties, and late fees. It is important to understand these costs before accepting a loan offer."
+    },
+    {
+      "icon": "fa fa-group",
+      "title": "Collateral",
+      "text": "Some loans require collateral, which is an asset that the borrower pledges as security for the loan. This can be a car, a house, or other valuable property."
+    },
+    {
+      "icon": "fa fa-magic",
+      "title": "Credit Score",
+      "text": "The borrower's credit score is a measure of their creditworthiness, based on their credit history and other financial factors. Lenders may use this score to determine the interest rate and loan terms that are offered."
+    },
+    {
+      "icon": "fa fa-language",
+      "title": "Payment Protection",
+      "text": "Each and every aspect of your payment is protected by our privacy and mony back policy and is been managed by expert."
+    }
+  ]
+}

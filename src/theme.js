@@ -127,5 +127,8 @@ export const mytheme=createTheme({
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
         fontSize: 14,
       },
+      button: {
+        textTransform: 'none'
+      },
     },
 });
