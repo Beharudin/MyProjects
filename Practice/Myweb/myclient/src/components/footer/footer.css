@@ -1,0 +1,120 @@
+.wrapper {
+    background: white;
+}
+.wrapper .container {
+    gap: 2rem;
+}
+.wrapper .container .left {
+    flex: 3;
+}
+.wrapper .container .left > * {
+    display: block;
+}
+.wrapper .container .left > :nth-child(2) {
+    margin-top: 3rem;
+}
+.wrapper .container .left > :nth-child(2) a {
+    text-decoration: underline;
+    color: orange;
+}
+.wrapper .container .right {
+    flex: 1;
+}
+.wrapper .container .right .info {
+    margin-bottom: 1rem;
+}
+.wrapper .container .right .info > * {
+    display: block;
+}
+.wrapper .container .right .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    list-style: none;
+}
+.wrapper .container .right .menu li {
+    cursor: pointer;
+}
+.wrapper .container .right .menu li:hover {
+    color: #286F6C;
+}
+
+.paddings {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+.yPaddings {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  .innerWidth {
+    width: 100%;
+  }
+
+@media (min-width: 640px) {
+    /*sm*/
+     .paddings {
+      padding: 4rem;
+    }
+    .yPaddings {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+    .primaryText {
+      font-size: 2.5rem;
+    }
+    .secondaryText {
+      font-size: 1.1rem;
+      line-height: 40px;
+    } 
+    
+  }
+
+  @media (max-width: 640px) {
+    .wrapper .container {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: flex-start;
+   }
+
+   .wrapper .container .right .menu {
+       flex-direction: row;
+       flex-wrap: wrap;
+   }
+  }
+  
+@media (min-width: 1280px), (min-width: 768px) {
+    /*md*/
+    .paddings {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    /*xl*/
+    .yPaddings {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+
+  
+@media (min-width: 640px) {
+    /*xxl*/
+    .innerWidth {
+      max-width: 1280px;
+      margin: auto;
+    }
+  }
+
+

@@ -1,0 +1,134 @@
+.wrapper {
+  overflow: hidden;
+}
+
+.paddings {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+.upperElements {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.lowerElements {
+  margin-top: 12rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.primaryText {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.secondaryText {
+  line-height: 50px;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+.top {
+  margin-top: 100px;
+}
+.topPaddings {
+  padding-top: 3rem;
+}
+
+.experience {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.certificate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.certificate img {
+  margin-bottom: 1rem;
+  width: 3.5rem;
+}
+
+.person {
+  position: absolute;
+  bottom: -2rem;
+  margin: auto;
+  background-image: url("../../../public/assets/splash.png");
+  background-repeat: no-repeat;
+  background-size: 23rem;
+  left: 33%;
+}
+
+.person img {
+  margin-bottom: -5px;
+}
+
+.email {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  color: orange;
+}
+
+@media (min-width: 640px) {
+  /*sm*/
+  .email {
+    position: relative;
+    display: none;
+  }
+  .paddings {
+    padding: 4rem;
+  }
+  .primaryText {
+    font-size: 2.5rem;
+  }
+  .secondaryText {
+    font-size: 1.1rem;
+    line-height: 40px;
+  }
+  .topPaddings {
+    padding-top: 4rem;
+  }
+  .person img {
+    width: 23rem;
+  }
+}
+
+@media (min-width: 1280px), (min-width: 768px) {
+  /*md*/
+  .paddings {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  /*xl*/
+  .topPaddings {
+    padding-top: 2rem;
+  }
+}
+
+@media (max-width: 640px), (max-width: 768px) {
+  .person {
+    position: relative;
+    left: 0;
+    background-size: 20rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-position: bottom;
+  }
+}

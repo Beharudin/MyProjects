@@ -1,0 +1,17 @@
+.card{
+    width: 100%;
+    display: flex;
+}
+
+.cardSubtitle{
+    display: flex;
+    justify-content: space-between;
+}
+
+.cardIconImg{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: fill;
+    margin-top: -40px;
+}
