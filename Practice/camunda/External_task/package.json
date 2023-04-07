@@ -1,0 +1,16 @@
+{
+  "name": "external_task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ExternalTask.js",
+  "scripts": {
+    "server": "nodemon ExternalTask.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "camunda-external-task-client-js": "^3.0.0"
+  }
+}
