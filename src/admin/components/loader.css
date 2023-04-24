@@ -1,0 +1,8 @@
+.container{
+    height: calc(100vh - 150px) !important;
+}
+
+.loader{
+height: 100%;
+position: relative;
+}

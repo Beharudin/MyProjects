@@ -1,0 +1,22 @@
+#poems{
+  margin-top: 50px;
+}
+
+#poems h2{
+    padding-bottom: 15px;
+}
+#poems h2::after {
+    position: absolute;
+    content: "";
+    background: linear-gradient(to right, #5ca9fb 0%, #6372ff 100%);
+    height: 4px;
+    width: 60px;
+    bottom: 0;
+    margin-left: -30px;
+    left: 50%;
+  }
+
+#poems h3 {
+  font-weight: 500;
+}
+

@@ -1,0 +1,19 @@
+#testimonials .container {
+  height: auto !important;
+}
+
+#testimonials h2 {
+    position: relative;
+    padding-bottom: 15px;
+  }
+
+#testimonials h2::after {
+    position: absolute;
+    content: "";
+    background: linear-gradient(to right, #5ca9fb 0%, #6372ff 100%);
+    height: 4px;
+    width: 100px;
+    bottom: 0;
+    margin-left: -120px;
+    left: 50%;
+  }
