@@ -13,10 +13,10 @@ function Poems() {
         <div className="row">
           {data.Walaloo
             ? data.Walaloo.map((data, index) => (
-                <div key={index} className="card col col-xs-12 col-md-6 col-lg-4 mb-2">
-                  <div className="posts-desc m-2">
+                <div key={index} className="card col-xs-12 col-md-6 col-lg-4 mb-2">
+                  <div className="poem-desc m-2">
                     <h3>{data.name} {data.section}</h3>
-                    <p className="posts-text">{data.text}</p>
+                    <p className="poem-text">{data.text}</p>
                     <Link className="btn btn-primary" to="/poem">Read More</Link>
                   </div>
                 </div>

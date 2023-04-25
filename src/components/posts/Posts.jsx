@@ -13,7 +13,7 @@ function Posts() {
         <div className="row">
           {data.Posts
             ? data.Posts.map((data, index) => (
-                <div key={index} className="card col col-xs-12 col-md-6 col-lg-4 mb-2">
+                <div key={index} className="card col-xs-12 col-md-6 col-lg-4 mb-2">
                   <div className="posts-desc m-2">
                     <h3>{data.name} {data.section}</h3>
                     <p className="posts-text">{data.text}</p>
