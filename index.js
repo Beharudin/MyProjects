@@ -17,11 +17,11 @@ app.use(express.json());
 // import each routers
 // import userRouter from "./api/users/user_router.js";
 // import customerRouter from "./api/customer/customer_route.js";
-// import serviceRouter from "./api/services/service_route.js";
-// import settingRouter from "./api/setting/setting_route.js";
-// import featureRouter from "./api/feature/feature_route.js";
+import postRouter from "./api/post/post_route.js";
+import videoRouter from "./api/video/video_route.js";
+import novelRouter from "./api/novel/novel_route.js";
 import aboutRouter from "./api/about/about_route.js";
-// import messageRouter from "./api/messages/message_route.js";
+import poemRouter from "./api/poem/poem_route.js";
 // import TestimonialRouter from "./api/testimonial/testimonial_route.js";
 // import FAQRouter from "./api/FAQ/faq_route.js";
 // import AddressRouter from "./api/address/address_router.js"
@@ -57,11 +57,11 @@ import aboutRouter from "./api/about/about_route.js";
 // get  router
 // app.use("/api/users/", userRouter);
 // app.use("/api/customers/", customerRouter);
-// app.use("/api/services/", serviceRouter);
-// app.use("/api/settings/", settingRouter);
-// app.use("/api/features/", featureRouter);
+app.use("/api/posts/", postRouter);
+app.use("/api/videos/", videoRouter);
+app.use("/api/novels/", novelRouter);
 app.use("/api/about/", aboutRouter);
-// app.use("/api/messages/", messageRouter);
+app.use("/api/poems/", poemRouter);
 // app.use("/api/testimonials/", TestimonialRouter);
 // app.use("/api/faq/", FAQRouter);
 // app.use("/api/address/", AddressRouter);

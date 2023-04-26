@@ -2,8 +2,8 @@ import pool from "../../config/database.js";
 
 export function Create(data, callback) {
   pool.query(
-    `INSERT INTO features(feature_name, feature_desc, feature_icon) VALUES (?,?,?)`,
-    [data.name, data.description, data.icon],
+    `INSERT INTO posts(topic, body) VALUES (?,?)`,
+    [data.topic, data.body],
     (errors, results, fields) => {
       if (errors) {
         return callback(errors);
@@ -13,7 +13,7 @@ export function Create(data, callback) {
   );
 }
 export function Get(callback) {
-  pool.query(`SELECT * FROM features`, [], (errors, results, fields) => {
+  pool.query(`SELECT * FROM posts`, [], (errors, results, fields) => {
     if (errors) {
       return callback(errors);
     }
@@ -22,7 +22,7 @@ export function Get(callback) {
 }
 export function GetById(id, callback) {
   pool.query(
-    `SELECT * FROM features WHERE id=?`,
+    `SELECT * FROM posts WHERE id=?`,
     [id],
     (errors, results, fields) => {
       if (errors) {
@@ -32,22 +32,11 @@ export function GetById(id, callback) {
     }
   );
 }
-export function GetByName(name, callback) {
-  pool.query(
-    `SELECT * FROM features WHERE feature_name = ?`,
-    [name],
-    (errors, results, fields) => {
-      if (errors) {
-        return callback(errors);
-      }
-      return callback(null, results[0]);
-    }
-  );
-}
+
 export function Update(data, id, callback) {
   pool.query(
-    `UPDATE features set feature_name=?, feature_desc=?, feature_icon=?  WHERE id=?`,
-    [data.name, data.description, data.icon, id],
+    `UPDATE posts set topic=?, body=? WHERE id=?`,
+    [data.topic, data.body, id],
     (errors, results, fields) => {
       if (errors) {
         return callback(errors);
@@ -58,7 +47,7 @@ export function Update(data, id, callback) {
 }
 export function Delete(id, callback) {
   pool.query(
-    `DELETE FROM features WHERE id=?`,
+    `DELETE FROM posts WHERE id=?`,
     [id],
     (errors, results, fields) => {
       if (errors) {
