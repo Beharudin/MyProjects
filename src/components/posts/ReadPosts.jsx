@@ -1,31 +1,56 @@
-import React from "react";
-import data from "../../data/data.json";
+import React, { useEffect, useState } from "react";
 import "./posts.css";
 import Topbar from "../topbar/Topbar";
+import axios from "axios";
+import Error from "../../admin/components/Error";
+import Loader from "../../admin/components/Loader";
+import { useParams } from "react-router-dom";
 
 function ReadPost() {
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const getPost = async () => {
+      try {
+        setLoading(true);
+        await axios.get(`/posts/${id}`).then((res) => {
+          setData(res.data.data);
+        });
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+    getPost();
+  }, [id]);
+
   return (
-    <div>
+    <div style={{ marginTop: "80px" }}>
       <Topbar />
+      {loading ? (
+        <Loader />
+      ) : data ? (
+        <>
       <div className="text-center mt-5 mb-5">
-        {data.Posts ? (
+        {data && (
           <div className="container">
             <div className="col-12 col-md-offset-1 card">
               <div>
-                <h2>Post Heloo</h2>
+                <h2>{data.topic}</h2>
               </div>
               <div className="text-start">
-                <p>
-                  These are long-term post that are used to finance the purchase
-                  of a home. The home serves as collateral for the loan.
-                </p>
+                <p>{data.body}</p>
               </div>
             </div>
           </div>
-        ) : (
-          "Loading..."
         )}
       </div>
+      </>
+      ) : (
+        <Error message="Something went wrong, please try again later!" />
+      )}
     </div>
   );
 }

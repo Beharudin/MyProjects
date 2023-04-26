@@ -46,9 +46,9 @@ function App() {
           {isTopbar ? <Topbar setIsSidebar={setIsSidebar} /> : null}
           <Routes>
             <Route path="/" exact element={<Homepage />} />
-            <Route path="/novel" exact element={<ReadNovel />} />
-            <Route path="/poem" exact element={<ReadPoem />} />
-            <Route path="/posts" exact element={<ReadPost />} />
+            <Route path="/novel/:id" exact element={<ReadNovel />} />
+            <Route path="/poem/:id" exact element={<ReadPoem />} />
+            <Route path="/post/:id" exact element={<ReadPost />} />
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin/website" element={<Website />} />

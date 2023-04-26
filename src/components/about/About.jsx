@@ -13,7 +13,6 @@ function About() {
       try {
         setLoading(true);
         await axios.get("/about").then((res) => {
-          console.log("about ", res.data.data[0]);
           setData(res.data.data[0]);
         });
         setLoading(false);
