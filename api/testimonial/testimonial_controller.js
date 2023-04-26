@@ -31,15 +31,13 @@ export function getTestimonialById(req, res) {
       console.log(error);
       return res.status(500).json({
         success: 0,
-        message: "failed to fetch testimonial",
-        status: "failed",
+        message: "Failed to fetch testimonial",
       });
     }
     if (!results) {
       return res.status(404).json({
         success: 0,
-        message: "record not found!",
-        status: "empty",
+        message: "Record not found!",
       });
     }
     return res.status(200).json({
@@ -55,15 +53,13 @@ export function getTestimonials(req, res) {
       console.log(error);
       return res.status(500).json({
         success: 0,
-        message: "failed to fetch testimonial",
-        status: "failed",
+        message: "Failed to fetch testimonial",
       });
     }
     if (!results) {
       return res.status(404).json({
         success: 0,
-        message: "record not found!",
-        status: "empty",
+        message: "Record not found!",
       });
     }
 
@@ -80,15 +76,13 @@ export function getRandomTestimonials(req, res) {
       console.log(error);
       return res.status(500).json({
         success: 0,
-        message: "failed to fetch testimonial",
-        status: "failed",
+        message: "Failed to fetch testimonial",
       });
     }
     if (!results) {
       return res.status(404).json({
         success: 0,
-        message: "record not found!",
-        status: "empty",
+        message: "Record not found!",
       });
     }
 
@@ -108,13 +102,12 @@ export function updateTestimonial(req, res) {
       console.log(error);
       return res.status(500).json({
         success: 0,
-        message: "failed to update testimonial",
-        status: "failed",
+        message: "Failed to update testimonial",
       });
     }
     return res.status(200).json({
       success: 1,
-      message: "Feature updated successfully!",
+      message: "Testimonial updated successfully!",
       data: results,
     });
   });
@@ -126,14 +119,12 @@ export function deleteTestimonial(req, res) {
       console.log(error);
       return res.status(500).json({
         success: 0,
-        message: "failed to delete testimonial",
-        status: "failed",
+        message: "Failed to delete testimonial",
       });
     } else if (results == "") {
       return res.status(201).json({
         success: 0,
-        message: "no testimonial with this id",
-        status: "failed",
+        message: "No testimonial with this id",
       });
     } else {
       return res.status(200).json({

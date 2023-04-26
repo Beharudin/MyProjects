@@ -2,8 +2,8 @@ import pool from "../../config/database.js";
 
 export function Create(data, callback) {
   pool.query(
-    `INSERT INTO testimonial(username, comment) VALUES (?,?)`,
-    [data.username, data.comment],
+    `INSERT INTO testimonials(name, comment, img) VALUES (?,?, ?)`,
+    [data.name, data.comment, data.img],
     (errors, results, fields) => {
       if (errors) {
         return callback(errors);
@@ -13,7 +13,7 @@ export function Create(data, callback) {
   );
 }
 export function Get(callback) {
-  pool.query(`SELECT * FROM testimonial`, [], (errors, results, fields) => {
+  pool.query(`SELECT * FROM testimonials`, [], (errors, results, fields) => {
     if (errors) {
       return callback(errors);
     }
@@ -23,7 +23,7 @@ export function Get(callback) {
 
 export function GetRandom(callback) {
   pool.query(
-    `SELECT * FROM testimonial order by RAND() LIMIT 6`,
+    `SELECT * FROM testimonials order by RAND() LIMIT 6`,
     [],
     (errors, results, fields) => {
       if (errors) {
@@ -35,7 +35,7 @@ export function GetRandom(callback) {
 }
 export function GetById(id, callback) {
   pool.query(
-    `SELECT * FROM testimonial WHERE id=?`,
+    `SELECT * FROM testimonials WHERE id=?`,
     [id],
     (errors, results, fields) => {
       if (errors) {
@@ -48,8 +48,8 @@ export function GetById(id, callback) {
 
 export function Update(data, id, callback) {
   pool.query(
-    `UPDATE testimonial set username=?, comment=? WHERE id=?`,
-    [data.username, data.comment, id],
+    `UPDATE testimonials set name=?, comment=?, img=? WHERE id=?`,
+    [data.name, data.comment, data.img, id],
     (errors, results, fields) => {
       if (errors) {
         return callback(errors);
@@ -60,7 +60,7 @@ export function Update(data, id, callback) {
 }
 export function Delete(id, callback) {
   pool.query(
-    `DELETE FROM testimonial WHERE id=?`,
+    `DELETE FROM testimonials WHERE id=?`,
     [id],
     (errors, results, fields) => {
       if (errors) {
