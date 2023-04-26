@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Mail } from "@mui/icons-material";
+import { Mail, Person } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import YupPassword from "yup-password";
 import Swal from "sweetalert2";
@@ -21,8 +21,6 @@ YupPassword(Yup);
 
 const Topbar = () => {
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
-  const [activeMessages, setActiveMessages] = useState([]);
-  const [noOfActive, setNoOfActive] = useState();
   const [loading, setLoading] = useState(true);
   const [id, setId] = useState(-1);
 
@@ -49,22 +47,6 @@ const Topbar = () => {
     }
     // setId(user.id);
   }, []);
-
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        await axios
-          .get("/messages/status/active/")
-          .then((res) => {
-            setActiveMessages(res.data.data);
-          });
-        setNoOfActive(activeMessages.length);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchMessages();
-  });
 
   const updatePassword = async (pwd) => {
     const data = {
@@ -129,12 +111,8 @@ const Topbar = () => {
             {/* ICONS */}
             <Box display="flex">
               <div>
-              <Link  to="messages">
-                <IconButton>
-                  <Badge badgeContent={noOfActive} color="error">
-                    <Mail color="action" />
-                  </Badge>
-                </IconButton>
+              <Link  to="">
+                Welcome, Mohammed!
               </Link>
               </div>
 

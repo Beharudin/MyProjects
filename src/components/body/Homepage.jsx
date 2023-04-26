@@ -3,7 +3,7 @@ import Topbar from "../topbar/Topbar";
 import Carousel from "./Carousel";
 import Posts from "../posts/Posts";
 import About from "../about/About";
-import Contact from "../footer/Contact";
+import Contact from "../footer/Footer";
 import Testimonials from "../testimonials/Testimonials";
 import Novels from "../novels/Novels";
 import Videos from "../videos/Videos";
