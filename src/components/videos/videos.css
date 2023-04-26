@@ -1,5 +1,8 @@
+#videos .container {
+  height: auto !important;
+}
 
-#videos .service-desc {
+#videos .videos-desc {
   margin: 10px 10px 20px;
 }
 #videos h2{

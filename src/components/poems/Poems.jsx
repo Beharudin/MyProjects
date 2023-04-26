@@ -25,7 +25,7 @@ function Poems() {
   }, []);
 
   return (
-    <div className="text-center mt-5 pb-5" id="poems">
+    <div className="text-center pb-5" id="poems">
       {loading ? (
         <Loader />
       ) : data.length ? (
@@ -39,17 +39,19 @@ function Poems() {
                 ? data.map((data, index) => (
                     <div
                       key={index}
-                      className="card col-xs-12 col-md-6 col-lg-4 mb-2"
+                      className="col-xs-12 col-md-6 col-lg-4"
                     >
-                      <div className="poem-desc m-2">
-                        <h3>{data.topic}</h3>
-                        <p className="poem-text">{data.body}</p>
-                        <Link
-                          className="btn btn-primary"
-                          to={`/poem/${data.id}`}
-                        >
-                          Read More
-                        </Link>
+                      <div className="card mb-3">
+                        <div className="poem-desc m-2">
+                          <h3>{data.topic}</h3>
+                          <p className="poem-text">{data.body}</p>
+                          <Link
+                            className="btn btn-primary"
+                            to={`/poem/${data.id}`}
+                          >
+                            Read More
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   ))

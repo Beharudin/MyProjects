@@ -39,14 +39,16 @@ function Videos() {
                 ? data.map((data, index) => (
                     <div
                       key={index}
-                      className="card col-xs-12 col-md-6 col-lg-4 mb-2"
+                      className="col-xs-12 col-md-6 col-lg-4"
                     >
-                      <div className="posts-desc m-2">
-                        <h3>{data.topic}</h3>
-                        <p className="posts-text">{data.body}</p>
-                        <Link className="btn btn-primary" to={data.link}>
-                          Watch
-                        </Link>
+                      <div className="card mb-3">
+                        <div className="videos-desc m-2">
+                          <h3>{data.topic}</h3>
+                          <p className="videos-text">{data.body}</p>
+                          <Link className="btn btn-primary" to={data.link}>
+                            Watch
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   ))

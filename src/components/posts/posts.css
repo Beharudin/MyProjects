@@ -1,3 +1,6 @@
+#posts .container {
+  height: auto !important;
+}
 
 #posts h2{
     padding-bottom: 15px;

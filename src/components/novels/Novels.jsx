@@ -37,18 +37,20 @@ function Novels() {
             <div className="row">
               {data
                 ? data.map((data, index) => (
-                    <div
-                      key={index}
-                      className="card col-xs-12 col-md-6 col-lg-4"
-                    >
-                      <div className="novels-desc m-2">
-                        <h3>
-                          {data.topic}, {data.section}
-                        </h3>
-                        <p className="novels-text">{data.body}</p>
-                        <Link className="btn btn-primary" to={`/novel/${data.id}`}>
-                          Read More
-                        </Link>
+                    <div key={index} className="col-xs-12 col-md-6 col-lg-4">
+                      <div className="card mb-3">
+                        <div className="novels-desc m-2">
+                          <h3>
+                            {data.topic}, {data.section}
+                          </h3>
+                          <p className="novels-text">{data.body}</p>
+                          <Link
+                            className="btn btn-primary"
+                            to={`/novel/${data.id}`}
+                          >
+                            Read More
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   ))

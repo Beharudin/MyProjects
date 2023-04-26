@@ -1,6 +1,9 @@
 #poems{
   margin-top: 50px;
 }
+#poems .container {
+  height: auto !important;
+}
 
 #poems h2{
     padding-bottom: 15px;

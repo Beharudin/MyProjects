@@ -5,6 +5,10 @@
   margin: 10px 20px;
 }
 
+#novels .container {
+  height: auto !important;
+}
+
 #novels h2::after {
     position: absolute;
     content: "";
