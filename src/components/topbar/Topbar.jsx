@@ -54,7 +54,7 @@ function Topbar() {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#top">
+            <a className="nav-link" href="#footer">
               Contacts
             </a>
           </li>

@@ -36,7 +36,7 @@ function Footer() {
   }, []);
 
   return (
-    <div className="fluid-container my-5">
+    <div className="fluid-container my-5" id="footer">
       {loading ? (
         <Loader />
       ) : data.length ? (
