@@ -41,7 +41,7 @@ function Novels() {
                       <div className="card mb-3">
                         <div className="novels-desc m-2">
                           <h3>
-                            {data.topic}, {data.section}
+                            {data.topic} {data.section}
                           </h3>
                           <p className="novels-text">{data.body}</p>
                           <Link
