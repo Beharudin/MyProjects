@@ -24,39 +24,39 @@ function Topbar() {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav mr-5 ml-auto">
           <li className="nav-item active">
-            <Link className="nav-link" to="#novels">
+            <a className="nav-link" href="#novels">
               Novels
-            </Link>
+            </a>
           </li>
           <li className="nav-item active">
-            <Link className="nav-link" to="#poems">
+            <a className="nav-link" href="#poems">
               Poems
-            </Link>
+            </a>
           </li>
           <li className="nav-item active">
-            <Link className="nav-link" to="#posts">
+            <a className="nav-link" href="#posts">
               Posts
-            </Link>
+            </a>
           </li>
           <li className="nav-item active">
-            <Link className="nav-link" to="#videos">
+            <a className="nav-link" href="#videos">
               Videos
-            </Link>
+            </a>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="#about">
+            <a className="nav-link" href="#about">
               About
-            </Link>
+            </a>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="#testimonials">
+            <a className="nav-link" href="#testimonials">
               Testimonials
-            </Link>
+            </a>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="#top">
+            <a className="nav-link" href="#top">
               Contacts
-            </Link>
+            </a>
           </li>
         </ul>
       </div>
