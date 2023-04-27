@@ -11,6 +11,6 @@ const router = express.Router();
 router.post("/", createVideo);
 router.get("/", getVideo);
 router.delete("/:id", deleteVideo);
-router.patch("/", updateVideo);
+router.patch("/:id", updateVideo);
 
 export default router;
