@@ -32,6 +32,7 @@ function About() {
         setLoading(true);
         await axios.get("/about").then((res) => {
           setData(res.data.data[0]);
+          console.log(res.data.data)
         });
         setLoading(false);
       } catch (error) {
@@ -41,10 +42,9 @@ function About() {
     getAbout();
   }, []);
 
-  const updateAbout = async (title, desc, list) => {
+  const updateAbout = async ( desc) => {
     let data = {
-      title: title,
-      text: desc,
+      description: desc,
     };
     if (file) {
       const formData = new FormData();
@@ -109,13 +109,11 @@ function About() {
   };
 
   const initialValues = {
-    aboutTitle: "About Us",
-    aboutDescription: data.about_text,
+    aboutDescription: data.description,
     modalImg: "",
   };
 
   const aboutInitSchema = Yup.object().shape({
-    aboutTitle: Yup.string().required("About title is required"),
     aboutDescription: Yup.string().required("About description is required"),
     modalImg: Yup.mixed().required("About image is required"),
   });
@@ -137,14 +135,14 @@ function About() {
         <div className="row">
           <div className="LeftDiv col-xs-12 col-md-6">
             <img
-              src={"http://10.100.150.37:5010/images/" + data.about_img}
+              src={"http://192.168.57.216:3001/images/" + data.img}
               className="img-responsive"
               alt=""
             />{" "}
           </div>
           <div className="col-xs-12 col-md-6">
             <div className="about-text">
-              <p>{data ? data.about_text : "loading..."}</p>
+              <p>{data ? data.description : "loading..."}</p>
             </div>
           </div>
         </div>
@@ -157,7 +155,7 @@ function About() {
               validationSchema={aboutInitSchema}
               validateOnMount={true}
               onSubmit={(values) => {
-                updateAbout(values.aboutTitle, values.aboutDescription);
+                updateAbout(values.aboutDescription);
                 handleCloseEditAboutModal();
               }}
             >
@@ -167,25 +165,6 @@ function About() {
                     About information
                   </Typography>
                   <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <TextField
-                        required
-                        id="aboutTitle"
-                        name="aboutTitle"
-                        label="Title"
-                        value={values.aboutTitle}
-                        multiline
-                        maxRows={10}
-                        fullWidth
-                        variant="standard"
-                        onChange={handleChange("aboutTitle")}
-                        onBlur={handleBlur("aboutTitle")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.aboutTitle && errors.aboutTitle && (
-                        <p style={{ color: "red" }}>{errors.aboutTitle}</p>
-                      )}
-                    </Grid>
                     <Grid item xs={12}>
                       <TextField
                         required

@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import Error from "../../components/Error";
 import Loader from "../../components/Loader";
+import Swal from "sweetalert2";
 
 function Website() {
   const [webName, setWebName] = useState("");
@@ -23,10 +24,11 @@ function Website() {
   const [webFacebookUrl, setWebfacebookUrl] = useState("");
   const [webTwitterUrl, setWebTwitterUrl] = useState("");
   const [webYoutubeUrl, setWebYoutubeUrl] = useState("");
-  const [webHeroText, setWebHeroText] = useState("");
-  const [webLogo, setWebLogo] = useState("");
+  const [webInstagramUrl, setWebInstagrameUrl] = useState("");
+  const [webDescription, setWebDescription] = useState("");
+  const [webBooks, setWebBooks] = useState("");
   const [loading, setLoading] = useState(true);
-
+  
   const user = JSON.parse(localStorage.getItem("currentUser"));
   // if(!user){
   //   setLoading(true);
@@ -41,16 +43,17 @@ function Website() {
     const getWebsiteInfo = async () => {
       try {
         setLoading(true);
-        await axios.get("/settings/").then((res) => {
-          setWebName(res.data.data[0].site_name);
-          setWebEmail(res.data.data[0].site_email);
-          setWebMobile(res.data.data[0].site_mobile);
-          setWebaddress(res.data.data[0].site_address);
-          setWebfacebookUrl(res.data.data[0].site_facebook_url);
-          setWebTwitterUrl(res.data.data[0].site_twitter_url);
-          setWebYoutubeUrl(res.data.data[0].site_youtube_url);
-          setWebHeroText(res.data.data[0].site_hero_text);
-          setWebLogo(res.data.data[0].site_logo);
+        await axios.get("/website/").then((res) => {
+          setWebName(res.data.data[0].name);
+          setWebEmail(res.data.data[0].email);
+          setWebMobile(res.data.data[0].mobile);
+          setWebaddress(res.data.data[0].address);
+          setWebfacebookUrl(res.data.data[0].facebook);
+          setWebTwitterUrl(res.data.data[0].twitter);
+          setWebInstagrameUrl(res.data.data[0].twitter);
+          setWebYoutubeUrl(res.data.data[0].youtube);
+          setWebDescription(res.data.data[0].footer_description);
+          setWebBooks(res.data.data[0].books);
         });
         setLoading(false);
       } catch (error) {
@@ -68,37 +71,45 @@ function Website() {
     address,
     facebook,
     twitter,
+    instagram,
     youtube,
-    herotext,
-    img
+    description,
+    books
   ) => {
     try {
       setLoading(true);
-      await axios.patch("/settings/", {
+      await axios.patch("/website/", {
         name: name,
         email: email,
         mobile: mobile,
         address: address,
-        facebookURL: facebook,
-        twitterURL: twitter,
-        youtubeURL: youtube,
-        heroText: herotext,
-        logo: img ? img : webLogo,
+        facebook: facebook,
+        twitter: twitter,
+        instagram: instagram,
+        youtube: youtube,
+        footer_description: description,
+        books: books
       });
-      await axios.get("/settings/").then((res) => {
-        setWebName(res.data.data[0].site_name);
-        setWebEmail(res.data.data[0].site_email);
-        setWebMobile(res.data.data[0].site_mobile);
-        setWebaddress(res.data.data[0].site_address);
-        setWebfacebookUrl(res.data.data[0].site_facebook_url);
-        setWebTwitterUrl(res.data.data[0].site_twitter_url);
-        setWebYoutubeUrl(res.data.data[0].site_youtube_url);
-        setWebHeroText(res.data.data[0].site_hero_text);
-        setWebLogo(res.data.data[0].site_logo);
+      Swal.fire(
+        "Congratulations!",
+        "Website updated successfully!",
+        "success"
+      );
+      await axios.get("/website/").then((res) => {
+        setWebName(res.data.data[0].name);
+          setWebEmail(res.data.data[0].email);
+          setWebMobile(res.data.data[0].mobile);
+          setWebaddress(res.data.data[0].address);
+          setWebfacebookUrl(res.data.data[0].facebook);
+          setWebTwitterUrl(res.data.data[0].twitter);
+          setWebInstagrameUrl(res.data.data[0].twitter);
+          setWebYoutubeUrl(res.data.data[0].youtube);
+          setWebDescription(res.data.data[0].footer_description);
+          setWebBooks(res.data.data[0].books);
       });
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      Swal.fire("Sorry!", "Something went wrong!", "error");
       setLoading(false);
     }
   };
@@ -110,10 +121,10 @@ function Website() {
     webAddress: webAddress,
     webFacebookUrl: webFacebookUrl,
     webTwitterUrl: webTwitterUrl,
+    webInstagramUrl: webInstagramUrl,
     webYoutubeUrl: webYoutubeUrl,
-    webHeroText: webHeroText,
-    webLogo: webLogo,
-    books: [],
+    webDescription: webDescription,
+    webBooks: webBooks,
   };
 
   const initSchema = Yup.object().shape({
@@ -123,17 +134,17 @@ function Website() {
     webAddress: Yup.string().required("Website address is required"),
     webFacebookUrl: Yup.string().required("Website facebook URL is required"),
     webTwitterUrl: Yup.string().required("Website twitter URL is required"),
+    webInstagramUrl: Yup.string().required("Website instagram URL is required"),
     webYoutubeUrl: Yup.string().required("Website youtube URL is required"),
-    webHeroText: Yup.string().required("Website hero text is required"),
-    webLogo: Yup.mixed().required("Website image is required"),
-    books: Yup.string().required("Books are required"),
+    webDescription: Yup.string().required("Website description is required"),
+    webBooks: Yup.string().required("Books are required"),
   });
   return (
     <div className="container">
-      {/* {loading ? (
+      {loading ? (
         <Loader />
       ) : webName ? (
-        <> */}
+        <>
           <div className="d-flex">
             <div className="col col-xs-12 col-sm-3">
               <Header title="Website" subtitle="Our website information" />
@@ -157,9 +168,10 @@ function Website() {
                     values.webAddress,
                     values.webFacebookUrl,
                     values.webTwitterUrl,
+                    values.webInstagramUrl,
                     values.webYoutubeUrl,
-                    values.webHeroText,
-                    values.webLogo
+                    values.webDescription,
+                    values.webBooks
                   );
                 }}
               >
@@ -307,65 +319,61 @@ function Website() {
                       <Grid item xs={12}>
                         <TextField
                           required
-                          id="webHeroText"
-                          name="webHeroText"
+                          id="webInstagramUrl"
+                          name="webInstagramUrl"
                           label="Instagram"
                           fullWidth
                           multiline
                           maxRows={5}
                           variant="standard"
-                          value={values.webHeroText}
-                          onChange={handleChange("webHeroText")}
-                          onBlur={handleBlur("webHeroText")}
+                          value={values.webInstagramUrl}
+                          onChange={handleChange("webInstagramUrl")}
+                          onBlur={handleBlur("webInstagramUrl")}
                           sx={{ p: 2 }}
                         />
-                        {touched.webHeroText && errors.webHeroText && (
-                          <p style={{ color: "red" }}>{errors.webHeroText}</p>
+                        {touched.webInstagramUrl && errors.webInstagramUrl && (
+                          <p style={{ color: "red" }}>{errors.webInstagramUrl}</p>
                         )}
                       </Grid>
 
                       <Grid item xs={12}>
                         <TextField
                           required
-                          id="books"
-                          name="books"
+                          id="webBooks"
+                          name="webBooks"
                           label="Books"
                           fullWidth
                           multiline
                           maxRows={5}
                           variant="standard"
-                          value={values.books}
-                          onChange={handleChange("books")}
-                          onBlur={handleBlur("books")}
+                          value={values.webBooks}
+                          onChange={handleChange("webBooks")}
+                          onBlur={handleBlur("webBooks")}
                           sx={{ p: 2 }}
                         />
-                        {touched.books && errors.books && (
-                          <p style={{ color: "red" }}>{errors.books}</p>
+                        {touched.webBooks && errors.webBooks && (
+                          <p style={{ color: "red" }}>{errors.webBooks}</p>
                         )}
                       </Grid>
 
-                      <Grid item xs={12} sm={6}>
-                        <Button
-                          variant="contained"
-                          component="label"
-                          size="small"
-                          onChange={handleChange("webLogo")}
-                          onBlur={handleBlur("webLogo")}
-                          color="common"
-                        >
-                          Logo
-                          <input
-                            type="file"
-                            accept="image/png, image/gif, image/jpeg"
-                            hidden
-                            name="webLogo"
-                          />
-                        </Button>
-                        <div>
-                          {errors.webLogo && touched.webLogo && (
-                            <p style={{ color: "red" }}>{errors.webLogo}</p>
-                          )}
-                        </div>
+                      <Grid item xs={12}>
+                        <TextField
+                          required
+                          id="webDescription"
+                          name="webDescription"
+                          label="Description"
+                          fullWidth
+                          multiline
+                          maxRows={5}
+                          variant="standard"
+                          value={values.webDescription}
+                          onChange={handleChange("webDescription")}
+                          onBlur={handleBlur("webDescription")}
+                          sx={{ p: 2 }}
+                        />
+                        {touched.webDescription && errors.webDescription && (
+                          <p style={{ color: "red" }}>{errors.webDescription}</p>
+                        )}
                       </Grid>
                     </Grid>
                     <div className="service-desc">
@@ -378,10 +386,10 @@ function Website() {
               </Formik>
             </Paper>
           </Container>
-        {/* </>
+        </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
-      )} */}
+      )}
     </div>
   );
 }

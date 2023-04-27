@@ -1,4 +1,4 @@
-import { Badge } from "@mui/material";
+import { Badge, Button } from "@mui/material";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import {
   IconButton,
@@ -107,121 +107,119 @@ const Topbar = () => {
     <>
       {/* {loading ? null : (
         <> */}
-          <Box display="flex" justifyContent="end" p={2}>
-            {/* ICONS */}
-            <Box display="flex">
-              <div>
-              <Link  to="">
-                Welcome, Mohammed!
-              </Link>
-              </div>
+      <Box display="flex" justifyContent="end" p={2}>
+        {/* ICONS */}
+        <Box display="flex">
+          <div>
+              <Typography p={1} variant="h4">Welcome, Mohammed</Typography>
+          </div>
 
-              <div className="dropdown">
+          <div className="dropdown">
+            <Link
+              id="dropdownMenuLink"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <IconButton>
+                <PersonOutlinedIcon />
+              </IconButton>
+            </Link>
+
+            <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li>
                 <Link
-                  id="dropdownMenuLink"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+                  className="dropdown-item"
+                  onClick={handleOpenPasswordModal}
                 >
-                  <IconButton>
-                    <PersonOutlinedIcon />
-                  </IconButton>
+                  Change password
                 </Link>
+              </li>
+              <li>
+                <Link className="dropdown-item" onClick={handleLogout}>
+                  Logout
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </Box>
+      </Box>
 
-                <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <li>
-                    <Link
-                      className="dropdown-item"
-                      onClick={handleOpenPasswordModal}
+      <Modal open={openPasswordModal} onClose={handleClosePasswordModal}>
+        <Box sx={style}>
+          <Formik
+            enableReinitialize
+            initialValues={editInitialValues}
+            validationSchema={initSchema}
+            validateOnMount={true}
+            onSubmit={(values) => {
+              updatePassword(values.password);
+              handleClosePasswordModal();
+            }}
+          >
+            {({ values, errors, touched, handleChange, handleBlur }) => (
+              <Form>
+                <Typography variant="h6" gutterBottom>
+                  Change password
+                </Typography>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      id="password"
+                      name="password"
+                      label="New password"
+                      fullWidth
+                      multiline
+                      maxRows={5}
+                      variant="standard"
+                      value={values.password}
+                      onChange={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      sx={{ p: 2 }}
+                    />
+                    {touched.password && errors.password && (
+                      <p style={{ color: "red" }}>{errors.password}</p>
+                    )}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      id="password1"
+                      name="password1"
+                      label="Retype new password"
+                      fullWidth
+                      multiline
+                      maxRows={5}
+                      variant="standard"
+                      value={values.password1}
+                      onChange={handleChange("password1")}
+                      onBlur={handleBlur("password1")}
+                      sx={{ p: 2 }}
+                    />
+                    {touched.password1 && errors.password1 && (
+                      <p style={{ color: "red" }}>{errors.password1}</p>
+                    )}
+                  </Grid>
+                </Grid>
+                <div className="service-desc">
+                  <div className="linksDiv d-flex justify-content-center">
+                    <button className="apply-btn" type="submit">
+                      Update
+                    </button>
+                    <button
+                      className="apply-btn"
+                      onClick={handleClosePasswordModal}
                     >
-                      Change password
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" onClick={handleLogout}>
-                      Logout
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </Box>
-          </Box>
-
-          <Modal open={openPasswordModal} onClose={handleClosePasswordModal}>
-            <Box sx={style}>
-              <Formik
-                enableReinitialize
-                initialValues={editInitialValues}
-                validationSchema={initSchema}
-                validateOnMount={true}
-                onSubmit={(values) => {
-                  updatePassword(values.password);
-                  handleClosePasswordModal();
-                }}
-              >
-                {({ values, errors, touched, handleChange, handleBlur }) => (
-                  <Form>
-                    <Typography variant="h6" gutterBottom>
-                      Change password
-                    </Typography>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12}>
-                        <TextField
-                          required
-                          id="password"
-                          name="password"
-                          label="New password"
-                          fullWidth
-                          multiline
-                          maxRows={5}
-                          variant="standard"
-                          value={values.password}
-                          onChange={handleChange("password")}
-                          onBlur={handleBlur("password")}
-                          sx={{ p: 2 }}
-                        />
-                        {touched.password && errors.password && (
-                          <p style={{ color: "red" }}>{errors.password}</p>
-                        )}
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          required
-                          id="password1"
-                          name="password1"
-                          label="Retype new password"
-                          fullWidth
-                          multiline
-                          maxRows={5}
-                          variant="standard"
-                          value={values.password1}
-                          onChange={handleChange("password1")}
-                          onBlur={handleBlur("password1")}
-                          sx={{ p: 2 }}
-                        />
-                        {touched.password1 && errors.password1 && (
-                          <p style={{ color: "red" }}>{errors.password1}</p>
-                        )}
-                      </Grid>
-                    </Grid>
-                    <div className="service-desc">
-                      <div className="linksDiv d-flex justify-content-center">
-                        <button className="apply-btn" type="submit">
-                          Update
-                        </button>
-                        <button
-                          className="apply-btn"
-                          onClick={handleClosePasswordModal}
-                        >
-                          close
-                        </button>
-                      </div>
-                    </div>
-                  </Form>
-                )}
-              </Formik>
-            </Box>
-          </Modal>
-        {/* </>
+                      close
+                    </button>
+                  </div>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </Box>
+      </Modal>
+      {/* </>
       )} */}
     </>
   );

@@ -2,15 +2,10 @@ import React from "react";
 import "./novels.css";
 import { Link } from "react-router-dom";
 import {
-  Button,
   Grid,
-  InputLabel,
   Modal,
-  Select,
   TextField,
   Typography,
-  MenuItem,
-  FormControl,
   IconButton, Box
 } from "@mui/material";
 import { Form, Formik } from "formik";
@@ -24,15 +19,13 @@ import Loader from "../../components/Loader";
 import Error from "../../components/Error";
 
 function Novels() {
-  const [services, setServices] = useState([]);
-  const [openEditServiceModal, setOpenEditServiceModal] = useState(false);
-  const [openServiceModal, setOpenServiceModal] = useState(false);
-  const [openAddServiceModal, setOpenAddServiceModal] = useState(false);
-  const [modalImg, setModalImg] = useState();
-  const [modalName, setModalName] = useState("");
-  const [modalDesc, setModalDesc] = useState("");
-  const [modalCategory, setModalCategory] = useState("");
-  const [modalStatus, setModalStatus] = useState("active");
+  const [novels, setNovels] = useState([]);
+  const [openEditNovelModal, setOpenEditNovelModal] = useState(false);
+  const [openNovelModal, setOpenNovelModal] = useState(false);
+  const [openAddNovelModal, setOpenAddNovelModal] = useState(false);
+  const [modalTopic, setModalTopic] = useState();
+  const [modalSection, setModalSection] = useState("");
+  const [modalBody, setModalBody] = useState("");
   const [modalId, setModalId] = useState();
   const [msg, setMsg] = useState("");
   const [error, setError] = useState(false);
@@ -50,35 +43,33 @@ function Novels() {
   // }
   
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchNovels = async () => {
       try {
         setLoading(true);
-        await axios.get("/services/").then((res) => {
-          setServices(res.data.data);
+        await axios.get("/novels/").then((res) => {
+          setNovels(res.data.data);
         });
         setLoading(false);
       } catch (error) {
         setLoading(false);
       }
     };
-    fetchServices();
+    fetchNovels();
   }, []);
 
-  const addService = async (name, img, desc, category, status) => {
+  const addNovel = async (topic, section, body) => {
     try {
       setLoading(true);
-      await axios.post("/services/", {
-        name: name,
-        image: img,
-        description: desc,
-        category: category,
-        status: status,
+      await axios.post("/novels/", {
+        topic: topic,
+        section: section,
+        body: body
       });
       setError(false);
       setSuccess(true);
-      setMsg("Service added successfully!");
-      await axios.get("/services/").then((res) => {
-        setServices(res.data.data);
+      setMsg("Novel added successfully!");
+      await axios.get("/novels/").then((res) => {
+        setNovels(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -89,19 +80,17 @@ function Novels() {
     }
   };
 
-  const updateService = async (id, name, img, desc, category, status) => {
+  const updateNovel = async (id, topic, section, body) => {
     try {
       setLoading(true);
-      await axios.patch(`/services/${id}`, {
-        name: name,
-        image: "urllllll",
-        description: desc,
-        category: category,
-        status: status,
+      await axios.patch(`/novels/${id}`, {
+        topic: topic,
+        section: section,
+        body: body
       });
-      Swal.fire("Congratulations!", "Service updated successfully!", "success");
-      await axios.get("/services/").then((res) => {
-        setServices(res.data.data);
+      Swal.fire("Congratulations!", "Novel updated successfully!", "success");
+      await axios.get("/novels/").then((res) => {
+        setNovels(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -110,14 +99,14 @@ function Novels() {
       setLoading(false);
     }
   };
-  const deleteService = async (id) => {
+  const deleteNovel = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`/services/${id}`);
+      await axios.delete(`/novels/${id}`);
 
-      Swal.fire("Congratulations!", "Service deleted successfully!", "success");
-      await axios.get("/services/").then((res) => {
-        setServices(res.data.data);
+      Swal.fire("Congratulations!", "Novel deleted successfully!", "success");
+      await axios.get("/novels/").then((res) => {
+        setNovels(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -139,62 +128,55 @@ function Novels() {
     pb: 3,
   };
 
-  const handleOpenServiceModal = (id, img, name, desc, category, status) => {
-    setModalImg(img);
-    setModalName(name);
-    setModalDesc(desc);
-    setModalCategory(category);
-    setModalStatus(status);
+  const handleOpenNovelModal = (id, topic, section, body) => {
     setModalId(id);
-    setOpenServiceModal(true);
+    setModalTopic(topic);
+    setModalSection(section);
+    setModalBody(body);
+    setOpenNovelModal(true);
   };
-  const handleCloseServiceModal = () => {
-    setOpenServiceModal(false);
-  };
-
-  const handleOpenEditServiceModal = () => {
-    setOpenServiceModal(false);
-    setOpenEditServiceModal(true);
-  };
-  const handleCloseEditServiceModal = () => {
-    setOpenEditServiceModal(false);
+  const handleCloseNovelModal = () => {
+    setOpenNovelModal(false);
   };
 
-  const handleOpenAddServiceModal = () => {
-    setOpenAddServiceModal(true);
+  const handleOpenEditNovelModal = () => {
+    setOpenNovelModal(false);
+    setOpenEditNovelModal(true);
   };
-  const handleCloseAddServiceModal = () => {
-    setOpenAddServiceModal(false);
+  const handleCloseEditNovelModal = () => {
+    setOpenEditNovelModal(false);
+  };
+
+  const handleOpenAddNovelModal = () => {
+    setOpenAddNovelModal(true);
+  };
+  const handleCloseAddNovelModal = () => {
+    setOpenAddNovelModal(false);
   };
 
   const addInitialValues = {
-    loanType: "",
-    loanDescription: "",
-    loanImg: "",
-    loanCategory: "",
-    loanStatus: modalStatus,
+    novelTopic: "",
+    novelSection: "",
+    novelBody: "",
   };
   const editInitialValues = {
-    loanType: modalName,
-    loanDescription: modalDesc,
-    loanImg: modalImg,
-    loanCategory: modalCategory,
-    loanStatus: modalStatus,
+    novelTopic: modalTopic,
+    novelSection: modalSection,
+    novelBody: modalBody,
   };
 
-  const serviceInitSchema = Yup.object().shape({
-    loanType: Yup.string().required("Service type is required"),
-    loanDescription: Yup.string().required("Service description is required"),
-    loanCategory: Yup.string().required("Service type is required"),
-    loanImg: Yup.mixed().required("Service image is required"),
+  const NovelInitSchema = Yup.object().shape({
+    novelTopic: Yup.string().required("Novel topic is required"),
+    novelBody: Yup.string().required("Novel section is required"),
+    novelBody: Yup.mixed().required("Novel body is required"),
   });
 
   return (
     <div className="container">
-      {/* {loading ? (
+      {loading ? (
         <Loader />
-      ) : services.length ? (
-        <> */}
+      ) : novels.length ? (
+        <>
       <Box sx={{ display: "flex" }}>
         <div className="col col-xs-12 col-sm-3">
           <Header
@@ -204,7 +186,7 @@ function Novels() {
         </div>
         <div className="d-flex justify-content-end col col-xs-12 col-sm-8">
           <Link className="Link">
-            <button className="apply-btn" onClick={handleOpenAddServiceModal}>
+            <button className="apply-btn" onClick={handleOpenAddNovelModal}>
               Add New
             </button>
           </Link>
@@ -212,34 +194,25 @@ function Novels() {
       </Box>
       <div className=" text-center">
         <div className="row">
-          {services
-            ? services.map((service, index) => (
+          {novels
+            ? novels.map((novel, index) => (
                 <>
                   <div
-                    key={`${service.service_name}-${index}`}
+                    key={`${novel.topic}-${index}`}
                     className="col-md-4"
                   >
-                    <i>
-                      <img
-                        src={service.service_image}
-                        alt=""
-                        className="service-img"
-                      />
-                    </i>
-                    <div className="service-desc">
-                      <h3>{service.service_name}</h3>
-                      <p className="service-text">{service.service_desc}</p>
+                    <div className="novel-desc">
+                      <h3>{novel.topic} {novel.section}</h3>
+                      <p className="novel-text">{novel.body}</p>
                       <Link className="Link">
                         <button
                           className="apply-btn"
                           onClick={() =>
-                            handleOpenServiceModal(
-                              service.id,
-                              service.service_image,
-                              service.service_name,
-                              service.service_desc,
-                              service.service_category,
-                              service.service_status
+                            handleOpenNovelModal(
+                              novel.id,
+                              novel.topic,
+                              novel.section,
+                              novel.body
                             )
                           }
                         >
@@ -252,33 +225,30 @@ function Novels() {
               ))
             : "loading"}
         </div>
-        <Modal open={openServiceModal} onClose={handleCloseServiceModal}>
+        <Modal open={openNovelModal} onClose={handleCloseNovelModal}>
           <Box sx={style}>
-            <div className="d-flex justify-content-center">
-              <img src={modalImg} alt="" className="service-img" />
-            </div>
-            <div className="service-desc">
+            <div className="Novel-desc">
               <div className="text-center">
-                <h3>{modalName}</h3>
+                <h3>{modalTopic} {modalSection}</h3>
               </div>
-              <p className="service-text">{modalDesc}</p>
+              <p className="Novel-text">{modalBody}</p>
               <div className="linksDiv d-flex justify-content-center">
                 <button
                   className="apply-btn"
-                  onClick={handleOpenEditServiceModal}
+                  onClick={handleOpenEditNovelModal}
                 >
                   Edit
                 </button>
                 <button
                   className="apply-btn"
                   onClick={() => {
-                    handleCloseServiceModal();
-                    deleteService(modalId);
+                    handleCloseNovelModal();
+                    deleteNovel(modalId);
                   }}
                 >
                   Delete
                 </button>
-                <button className="apply-btn" onClick={handleCloseServiceModal}>
+                <button className="apply-btn" onClick={handleCloseNovelModal}>
                   close
                 </button>
               </div>
@@ -286,134 +256,93 @@ function Novels() {
           </Box>
         </Modal>
         <Modal
-          open={openEditServiceModal}
-          onClose={handleCloseEditServiceModal}
+          open={openEditNovelModal}
+          onClose={handleCloseEditNovelModal}
         >
           <Box sx={style}>
             <Formik
               enableReinitialize
               initialValues={editInitialValues}
-              validationSchema={serviceInitSchema}
+              validationSchema={NovelInitSchema}
               validateOnMount={true}
               onSubmit={(values) => {
-                updateService(
+                updateNovel(
                   modalId,
-                  values.loanType,
-                  values.loanImg,
-                  values.loanDescription,
-                  values.loanCategory,
-                  values.loanStatus
+                  values.novelTopic,
+                  values.novelSection,
+                  values.novelBody
                 );
-                setOpenEditServiceModal(false);
+                setOpenEditNovelModal(false);
               }}
             >
               {({ values, errors, touched, handleChange, handleBlur }) => (
                 <Form>
                   <Typography variant="h6" gutterBottom>
-                    Service information
+                    Novel information
                   </Typography>
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
                       <TextField
                         required
-                        id="loanType"
-                        name="loanType"
-                        label="Loan Type"
+                        id="novelTopic"
+                        name="novelTopic"
+                        label="Novel Topic"
                         fullWidth
                         variant="standard"
-                        value={values.loanType}
-                        onChange={handleChange("loanType")}
-                        onBlur={handleBlur("loanType")}
+                        value={values.novelTopic}
+                        onChange={handleChange("novelTopic")}
+                        onBlur={handleBlur("novelTopic")}
                         sx={{ p: 2 }}
                       />
-                      {touched.loanType && errors.loanType && (
-                        <p style={{ color: "red" }}>{errors.loanType}</p>
+                      {touched.novelTopic && errors.novelTopic && (
+                        <p style={{ color: "red" }}>{errors.novelTopic}</p>
+                      )}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="novelSection"
+                        name="novelSection"
+                        label="Novel Section"
+                        fullWidth
+                        variant="standard"
+                        value={values.novelSection}
+                        onChange={handleChange("novelSection")}
+                        onBlur={handleBlur("novelSection")}
+                        sx={{ p: 2 }}
+                      />
+                      {touched.novelSection && errors.novelSection && (
+                        <p style={{ color: "red" }}>{errors.novelSection}</p>
                       )}
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
                         required
-                        id="loanDescription"
-                        name="loanDescription"
-                        label="Loan Description"
-                        value={values.loanDescription}
+                        id="novelBody"
+                        name="novelBody"
+                        label="Novel Body"
+                        value={values.novelBody}
                         multiline
                         maxRows={10}
                         fullWidth
                         variant="standard"
-                        onChange={handleChange("loanDescription")}
-                        onBlur={handleBlur("loanDescription")}
+                        onChange={handleChange("novelBody")}
+                        onBlur={handleBlur("novelBody")}
                         sx={{ p: 2 }}
                       />
-                      {touched.loanDescription && errors.loanDescription && (
-                        <p style={{ color: "red" }}>{errors.loanDescription}</p>
+                      {touched.novelBody && errors.novelBody && (
+                        <p style={{ color: "red" }}>{errors.novelBody}</p>
                       )}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        required
-                        id="loanCategory"
-                        name="loanCategory"
-                        label="Loan Category"
-                        fullWidth
-                        variant="standard"
-                        value={values.loanCategory}
-                        onChange={handleChange("loanCategory")}
-                        onBlur={handleBlur("loanCategory")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.loanCategory && errors.loanCategory && (
-                        <p style={{ color: "red" }}>{errors.loanCategory}</p>
-                      )}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth>
-                        <InputLabel id="status">Status</InputLabel>
-                        <Select
-                          labelId="status"
-                          id="statusSelect"
-                          value={modalStatus}
-                          onChange={(event) =>
-                            setModalStatus(event.target.value)
-                          }
-                        >
-                          <MenuItem value="active">Active</MenuItem>
-                          <MenuItem value="passive">Passive</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Button
-                        variant="contained"
-                        component="label"
-                        size="small"
-                        onChange={handleChange("serviceImg")}
-                        onBlur={handleBlur("serviceImg")}
-                        color="common"
-                      >
-                        Loan image
-                        <input
-                          type="file"
-                          hidden
-                          name="serviceImg"
-                          accept="image/png, image/gif, image/jpeg"
-                        />
-                      </Button>
-                      <div>
-                        {errors.serviceImg && touched.serviceImg && (
-                          <p style={{ color: "red" }}>{errors.serviceImg}</p>
-                        )}
-                      </div>
                     </Grid>
                   </Grid>
-                  <div className="service-desc">
+                  <div className="Novel-desc">
                     <div className="linksDiv d-flex justify-content-center">
                       <button className="apply-btn" type="submit">
                         Update
                       </button>
                       <button
                         className="apply-btn"
-                        onClick={handleCloseEditServiceModal}
+                        onClick={handleCloseEditNovelModal}
                       >
                         close
                       </button>
@@ -424,7 +353,7 @@ function Novels() {
             </Formik>
           </Box>
         </Modal>
-        <Modal open={openAddServiceModal} onClose={handleCloseAddServiceModal}>
+        <Modal open={openAddNovelModal} onClose={handleCloseAddNovelModal}>
           <Box sx={style}>
             {error && (
                 <div
@@ -451,15 +380,13 @@ function Novels() {
             <Formik
               enableReinitialize
               initialValues={addInitialValues}
-              validationSchema={serviceInitSchema}
+              validationSchema={NovelInitSchema}
               validateOnMount={true}
               onSubmit={(values, actions) => {
-                addService(
-                  values.loanType,
-                  values.loanImg,
-                  values.loanDescription,
-                  values.loanCategory,
-                  values.loanStatus
+                addNovel(
+                  values.novelTopic,
+                  values.novelSection,
+                  values.novelBody
                 );
                 actions.resetForm();
               }}
@@ -467,109 +394,71 @@ function Novels() {
               {({ values, errors, touched, handleChange, handleBlur }) => (
                 <Form>
                   <Typography variant="h6" gutterBottom>
-                    Service information
+                    Novel information
                   </Typography>
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
                       <TextField
                         required
-                        id="loanType"
-                        name="loanType"
-                        label="Loan Type"
+                        id="novelTopic"
+                        name="novelTopic"
+                        label="Novel Topic"
                         fullWidth
                         variant="standard"
-                        value={values.loanType}
-                        onChange={handleChange("loanType")}
-                        onBlur={handleBlur("loanType")}
+                        value={values.novelTopic}
+                        onChange={handleChange("novelTopic")}
+                        onBlur={handleBlur("novelTopic")}
                         sx={{ p: 2 }}
                       />
-                      {touched.loanType && errors.loanType && (
-                        <p style={{ color: "red" }}>{errors.loanType}</p>
+                      {touched.novelTopic && errors.novelTopic && (
+                        <p style={{ color: "red" }}>{errors.novelTopic}</p>
+                      )}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="novelSection"
+                        name="novelSection"
+                        label="Novel Section"
+                        fullWidth
+                        variant="standard"
+                        value={values.novelSection}
+                        onChange={handleChange("novelSection")}
+                        onBlur={handleBlur("novelSection")}
+                        sx={{ p: 2 }}
+                      />
+                      {touched.novelSection && errors.novelSection && (
+                        <p style={{ color: "red" }}>{errors.novelSection}</p>
                       )}
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
                         required
-                        id="loanDescription"
-                        name="loanDescription"
-                        label="Loan Description"
-                        value={values.loanDescription}
+                        id="novelBody"
+                        name="novelBody"
+                        label="Novel Body"
+                        value={values.novelBody}
                         multiline
                         maxRows={10}
                         fullWidth
                         variant="standard"
-                        onChange={handleChange("loanDescription")}
-                        onBlur={handleBlur("loanDescription")}
+                        onChange={handleChange("novelBody")}
+                        onBlur={handleBlur("novelBody")}
                         sx={{ p: 2 }}
                       />
-                      {touched.loanDescription && errors.loanDescription && (
-                        <p style={{ color: "red" }}>{errors.loanDescription}</p>
+                      {touched.novelBody && errors.novelBody && (
+                        <p style={{ color: "red" }}>{errors.novelBody}</p>
                       )}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        required
-                        id="loanCategory"
-                        name="loanCategory"
-                        label="Loan Category"
-                        fullWidth
-                        variant="standard"
-                        value={values.loanCategory}
-                        onChange={handleChange("loanCategory")}
-                        onBlur={handleBlur("loanCategory")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.loanCategory && errors.loanCategory && (
-                        <p style={{ color: "red" }}>{errors.loanCategory}</p>
-                      )}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth>
-                        <InputLabel id="status">Status</InputLabel>
-                        <Select
-                          labelId="status"
-                          id="loanStatus"
-                          name="loanStatus"
-                          value={values.loanStatus}
-                          onChange={handleChange("loanStatus")}
-                        >
-                          <MenuItem value="active">Active</MenuItem>
-                          <MenuItem value="passive">Passive</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Button
-                        variant="contained"
-                        component="label"
-                        size="small"
-                        onChange={handleChange("loanImg")}
-                        onBlur={handleBlur("loanImg")}
-                        color="common"
-                      >
-                        Loan image
-                        <input
-                          type="file"
-                          hidden
-                          accept="image/png, image/gif, image/jpeg"
-                          name="loanImg"
-                        />
-                      </Button>
-                      <div>
-                        {errors.loanImg && touched.loanImg && (
-                          <p style={{ color: "red" }}>{errors.loanImg}</p>
-                        )}
-                      </div>
                     </Grid>
                   </Grid>
-                  <div className="service-desc">
+                  <div className="Novel-desc">
                     <div className="linksDiv d-flex justify-content-center">
                       <button className="apply-btn" type="submit">
                         Save
                       </button>
                       <button
                         className="apply-btn"
-                        onClick={handleCloseAddServiceModal}
+                        onClick={handleCloseAddNovelModal}
                       >
                         close
                       </button>
@@ -581,10 +470,10 @@ function Novels() {
           </Box>
         </Modal>
       </div>
-      {/* </>
+      </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
-      )} */}
+      )}
     </div>
   );
 }
