@@ -4,7 +4,6 @@ import {
   getNovels,
   updateNovel,
   deleteNovel,
-  getNovelByName,
 } from "./novel_controller.js";
 import express from "express";
 const router = express.Router();
@@ -15,6 +14,5 @@ router.get("/", getNovels);
 router.patch("/:id", updateNovel);
 router.delete("/:id", deleteNovel);
 router.get("/:id", getNovelById);
-router.post("/name", getNovelByName);
 
 export default router;

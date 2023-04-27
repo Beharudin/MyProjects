@@ -33,7 +33,6 @@ export function updateWebsite(req, res) {
         message: "Failed to update website",
       });
     }
-    const { password, ...others } = results;
     res.status(200).json({
       success: 1,
       message: "Website updated successfully!",

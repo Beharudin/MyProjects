@@ -6,14 +6,14 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 app.use(express.json());
 // dotenv.config();
 
-// app.use(cors());
+app.use(cors());
 // import each routers
 import websiteRouter from "./api/website/website_route.js";
 import postRouter from "./api/post/post_route.js";
@@ -28,26 +28,21 @@ import TestimonialRouter from "./api/testimonial/testimonial_route.js";
 
 
 // image route
-// app.use("/images", express.static(path.join(__dirname, "/images")));
-
-// app.use(express.static(path.join(__dirname, "./images")));
+app.use("/images", express.static(path.join(__dirname, "/images")));
 
 // perform file upload operation
-// const randomFileName = randomstring.generate(7);
-// const storage = multer.diskStorage({
-//   destination: (res, file, callback) => {
-//     callback(file, "./images");
-//   },
-//   filename: (req, file, callback) => {
-//     callback(null, req.body.name);
-//   },
-// });
+const storage = multer.diskStorage({
+  destination: "./images",
+  filename: (req, file, callback) => {
+    callback(null, req.body.name);
+  },
+});
 
 // now upload file
-// const upload = multer({ storage: storage });
-// app.post("/api/upload", upload.single("file"), (req, res) => {
-//   res.status(200).json("file has been uploaded");
-// });
+const upload = multer({ storage: storage });
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  res.status(200).json("file has been uploaded");
+});
 
 // app.get("/api/auth/",checkToken);
 

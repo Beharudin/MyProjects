@@ -11,7 +11,7 @@ export function Get(callback) {
 
 export function Update(data, callback) {
   mysql.query(
-    `UPDATE website set name=?, email, mobile, address, facebook, twitter, youtube, instagram, books, footer_description, logo=? WHERE id=?`,
+    `UPDATE website set name=?, email=?, mobile=?, address=?, facebook=?, twitter=?, youtube=?, instagram=?, books=?, footer_description=? WHERE id=1`,
     [
       data.name,
       data.email,
@@ -22,8 +22,7 @@ export function Update(data, callback) {
       data.youtube,
       data.instagram,
       data.books,
-      data.footer_description,
-      data.logo,
+      data.footer_description
     ],
     (errors, results, fields) => {
       if (errors) {
