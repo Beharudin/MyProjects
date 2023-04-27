@@ -22,10 +22,10 @@ function Topbar() {
   }, []);
 
   return (
-    <nav id="top" className="navbar navbar-expand-lg bg-primary fixed-top">
-      <Link className="navbar-brand" to="#top">
+    <nav className="navbar navbar-expand-lg bg-primary fixed-top">
+      <a className="navbar-brand" href="#top">
       {data.length ? data[0].name : 'Bakkalcha Fedis'}
-      </Link>
+      </a>
       <button
         className="navbar-toggler"
         type="button"
