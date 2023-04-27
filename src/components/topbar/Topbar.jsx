@@ -23,7 +23,7 @@ function Topbar() {
 
   return (
     <nav className="navbar navbar-expand-lg bg-primary fixed-top">
-      <a className="navbar-brand" href="#top">
+      <a className="navbar-brand" href="/">
       {data.length ? data[0].name : 'Bakkalcha Fedis'}
       </a>
       <button

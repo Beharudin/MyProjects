@@ -21,19 +21,30 @@ import Posts from "./admin/scenes/posts/Posts";
 import Videos from "./admin/scenes/videos/Videos";
 
 function App() {
-  const [isSidebar, setIsSidebar] = useState(true);
-  const [isTopbar, setIsTopbar] = useState(true);
+  const [isSidebar, setIsSidebar] = useState(false);
+  const [isTopbar, setIsTopbar] = useState(false);
   const location = useLocation().pathname;
   useEffect(() => {
     if (
-      location === "/" ||
-      location === "/novel" ||
-      location === "/poem" ||
-      location === "/posts" ||
-      location === "/admin/login"
+      location === "/admin" ||
+      location === "/admin/" ||
+      location === "/admin/novels" ||
+      location === "/admin/novels/" ||
+      location === "/admin/poems" ||
+      location === "/admin/poems/" ||
+      location === "/admin/posts" ||
+      location === "/admin/posts/" ||
+      location === "/admin/about" ||
+      location === "/admin/about/" ||
+      location === "/admin/videos" ||
+      location === "/admin/videos/" ||
+      location === "/admin/testimonials" ||
+      location === "/admin/testimonials/" ||
+      location === "/admin/website" ||
+      location === "/admin/website/"
     ) {
-      setIsSidebar(false);
-      setIsTopbar(false);
+      setIsSidebar(true);
+      setIsTopbar(true);
     }
   }, [location]);
 
