@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./topbar.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 function Topbar() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getTopbar = async () => {
+      try {
+        await axios.get("/website").then((res) => {
+          setData(res.data.data);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getTopbar();
+  }, []);
+
   return (
     <nav id="top" className="navbar navbar-expand-lg bg-primary fixed-top">
       <Link className="navbar-brand" to="#top">
-        Kulkula
+      {data.length ? data[0].name : 'Bakkalcha Fedis'}
       </Link>
       <button
         className="navbar-toggler"

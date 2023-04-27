@@ -19,13 +19,12 @@ import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 
 function Poems() {
-  const [features, setFeatures] = useState([]);
-  const [openEditFeatureModal, setOpenEditFeatureModal] = useState(false);
-  const [openFeatureModal, setOpenFeatureModal] = useState(false);
-  const [openAddFeatureModal, setOpenAddFeatureModal] = useState(false);
-  const [featureName, setFeatureName] = useState("");
-  const [featureDesc, setFeatureDesc] = useState("");
-  const [featureIcon, setFeatureIcon] = useState("");
+  const [poems, setPoems] = useState([]);
+  const [openEditPoemModal, setOpenEditPoemModal] = useState(false);
+  const [openPoemModal, setOpenPoemModal] = useState(false);
+  const [openAddPoemModal, setOpenAddPoemModal] = useState(false);
+  const [poemTopic, setPoemTopic] = useState("");
+  const [poemBody, setPoemBody] = useState("");
   const [modalId, setModalId] = useState();
   const [msg, setMsg] = useState("");
   const [error, setError] = useState(false);
@@ -42,33 +41,32 @@ function Poems() {
   // }
 
   useEffect(() => {
-    const fetchFeatures = async () => {
+    const fetchPoems = async () => {
       try {
         setLoading(true);
-        await axios.get("/features/").then((res) => {
-          setFeatures(res.data.data);
+        await axios.get("/poems/").then((res) => {
+          setPoems(res.data.data);
         });
         setLoading(false);
       } catch (error) {
         setLoading(false);
       }
     };
-    fetchFeatures();
+    fetchPoems();
   }, []);
 
-  const addFeature = async (name, desc, icon) => {
+  const addPoem = async (topic, body) => {
     try {
       setLoading(true);
-      await axios.post("/features/", {
-        name: name,
-        description: desc,
-        icon: icon,
+      await axios.post("/poems/", {
+        topic: topic,
+        body: body,
       });
       setError(false);
       setSuccess(true);
-      setMsg("Feature added successfully!");
-      await axios.get("/features/").then((res) => {
-        setFeatures(res.data.data);
+      setMsg("Poem added successfully!");
+      await axios.get("/poems/").then((res) => {
+        setPoems(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -79,17 +77,16 @@ function Poems() {
     }
   };
 
-  const updateFeature = async (id, name, desc, icon) => {
+  const updatePoem = async (id, topic, body) => {
     try {
       setLoading(true);
-      await axios.patch(`/features/${id}`, {
-        name: name,
-        description: desc,
-        icon: icon,
+      await axios.patch(`/poems/${id}`, {
+        topic: topic,
+        body: body,
       });
-      Swal.fire("Congratulations!", "Feature updated successfully!", "success");
-      await axios.get("/features/").then((res) => {
-        setFeatures(res.data.data);
+      Swal.fire("Congratulations!", "Poem updated successfully!", "success");
+      await axios.get("/poems/").then((res) => {
+        setPoems(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -97,13 +94,13 @@ function Poems() {
       setLoading(false);
     }
   };
-  const deleteFeature = async (id) => {
+  const deletePoem = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`/features/${id}`);
-      Swal.fire("Congratulations!", "Feature deleted successfully!", "success");
-      await axios.get("/features/").then((res) => {
-        setFeatures(res.data.data);
+      await axios.delete(`/poems/${id}`);
+      Swal.fire("Congratulations!", "Poem deleted successfully!", "success");
+      await axios.get("/poems/").then((res) => {
+        setPoems(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -125,369 +122,293 @@ function Poems() {
     pb: 3,
   };
 
-  const handleOpenFeatureModal = (id, name, desc, icon) => {
-    setFeatureName(name);
-    setFeatureDesc(desc);
-    setFeatureIcon(icon);
+  const handleOpenPoemModal = (id, name, desc, icon) => {
+    setPoemTopic(name);
+    setPoemBody(desc);
     setModalId(id);
-    setOpenFeatureModal(true);
+    setOpenPoemModal(true);
   };
-  const handleCloseFeatureModal = () => {
-    setOpenFeatureModal(false);
-  };
-
-  const handleOpenEditFeatureModal = () => {
-    setOpenFeatureModal(false);
-    setOpenEditFeatureModal(true);
-  };
-  const handleCloseEditFeatureModal = () => {
-    setOpenEditFeatureModal(false);
+  const handleClosePoemModal = () => {
+    setOpenPoemModal(false);
   };
 
-  const handleOpenAddFeatureModal = () => {
-    setOpenAddFeatureModal(true);
+  const handleOpenEditPoemModal = () => {
+    setOpenPoemModal(false);
+    setOpenEditPoemModal(true);
   };
-  const handleCloseAddFeatureModal = () => {
-    setOpenAddFeatureModal(false);
+  const handleCloseEditPoemModal = () => {
+    setOpenEditPoemModal(false);
+  };
+
+  const handleOpenAddPoemModal = () => {
+    setOpenAddPoemModal(true);
+  };
+  const handleCloseAddPoemModal = () => {
+    setOpenAddPoemModal(false);
   };
 
   const addInitialValues = {
-    featureType: "",
-    featureDescription: "",
-    featureIcon: "",
+    poemTopic: "",
+    poemBody: "",
   };
   const editInitialValues = {
-    featureType: featureName,
-    featureDescription: featureDesc,
-    featureIcon: featureIcon,
+    poemTopic: poemTopic,
+    poemBody: poemBody,
   };
 
-  const featureInitSchema = Yup.object().shape({
-    featureType: Yup.string().required("Feature name is required"),
-    featureDescription: Yup.string().required(
-      "Feature description is required"
-    ),
-    featureIcon: Yup.string().required("Feature icon is required"),
+  const poemInitSchema = Yup.object().shape({
+    poemTopic: Yup.string().required("Poem topic is required"),
+    poemBody: Yup.string().required("Poem body is required"),
   });
 
   return (
-    <div id="features" className="container">
-      {/* {loading ? (
+    <div id="Poems" className="container">
+      {loading ? (
         <Loader />
-      ) : features.length ? (
-        <> */}
-          <Box sx={{ display: "flex" }}>
-            <div className="col col-xs-12 col-sm-3">
-              <Header title="Poems" subtitle="Poems we provide" />
-            </div>
-            <div className="d-flex justify-content-end col col-xs-12 col-sm-8">
-              <Link className="Link">
+      ) : poems.length ? (
+        <>
+      <Box sx={{ display: "flex" }}>
+        <div className="col col-xs-12 col-sm-3">
+          <Header title="Poems" subtitle="Poems we provide" />
+        </div>
+        <div className="d-flex justify-content-end col col-xs-12 col-sm-8">
+          <Link className="Link">
+            <button className="apply-btn" onClick={handleOpenAddPoemModal}>
+              Add New
+            </button>
+          </Link>
+        </div>
+      </Box>
+      <div className="text-center">
+        <div className="row p-5">
+          {poems
+            ? poems.map((data, index) => (
+                <div
+                  key={`${data.topic}-${index}`}
+                  className="col-xs-6 col-md-3"
+                >
+                  <h3>{data.topic}</h3>
+                  <p className="Poem-text">{data.body}</p>
+                  <Link className="Link">
+                    <button
+                      className="apply-btn mb-5"
+                      onClick={() =>
+                        handleOpenPoemModal(
+                          data.id,
+                          data.topic,
+                          data.body
+                        )
+                      }
+                    >
+                      View more
+                    </button>
+                  </Link>
+                </div>
+              ))
+            : "Loading..."}
+        </div>
+        <Modal open={openPoemModal} onClose={handleClosePoemModal}>
+          <Box sx={style}>
+            <div className="poem-desc">
+              <div className="text-center">
+                <h3>{poemTopic}</h3>
+              </div>
+              <p className="poem-text">{poemBody}</p>
+              <div className="linksDiv d-flex justify-content-center">
+                <button className="apply-btn" onClick={handleOpenEditPoemModal}>
+                  Edit
+                </button>
                 <button
                   className="apply-btn"
-                  onClick={handleOpenAddFeatureModal}
+                  onClick={() => {
+                    handleClosePoemModal();
+                    deletePoem(modalId);
+                  }}
                 >
-                  Add New
+                  Delete
                 </button>
-              </Link>
+                <button className="apply-btn" onClick={handleClosePoemModal}>
+                  close
+                </button>
+              </div>
             </div>
           </Box>
-          <div className="text-center">
-
-            <div className="row p-5">
-              {features
-                ? features.map((data, index) => (
-                    <div
-                      key={`${data.feature_name}-${index}`}
-                      className="col-xs-6 col-md-3"
-                    >
-                      <i className={data.feature_icon}></i>
-                      <h3>{data.feature_name}</h3>
-                      <p className="feature-text">{data.feature_desc}</p>
-                      <Link className="Link">
-                        <button
-                          className="apply-btn mb-5"
-                          onClick={() =>
-                            handleOpenFeatureModal(
-                              data.id,
-                              data.feature_name,
-                              data.feature_desc,
-                              data.feature_icon
-                            )
-                          }
-                        >
-                          View more
-                        </button>
-                      </Link>
+        </Modal>
+        <Modal open={openEditPoemModal} onClose={handleCloseEditPoemModal}>
+          <Box sx={style}>
+            <Formik
+              enableReinitialize
+              initialValues={editInitialValues}
+              validationSchema={poemInitSchema}
+              validateOnMount={true}
+              onSubmit={(values) => {
+                updatePoem(
+                  modalId,
+                  values.poemTopic,
+                  values.poemBody
+                );
+                setOpenEditPoemModal(false);
+              }}
+            >
+              {({ values, errors, touched, handleChange, handleBlur }) => (
+                <Form>
+                  <Typography variant="h6" gutterBottom>
+                    Poem information
+                  </Typography>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="poemTopic"
+                        name="poemTopic"
+                        label="Poem Topic"
+                        fullWidth
+                        variant="standard"
+                        value={values.poemTopic}
+                        onChange={handleChange("poemTopic")}
+                        onBlur={handleBlur("poemTopic")}
+                        sx={{ p: 2 }}
+                      />
+                      {touched.poemTopic && errors.poemTopic && (
+                        <p style={{ color: "red" }}>{errors.poemTopic}</p>
+                      )}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        id="poemBody"
+                        name="poemBody"
+                        label="Poem Body"
+                        value={values.poemBody}
+                        multiline
+                        maxRows={10}
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChange("poemBody")}
+                        onBlur={handleBlur("poemBody")}
+                        sx={{ p: 2 }}
+                      />
+                      {touched.poemBody && errors.poemBody && (
+                        <p style={{ color: "red" }}>{errors.poemBody}</p>
+                      )}
+                    </Grid>
+                  </Grid>
+                  <div className="poem-desc">
+                    <div className="linksDiv d-flex justify-content-center">
+                      <button className="apply-btn" type="submit">
+                        Update
+                      </button>
+                      <button
+                        className="apply-btn"
+                        onClick={handleCloseEditPoemModal}
+                      >
+                        close
+                      </button>
                     </div>
-                  ))
-                : "Loading..."}
-            </div>
-            <Modal open={openFeatureModal} onClose={handleCloseFeatureModal}>
-              <Box sx={style}>
-                <div className="d-flex justify-content-center text-center">
-                  <li className={featureIcon} id="faIcon"></li>
-                </div>
-                <div className="service-desc">
-                  <div className="text-center">
-                    <h3>{featureName}</h3>
                   </div>
-                  <p className="service-text">{featureDesc}</p>
-                  <div className="linksDiv d-flex justify-content-center">
-                    <button
-                      className="apply-btn"
-                      onClick={handleOpenEditFeatureModal}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="apply-btn"
-                      onClick={() => {
-                        handleCloseFeatureModal();
-                        deleteFeature(modalId);
-                      }}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      className="apply-btn"
-                      onClick={handleCloseFeatureModal}
-                    >
-                      close
-                    </button>
-                  </div>
-                </div>
-              </Box>
-            </Modal>
-            <Modal
-              open={openEditFeatureModal}
-              onClose={handleCloseEditFeatureModal}
+                </Form>
+              )}
+            </Formik>
+          </Box>
+        </Modal>
+        <Modal open={openAddPoemModal} onClose={handleCloseAddPoemModal}>
+          <Box sx={style}>
+            {error && (
+              <div
+                className="alert alert-danger d-flex justify-content-between"
+                role="alert"
+              >
+                {msg}
+                <IconButton onClick={() => setError(false)} sx={{ p: 0 }}>
+                  {<Close />}
+                </IconButton>
+              </div>
+            )}
+            {success && (
+              <div
+                className="alert alert-success d-flex justify-content-between"
+                role="alert"
+              >
+                {msg}
+                <IconButton onClick={() => setSuccess(false)} sx={{ p: 0 }}>
+                  {<Close />}
+                </IconButton>
+              </div>
+            )}
+            <Formik
+              enableReinitialize
+              initialValues={addInitialValues}
+              validationSchema={poemInitSchema}
+              validateOnMount={true}
+              onSubmit={(values, actions) => {
+                addPoem(values.poemTopic, values.poemBody, values.PoemIcon);
+                actions.resetForm();
+              }}
             >
-              <Box sx={style}>
-                <Formik
-                  enableReinitialize
-                  initialValues={editInitialValues}
-                  validationSchema={featureInitSchema}
-                  validateOnMount={true}
-                  onSubmit={(values) => {
-                    updateFeature(
-                      modalId,
-                      values.featureType,
-                      values.featureDescription,
-                      values.featureIcon
-                    );
-                    setOpenEditFeatureModal(false);
-                  }}
-                >
-                  {({ values, errors, touched, handleChange, handleBlur }) => (
-                    <Form>
-                      <Typography variant="h6" gutterBottom>
-                        Feature information
-                      </Typography>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                          <TextField
-                            required
-                            id="featureType"
-                            name="featureType"
-                            label="Feature Type"
-                            fullWidth
-                            variant="standard"
-                            value={values.featureType}
-                            onChange={handleChange("featureType")}
-                            onBlur={handleBlur("featureType")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureType && errors.featureType && (
-                            <p style={{ color: "red" }}>{errors.featureType}</p>
-                          )}
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            required
-                            id="featureDescription"
-                            name="featureDescription"
-                            label="Feature Description"
-                            value={values.featureDescription}
-                            multiline
-                            maxRows={10}
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange("featureDescription")}
-                            onBlur={handleBlur("featureDescription")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureDescription &&
-                            errors.featureDescription && (
-                              <p style={{ color: "red" }}>
-                                {errors.featureDescription}
-                              </p>
-                            )}
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            required
-                            id="featureIcon"
-                            name="featureIcon"
-                            label="Feature Icon"
-                            value={values.featureIcon}
-                            multiline
-                            maxRows={2}
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange("featureIcon")}
-                            onBlur={handleBlur("featureIcon")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureIcon && errors.featureIcon && (
-                            <p style={{ color: "red" }}>{errors.featureIcon}</p>
-                          )}
-                        </Grid>
-                      </Grid>
-                      <div className="service-desc">
-                        <div className="linksDiv d-flex justify-content-center">
-                          <button className="apply-btn" type="submit">
-                            Update
-                          </button>
-                          <button
-                            className="apply-btn"
-                            onClick={handleCloseEditFeatureModal}
-                          >
-                            close
-                          </button>
-                        </div>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
-              </Box>
-            </Modal>
-            <Modal
-              open={openAddFeatureModal}
-              onClose={handleCloseAddFeatureModal}
-            >
-              <Box sx={style}>
-                {error && (
-                  <div
-                    className="alert alert-danger d-flex justify-content-between"
-                    role="alert"
-                  >
-                    {msg}
-                    <IconButton onClick={() => setError(false)} sx={{ p: 0 }}>
-                      {<Close />}
-                    </IconButton>
+              {({ values, errors, touched, handleChange, handleBlur }) => (
+                <Form>
+                  <Typography variant="h6" gutterBottom>
+                    Poem information
+                  </Typography>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="poemTopic"
+                        name="poemTopic"
+                        label="Poem Topic"
+                        fullWidth
+                        variant="standard"
+                        value={values.poemTopic}
+                        onChange={handleChange("poemTopic")}
+                        onBlur={handleBlur("poemTopic")}
+                        sx={{ p: 2 }}
+                      />
+                      {touched.poemTopic && errors.poemTopic && (
+                        <p style={{ color: "red" }}>{errors.poemTopic}</p>
+                      )}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        id="poemBody"
+                        name="poemBody"
+                        label="Poem Body"
+                        value={values.poemBody}
+                        multiline
+                        maxRows={10}
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChange("poemBody")}
+                        onBlur={handleBlur("poemBody")}
+                        sx={{ p: 2 }}
+                      />
+                      {touched.poemBody && errors.poemBody && (
+                        <p style={{ color: "red" }}>{errors.poemBody}</p>
+                      )}
+                    </Grid>
+                  </Grid>
+                  <div className="poem-desc">
+                    <div className="linksDiv d-flex justify-content-center">
+                      <button className="apply-btn">Save</button>
+                      <button
+                        className="apply-btn"
+                        onClick={handleCloseAddPoemModal}
+                      >
+                        close
+                      </button>
+                    </div>
                   </div>
-                )}
-                {success && (
-                  <div
-                    className="alert alert-success d-flex justify-content-between"
-                    role="alert"
-                  >
-                    {msg}
-                    <IconButton onClick={() => setSuccess(false)} sx={{ p: 0 }}>
-                      {<Close />}
-                    </IconButton>
-                  </div>
-                )}
-                <Formik
-                  enableReinitialize
-                  initialValues={addInitialValues}
-                  validationSchema={featureInitSchema}
-                  validateOnMount={true}
-                  onSubmit={(values, actions) => {
-                    addFeature(
-                      values.featureType,
-                      values.featureDescription,
-                      values.featureIcon
-                    );
-                    actions.resetForm();
-                  }}
-                >
-                  {({ values, errors, touched, handleChange, handleBlur }) => (
-                    <Form>
-                      <Typography variant="h6" gutterBottom>
-                        Feature information
-                      </Typography>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                          <TextField
-                            required
-                            id="featureType"
-                            name="featureType"
-                            label="Feature Type"
-                            fullWidth
-                            variant="standard"
-                            value={values.featureType}
-                            onChange={handleChange("featureType")}
-                            onBlur={handleBlur("featureType")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureType && errors.featureType && (
-                            <p style={{ color: "red" }}>{errors.featureType}</p>
-                          )}
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            required
-                            id="featureDescription"
-                            name="featureDescription"
-                            label="Loan Description"
-                            value={values.featureDescription}
-                            multiline
-                            maxRows={10}
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange("featureDescription")}
-                            onBlur={handleBlur("featureDescription")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureDescription &&
-                            errors.featureDescription && (
-                              <p style={{ color: "red" }}>
-                                {errors.featureDescription}
-                              </p>
-                            )}
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            required
-                            id="featureIcon"
-                            name="featureIcon"
-                            label="Feature Icon"
-                            value={values.featureIcon}
-                            multiline
-                            maxRows={2}
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange("featureIcon")}
-                            onBlur={handleBlur("featureIcon")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureIcon && errors.featureIcon && (
-                            <p style={{ color: "red" }}>{errors.featureIcon}</p>
-                          )}
-                        </Grid>
-                      </Grid>
-                      <div className="service-desc">
-                        <div className="linksDiv d-flex justify-content-center">
-                          <button className="apply-btn">Save</button>
-                          <button
-                            className="apply-btn"
-                            onClick={handleCloseAddFeatureModal}
-                          >
-                            close
-                          </button>
-                        </div>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
-              </Box>
-            </Modal>
-          </div>
-        {/* </>
+                </Form>
+              )}
+            </Formik>
+          </Box>
+        </Modal>
+      </div>
+      </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
-      )} */}
+      )}
     </div>
   );
 }

@@ -19,13 +19,12 @@ import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 
 function Posts() {
-  const [features, setFeatures] = useState([]);
-  const [openEditFeatureModal, setOpenEditFeatureModal] = useState(false);
-  const [openFeatureModal, setOpenFeatureModal] = useState(false);
-  const [openAddFeatureModal, setOpenAddFeatureModal] = useState(false);
-  const [featureName, setFeatureName] = useState("");
-  const [featureDesc, setFeatureDesc] = useState("");
-  const [featureIcon, setFeatureIcon] = useState("");
+  const [posts, setPosts] = useState([]);
+  const [openEditPostModal, setOpenEditPostModal] = useState(false);
+  const [openPostModal, setOpenPostModal] = useState(false);
+  const [openAddPostModal, setOpenAddPostModal] = useState(false);
+  const [postTopic, setpostTopic] = useState("");
+  const [postBody, setPostBody] = useState("");
   const [modalId, setModalId] = useState();
   const [msg, setMsg] = useState("");
   const [error, setError] = useState(false);
@@ -42,33 +41,32 @@ function Posts() {
   // }
 
   useEffect(() => {
-    const fetchFeatures = async () => {
+    const fetchPosts = async () => {
       try {
         setLoading(true);
-        await axios.get("/features/").then((res) => {
-          setFeatures(res.data.data);
+        await axios.get("/posts/").then((res) => {
+          setPosts(res.data.data);
         });
         setLoading(false);
       } catch (error) {
         setLoading(false);
       }
     };
-    fetchFeatures();
+    fetchPosts();
   }, []);
 
-  const addFeature = async (name, desc, icon) => {
+  const addPost = async (topic, body) => {
     try {
       setLoading(true);
-      await axios.post("/features/", {
-        name: name,
-        description: desc,
-        icon: icon,
+      await axios.post("/posts/", {
+        topic: topic,
+        body: body,
       });
       setError(false);
       setSuccess(true);
-      setMsg("Feature added successfully!");
-      await axios.get("/features/").then((res) => {
-        setFeatures(res.data.data);
+      setMsg("Post added successfully!");
+      await axios.get("/posts/").then((res) => {
+        setPosts(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -79,17 +77,16 @@ function Posts() {
     }
   };
 
-  const updateFeature = async (id, name, desc, icon) => {
+  const updatePost = async (id, topic, body) => {
     try {
       setLoading(true);
-      await axios.patch(`/features/${id}`, {
-        name: name,
-        description: desc,
-        icon: icon,
+      await axios.patch(`/posts/${id}`, {
+        topic: topic,
+        body: body,
       });
-      Swal.fire("Congratulations!", "Feature updated successfully!", "success");
-      await axios.get("/features/").then((res) => {
-        setFeatures(res.data.data);
+      Swal.fire("Congratulations!", "Post updated successfully!", "success");
+      await axios.get("/posts/").then((res) => {
+        setPosts(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -97,13 +94,13 @@ function Posts() {
       setLoading(false);
     }
   };
-  const deleteFeature = async (id) => {
+  const deletePost = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`/features/${id}`);
-      Swal.fire("Congratulations!", "Feature deleted successfully!", "success");
-      await axios.get("/features/").then((res) => {
-        setFeatures(res.data.data);
+      await axios.delete(`/posts/${id}`);
+      Swal.fire("Congratulations!", "Post deleted successfully!", "success");
+      await axios.get("/posts/").then((res) => {
+        setPosts(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -125,368 +122,293 @@ function Posts() {
     pb: 3,
   };
 
-  const handleOpenFeatureModal = (id, name, desc, icon) => {
-    setFeatureName(name);
-    setFeatureDesc(desc);
-    setFeatureIcon(icon);
+  const handleOpenPostModal = (id, topic, body) => {
+    setpostTopic(topic);
+    setPostBody(body);
     setModalId(id);
-    setOpenFeatureModal(true);
+    setOpenPostModal(true);
   };
-  const handleCloseFeatureModal = () => {
-    setOpenFeatureModal(false);
-  };
-
-  const handleOpenEditFeatureModal = () => {
-    setOpenFeatureModal(false);
-    setOpenEditFeatureModal(true);
-  };
-  const handleCloseEditFeatureModal = () => {
-    setOpenEditFeatureModal(false);
+  const handleClosePostModal = () => {
+    setOpenPostModal(false);
   };
 
-  const handleOpenAddFeatureModal = () => {
-    setOpenAddFeatureModal(true);
+  const handleOpenEditPostModal = () => {
+    setOpenPostModal(false);
+    setOpenEditPostModal(true);
   };
-  const handleCloseAddFeatureModal = () => {
-    setOpenAddFeatureModal(false);
+  const handleCloseEditPostModal = () => {
+    setOpenEditPostModal(false);
+  };
+
+  const handleOpenAddPostModal = () => {
+    setOpenAddPostModal(true);
+  };
+  const handleCloseAddPostModal = () => {
+    setOpenAddPostModal(false);
   };
 
   const addInitialValues = {
-    featureType: "",
-    featureDescription: "",
-    featureIcon: "",
+    postTopic: "",
+    postBody: "",
   };
   const editInitialValues = {
-    featureType: featureName,
-    featureDescription: featureDesc,
-    featureIcon: featureIcon,
+    postTopic: postTopic,
+    postBody: postBody,
   };
 
-  const featureInitSchema = Yup.object().shape({
-    featureType: Yup.string().required("Feature name is required"),
-    featureDescription: Yup.string().required(
-      "Feature description is required"
-    ),
-    featureIcon: Yup.string().required("Feature icon is required"),
+  const postInitSchema = Yup.object().shape({
+    postTopic: Yup.string().required("Post topic is required"),
+    postBody: Yup.string().required("Post body is required"),
   });
 
   return (
-    <div id="features" className="container">
-      {/* {loading ? (
+    <div id="Posts" className="container">
+      {loading ? (
         <Loader />
-      ) : features.length ? (
-        <> */}
-          <Box sx={{ display: "flex" }}>
-            <div className="col col-xs-12 col-sm-3">
-              <Header title="Posts" subtitle="Posts we provide" />
-            </div>
-            <div className="d-flex justify-content-end col col-xs-12 col-sm-8">
-              <Link className="Link">
+      ) : posts.length ? (
+        <>
+      <Box sx={{ display: "flex" }}>
+        <div className="col col-xs-12 col-sm-3">
+          <Header title="Posts" subtitle="Posts we provide" />
+        </div>
+        <div className="d-flex justify-content-end col col-xs-12 col-sm-8">
+          <Link className="Link">
+            <button className="apply-btn" onClick={handleOpenAddPostModal}>
+              Add New
+            </button>
+          </Link>
+        </div>
+      </Box>
+      <div className="text-center">
+        <div className="row p-5">
+          {posts
+            ? posts.map((data, index) => (
+                <div
+                  key={`${data.topic}-${index}`}
+                  className="col-xs-6 col-md-3"
+                >
+                  <h3>{data.topic}</h3>
+                  <p className="post-text">{data.body}</p>
+                  <Link className="Link">
+                    <button
+                      className="apply-btn mb-5"
+                      onClick={() =>
+                        handleOpenPostModal(
+                          data.id,
+                          data.topic,
+                          data.body
+                        )
+                      }
+                    >
+                      View more
+                    </button>
+                  </Link>
+                </div>
+              ))
+            : "Loading..."}
+        </div>
+        <Modal open={openPostModal} onClose={handleClosePostModal}>
+          <Box sx={style}>
+            <div className="post-desc">
+              <div className="text-center">
+                <h3>{postTopic}</h3>
+              </div>
+              <p className="post-text">{postBody}</p>
+              <div className="linksDiv d-flex justify-content-center">
+                <button className="apply-btn" onClick={handleOpenEditPostModal}>
+                  Edit
+                </button>
                 <button
                   className="apply-btn"
-                  onClick={handleOpenAddFeatureModal}
+                  onClick={() => {
+                    handleClosePostModal();
+                    deletePost(modalId);
+                  }}
                 >
-                  Add New
+                  Delete
                 </button>
-              </Link>
+                <button className="apply-btn" onClick={handleClosePostModal}>
+                  close
+                </button>
+              </div>
             </div>
           </Box>
-          <div className="text-center">
-            <div className="row p-5">
-              {features
-                ? features.map((data, index) => (
-                    <div
-                      key={`${data.feature_name}-${index}`}
-                      className="col-xs-6 col-md-3"
-                    >
-                      <i className={data.feature_icon}></i>
-                      <h3>{data.feature_name}</h3>
-                      <p className="feature-text">{data.feature_desc}</p>
-                      <Link className="Link">
-                        <button
-                          className="apply-btn mb-5"
-                          onClick={() =>
-                            handleOpenFeatureModal(
-                              data.id,
-                              data.feature_name,
-                              data.feature_desc,
-                              data.feature_icon
-                            )
-                          }
-                        >
-                          View more
-                        </button>
-                      </Link>
+        </Modal>
+        <Modal open={openEditPostModal} onClose={handleCloseEditPostModal}>
+          <Box sx={style}>
+            <Formik
+              enableReinitialize
+              initialValues={editInitialValues}
+              validationSchema={postInitSchema}
+              validateOnMount={true}
+              onSubmit={(values) => {
+                updatePost(
+                  modalId,
+                  values.postTopic,
+                  values.postBody
+                );
+                setOpenEditPostModal(false);
+              }}
+            >
+              {({ values, errors, touched, handleChange, handleBlur }) => (
+                <Form>
+                  <Typography variant="h6" gutterBottom>
+                    Post information
+                  </Typography>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="postTopic"
+                        name="postTopic"
+                        label="Post Topic"
+                        fullWidth
+                        variant="standard"
+                        value={values.postTopic}
+                        onChange={handleChange("postTopic")}
+                        onBlur={handleBlur("postTopic")}
+                        sx={{ p: 2 }}
+                      />
+                      {touched.postTopic && errors.postTopic && (
+                        <p style={{ color: "red" }}>{errors.postTopic}</p>
+                      )}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        id="postBody"
+                        name="postBody"
+                        label="Post Body"
+                        value={values.postBody}
+                        multiline
+                        maxRows={10}
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChange("postBody")}
+                        onBlur={handleBlur("postBody")}
+                        sx={{ p: 2 }}
+                      />
+                      {touched.postBody && errors.postBody && (
+                        <p style={{ color: "red" }}>{errors.postBody}</p>
+                      )}
+                    </Grid>
+                  </Grid>
+                  <div className="post-desc">
+                    <div className="linksDiv d-flex justify-content-center">
+                      <button className="apply-btn" type="submit">
+                        Update
+                      </button>
+                      <button
+                        className="apply-btn"
+                        onClick={handleCloseEditPostModal}
+                      >
+                        close
+                      </button>
                     </div>
-                  ))
-                : "Loading..."}
-            </div>
-            <Modal open={openFeatureModal} onClose={handleCloseFeatureModal}>
-              <Box sx={style}>
-                <div className="d-flex justify-content-center text-center">
-                  <li className={featureIcon} id="faIcon"></li>
-                </div>
-                <div className="service-desc">
-                  <div className="text-center">
-                    <h3>{featureName}</h3>
                   </div>
-                  <p className="service-text">{featureDesc}</p>
-                  <div className="linksDiv d-flex justify-content-center">
-                    <button
-                      className="apply-btn"
-                      onClick={handleOpenEditFeatureModal}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="apply-btn"
-                      onClick={() => {
-                        handleCloseFeatureModal();
-                        deleteFeature(modalId);
-                      }}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      className="apply-btn"
-                      onClick={handleCloseFeatureModal}
-                    >
-                      close
-                    </button>
-                  </div>
-                </div>
-              </Box>
-            </Modal>
-            <Modal
-              open={openEditFeatureModal}
-              onClose={handleCloseEditFeatureModal}
+                </Form>
+              )}
+            </Formik>
+          </Box>
+        </Modal>
+        <Modal open={openAddPostModal} onClose={handleCloseAddPostModal}>
+          <Box sx={style}>
+            {error && (
+              <div
+                className="alert alert-danger d-flex justify-content-between"
+                role="alert"
+              >
+                {msg}
+                <IconButton onClick={() => setError(false)} sx={{ p: 0 }}>
+                  {<Close />}
+                </IconButton>
+              </div>
+            )}
+            {success && (
+              <div
+                className="alert alert-success d-flex justify-content-between"
+                role="alert"
+              >
+                {msg}
+                <IconButton onClick={() => setSuccess(false)} sx={{ p: 0 }}>
+                  {<Close />}
+                </IconButton>
+              </div>
+            )}
+            <Formik
+              enableReinitialize
+              initialValues={addInitialValues}
+              validationSchema={postInitSchema}
+              validateOnMount={true}
+              onSubmit={(values, actions) => {
+                addPost(values.postTopic, values.postBody);
+                actions.resetForm();
+              }}
             >
-              <Box sx={style}>
-                <Formik
-                  enableReinitialize
-                  initialValues={editInitialValues}
-                  validationSchema={featureInitSchema}
-                  validateOnMount={true}
-                  onSubmit={(values) => {
-                    updateFeature(
-                      modalId,
-                      values.featureType,
-                      values.featureDescription,
-                      values.featureIcon
-                    );
-                    setOpenEditFeatureModal(false);
-                  }}
-                >
-                  {({ values, errors, touched, handleChange, handleBlur }) => (
-                    <Form>
-                      <Typography variant="h6" gutterBottom>
-                        Feature information
-                      </Typography>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                          <TextField
-                            required
-                            id="featureType"
-                            name="featureType"
-                            label="Feature Type"
-                            fullWidth
-                            variant="standard"
-                            value={values.featureType}
-                            onChange={handleChange("featureType")}
-                            onBlur={handleBlur("featureType")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureType && errors.featureType && (
-                            <p style={{ color: "red" }}>{errors.featureType}</p>
-                          )}
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            required
-                            id="featureDescription"
-                            name="featureDescription"
-                            label="Feature Description"
-                            value={values.featureDescription}
-                            multiline
-                            maxRows={10}
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange("featureDescription")}
-                            onBlur={handleBlur("featureDescription")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureDescription &&
-                            errors.featureDescription && (
-                              <p style={{ color: "red" }}>
-                                {errors.featureDescription}
-                              </p>
-                            )}
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            required
-                            id="featureIcon"
-                            name="featureIcon"
-                            label="Feature Icon"
-                            value={values.featureIcon}
-                            multiline
-                            maxRows={2}
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange("featureIcon")}
-                            onBlur={handleBlur("featureIcon")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureIcon && errors.featureIcon && (
-                            <p style={{ color: "red" }}>{errors.featureIcon}</p>
-                          )}
-                        </Grid>
-                      </Grid>
-                      <div className="service-desc">
-                        <div className="linksDiv d-flex justify-content-center">
-                          <button className="apply-btn" type="submit">
-                            Update
-                          </button>
-                          <button
-                            className="apply-btn"
-                            onClick={handleCloseEditFeatureModal}
-                          >
-                            close
-                          </button>
-                        </div>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
-              </Box>
-            </Modal>
-            <Modal
-              open={openAddFeatureModal}
-              onClose={handleCloseAddFeatureModal}
-            >
-              <Box sx={style}>
-                {error && (
-                  <div
-                    className="alert alert-danger d-flex justify-content-between"
-                    role="alert"
-                  >
-                    {msg}
-                    <IconButton onClick={() => setError(false)} sx={{ p: 0 }}>
-                      {<Close />}
-                    </IconButton>
+              {({ values, errors, touched, handleChange, handleBlur }) => (
+                <Form>
+                  <Typography variant="h6" gutterBottom>
+                    Post information
+                  </Typography>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="postTopic"
+                        name="postTopic"
+                        label="Post Topic"
+                        fullWidth
+                        variant="standard"
+                        value={values.postTopic}
+                        onChange={handleChange("postTopic")}
+                        onBlur={handleBlur("postTopic")}
+                        sx={{ p: 2 }}
+                      />
+                      {touched.postTopic && errors.postTopic && (
+                        <p style={{ color: "red" }}>{errors.postTopic}</p>
+                      )}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        id="postBody"
+                        name="postBody"
+                        label="Loan Body"
+                        value={values.postBody}
+                        multiline
+                        maxRows={10}
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChange("postBody")}
+                        onBlur={handleBlur("postBody")}
+                        sx={{ p: 2 }}
+                      />
+                      {touched.postBody && errors.postBody && (
+                        <p style={{ color: "red" }}>{errors.postBody}</p>
+                      )}
+                    </Grid>
+                  </Grid>
+                  <div className="post-desc">
+                    <div className="linksDiv d-flex justify-content-center">
+                      <button className="apply-btn">Save</button>
+                      <button
+                        className="apply-btn"
+                        onClick={handleCloseAddPostModal}
+                      >
+                        close
+                      </button>
+                    </div>
                   </div>
-                )}
-                {success && (
-                  <div
-                    className="alert alert-success d-flex justify-content-between"
-                    role="alert"
-                  >
-                    {msg}
-                    <IconButton onClick={() => setSuccess(false)} sx={{ p: 0 }}>
-                      {<Close />}
-                    </IconButton>
-                  </div>
-                )}
-                <Formik
-                  enableReinitialize
-                  initialValues={addInitialValues}
-                  validationSchema={featureInitSchema}
-                  validateOnMount={true}
-                  onSubmit={(values, actions) => {
-                    addFeature(
-                      values.featureType,
-                      values.featureDescription,
-                      values.featureIcon
-                    );
-                    actions.resetForm();
-                  }}
-                >
-                  {({ values, errors, touched, handleChange, handleBlur }) => (
-                    <Form>
-                      <Typography variant="h6" gutterBottom>
-                        Feature information
-                      </Typography>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                          <TextField
-                            required
-                            id="featureType"
-                            name="featureType"
-                            label="Feature Type"
-                            fullWidth
-                            variant="standard"
-                            value={values.featureType}
-                            onChange={handleChange("featureType")}
-                            onBlur={handleBlur("featureType")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureType && errors.featureType && (
-                            <p style={{ color: "red" }}>{errors.featureType}</p>
-                          )}
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            required
-                            id="featureDescription"
-                            name="featureDescription"
-                            label="Loan Description"
-                            value={values.featureDescription}
-                            multiline
-                            maxRows={10}
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange("featureDescription")}
-                            onBlur={handleBlur("featureDescription")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureDescription &&
-                            errors.featureDescription && (
-                              <p style={{ color: "red" }}>
-                                {errors.featureDescription}
-                              </p>
-                            )}
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            required
-                            id="featureIcon"
-                            name="featureIcon"
-                            label="Feature Icon"
-                            value={values.featureIcon}
-                            multiline
-                            maxRows={2}
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange("featureIcon")}
-                            onBlur={handleBlur("featureIcon")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.featureIcon && errors.featureIcon && (
-                            <p style={{ color: "red" }}>{errors.featureIcon}</p>
-                          )}
-                        </Grid>
-                      </Grid>
-                      <div className="service-desc">
-                        <div className="linksDiv d-flex justify-content-center">
-                          <button className="apply-btn">Save</button>
-                          <button
-                            className="apply-btn"
-                            onClick={handleCloseAddFeatureModal}
-                          >
-                            close
-                          </button>
-                        </div>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
-              </Box>
-            </Modal>
-          </div>
-        {/* </>
+                </Form>
+              )}
+            </Formik>
+          </Box>
+        </Modal>
+      </div>
+      </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
-      )} */}
+      )}
     </div>
   );
 }

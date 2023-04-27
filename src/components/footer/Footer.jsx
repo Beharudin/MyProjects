@@ -21,7 +21,7 @@ function Footer() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getVideos = async () => {
+    const getWebsite = async () => {
       try {
         setLoading(true);
         await axios.get("/website").then((res) => {
@@ -32,7 +32,7 @@ function Footer() {
         setLoading(false);
       }
     };
-    getVideos();
+    getWebsite();
   }, []);
 
   return (
@@ -45,7 +45,7 @@ function Footer() {
             <div className="card p-4" style={{ backgroundColor: "#23242a" }}>
               <div className="row mt-4">
                 <div className="col-lg-6 col-xs-12 mb-4 mb-md-0">
-                  <h5 className="text-uppercase mb-4">Bakkalcha</h5>
+                  <h5 className="text-uppercase mb-4">{data[0].name}</h5>
                   <p className="ml-2">{data[0].footer_description}</p>
 
                   <div className="mt-4 ml-2">

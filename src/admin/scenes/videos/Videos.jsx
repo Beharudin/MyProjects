@@ -19,13 +19,13 @@ import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 
 function Videos() {
-  const [features, setFeatures] = useState([]);
-  const [openEditFeatureModal, setOpenEditFeatureModal] = useState(false);
-  const [openFeatureModal, setOpenFeatureModal] = useState(false);
-  const [openAddFeatureModal, setOpenAddFeatureModal] = useState(false);
-  const [featureName, setFeatureName] = useState("");
-  const [featureDesc, setFeatureDesc] = useState("");
-  const [featureIcon, setFeatureIcon] = useState("");
+  const [videos, setVideos] = useState([]);
+  const [openEditVideoModal, setOpenEditVideoModal] = useState(false);
+  const [openVideoModal, setOpenVideoModal] = useState(false);
+  const [openAddVideoModal, setOpenAddVideoModal] = useState(false);
+  const [videoTopic, setVideoTopic] = useState("");
+  const [videoBody, setVideoBody] = useState("");
+  const [videoLink, setVideoLink] = useState("");
   const [modalId, setModalId] = useState();
   const [msg, setMsg] = useState("");
   const [error, setError] = useState(false);
@@ -42,33 +42,33 @@ function Videos() {
   // }
 
   useEffect(() => {
-    const fetchFeatures = async () => {
+    const fetchVideos = async () => {
       try {
         setLoading(true);
-        await axios.get("/features/").then((res) => {
-          setFeatures(res.data.data);
+        await axios.get("/videos/").then((res) => {
+          setVideos(res.data.data);
         });
         setLoading(false);
       } catch (error) {
         setLoading(false);
       }
     };
-    fetchFeatures();
+    fetchVideos();
   }, []);
 
-  const addFeature = async (name, desc, icon) => {
+  const addVideo = async (topic, body, link) => {
     try {
       setLoading(true);
-      await axios.post("/features/", {
-        name: name,
-        description: desc,
-        icon: icon,
+      await axios.post("/videos/", {
+        topic: topic,
+        body: body,
+        link: link,
       });
       setError(false);
       setSuccess(true);
-      setMsg("Feature added successfully!");
-      await axios.get("/features/").then((res) => {
-        setFeatures(res.data.data);
+      setMsg("Video added successfully!");
+      await axios.get("/videos/").then((res) => {
+        setVideos(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -79,17 +79,18 @@ function Videos() {
     }
   };
 
-  const updateFeature = async (id, name, desc, icon) => {
+  const updateVideo = async (id, topic, body, link) => {
+    console.log("link: ",link)
     try {
       setLoading(true);
-      await axios.patch(`/features/${id}`, {
-        name: name,
-        description: desc,
-        icon: icon,
+      await axios.patch(`/videos/${id}`, {
+        topic: topic,
+        body: body,
+        link: link,
       });
-      Swal.fire("Congratulations!", "Feature updated successfully!", "success");
-      await axios.get("/features/").then((res) => {
-        setFeatures(res.data.data);
+      Swal.fire("Congratulations!", "Video updated successfully!", "success");
+      await axios.get("/videos/").then((res) => {
+        setVideos(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -97,13 +98,13 @@ function Videos() {
       setLoading(false);
     }
   };
-  const deleteFeature = async (id) => {
+  const deleteVideo = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`/features/${id}`);
-      Swal.fire("Congratulations!", "Feature deleted successfully!", "success");
-      await axios.get("/features/").then((res) => {
-        setFeatures(res.data.data);
+      await axios.delete(`/videos/${id}`);
+      Swal.fire("Congratulations!", "Video deleted successfully!", "success");
+      await axios.get("/videos/").then((res) => {
+        setVideos(res.data.data);
       });
       setLoading(false);
     } catch (error) {
@@ -125,67 +126,62 @@ function Videos() {
     pb: 3,
   };
 
-  const handleOpenFeatureModal = (id, name, desc, icon) => {
-    setFeatureName(name);
-    setFeatureDesc(desc);
-    setFeatureIcon(icon);
+  const handleOpenVideoModal = (id, topic, body, link) => {
+    setVideoTopic(topic);
+    setVideoBody(body);
+    setVideoLink(link);
     setModalId(id);
-    setOpenFeatureModal(true);
+    setOpenVideoModal(true);
   };
-  const handleCloseFeatureModal = () => {
-    setOpenFeatureModal(false);
-  };
-
-  const handleOpenEditFeatureModal = () => {
-    setOpenFeatureModal(false);
-    setOpenEditFeatureModal(true);
-  };
-  const handleCloseEditFeatureModal = () => {
-    setOpenEditFeatureModal(false);
+  const handleCloseVideoModal = () => {
+    setOpenVideoModal(false);
   };
 
-  const handleOpenAddFeatureModal = () => {
-    setOpenAddFeatureModal(true);
+  const handleOpenEditVideoModal = () => {
+    setOpenVideoModal(false);
+    setOpenEditVideoModal(true);
   };
-  const handleCloseAddFeatureModal = () => {
-    setOpenAddFeatureModal(false);
+  const handleCloseEditVideoModal = () => {
+    setOpenEditVideoModal(false);
+  };
+
+  const handleOpenAddVideoModal = () => {
+    setOpenAddVideoModal(true);
+  };
+  const handleCloseAddVideoModal = () => {
+    setOpenAddVideoModal(false);
   };
 
   const addInitialValues = {
-    featureType: "",
-    featureDescription: "",
-    featureIcon: "",
+    VideoTopic: "",
+    videoBody: "",
+    videoLink: "",
   };
   const editInitialValues = {
-    featureType: featureName,
-    featureDescription: featureDesc,
-    featureIcon: featureIcon,
+    VideoTopic: videoTopic,
+    videoBody: videoBody,
+    videoLink: videoLink,
   };
 
-  const featureInitSchema = Yup.object().shape({
-    featureType: Yup.string().required("Feature name is required"),
-    featureDescription: Yup.string().required(
-      "Feature description is required"
-    ),
-    featureIcon: Yup.string().required("Feature icon is required"),
+  const videoInitSchema = Yup.object().shape({
+    VideoTopic: Yup.string().required("Video topic is required"),
+    videoBody: Yup.string().required("Video body is required"),
+    videoLink: Yup.string().required("Video link is required"),
   });
 
   return (
-    <div id="features" className="container">
-      {/* {loading ? (
+    <div id="videos" className="container">
+      {loading ? (
         <Loader />
-      ) : features.length ? (
-        <> */}
+      ) : videos.length ? (
+        <>
           <Box sx={{ display: "flex" }}>
             <div className="col col-xs-12 col-sm-3">
               <Header title="Videos" subtitle="Videos we provide" />
             </div>
             <div className="d-flex justify-content-end col col-xs-12 col-sm-8">
               <Link className="Link">
-                <button
-                  className="apply-btn"
-                  onClick={handleOpenAddFeatureModal}
-                >
+                <button className="apply-btn" onClick={handleOpenAddVideoModal}>
                   Add New
                 </button>
               </Link>
@@ -193,24 +189,23 @@ function Videos() {
           </Box>
           <div className="text-center">
             <div className="row p-5">
-              {features
-                ? features.map((data, index) => (
+              {videos
+                ? videos.map((data, index) => (
                     <div
-                      key={`${data.feature_name}-${index}`}
+                      key={`${data.topic}-${index}`}
                       className="col-xs-6 col-md-3"
                     >
-                      <i className={data.feature_icon}></i>
-                      <h3>{data.feature_name}</h3>
-                      <p className="feature-text">{data.feature_desc}</p>
+                      <h3>{data.topic}</h3>
+                      <p className="video-text">{data.body}</p>
                       <Link className="Link">
                         <button
                           className="apply-btn mb-5"
                           onClick={() =>
-                            handleOpenFeatureModal(
+                            handleOpenVideoModal(
                               data.id,
-                              data.feature_name,
-                              data.feature_desc,
-                              data.feature_icon
+                              data.topic,
+                              data.body,
+                              data.link
                             )
                           }
                         >
@@ -221,35 +216,32 @@ function Videos() {
                   ))
                 : "Loading..."}
             </div>
-            <Modal open={openFeatureModal} onClose={handleCloseFeatureModal}>
+            <Modal open={openVideoModal} onClose={handleCloseVideoModal}>
               <Box sx={style}>
-                <div className="d-flex justify-content-center text-center">
-                  <li className={featureIcon} id="faIcon"></li>
-                </div>
-                <div className="service-desc">
+                <div className="video-desc">
                   <div className="text-center">
-                    <h3>{featureName}</h3>
+                    <h3>{videoTopic}</h3>
                   </div>
-                  <p className="service-text">{featureDesc}</p>
+                  <p className="video-text">{videoBody}</p>
                   <div className="linksDiv d-flex justify-content-center">
                     <button
                       className="apply-btn"
-                      onClick={handleOpenEditFeatureModal}
+                      onClick={handleOpenEditVideoModal}
                     >
                       Edit
                     </button>
                     <button
                       className="apply-btn"
                       onClick={() => {
-                        handleCloseFeatureModal();
-                        deleteFeature(modalId);
+                        handleCloseVideoModal();
+                        deleteVideo(modalId);
                       }}
                     >
                       Delete
                     </button>
                     <button
                       className="apply-btn"
-                      onClick={handleCloseFeatureModal}
+                      onClick={handleCloseVideoModal}
                     >
                       close
                     </button>
@@ -258,98 +250,95 @@ function Videos() {
               </Box>
             </Modal>
             <Modal
-              open={openEditFeatureModal}
-              onClose={handleCloseEditFeatureModal}
+              open={openEditVideoModal}
+              onClose={handleCloseEditVideoModal}
             >
               <Box sx={style}>
                 <Formik
                   enableReinitialize
                   initialValues={editInitialValues}
-                  validationSchema={featureInitSchema}
+                  validationSchema={videoInitSchema}
                   validateOnMount={true}
                   onSubmit={(values) => {
-                    updateFeature(
+                    updateVideo(
                       modalId,
-                      values.featureType,
-                      values.featureDescription,
-                      values.featureIcon
+                      values.VideoTopic,
+                      values.videoBody,
+                      values.videoLink
                     );
-                    setOpenEditFeatureModal(false);
+                    setOpenEditVideoModal(false);
                   }}
                 >
                   {({ values, errors, touched, handleChange, handleBlur }) => (
                     <Form>
                       <Typography variant="h6" gutterBottom>
-                        Feature information
+                        Video information
                       </Typography>
                       <Grid container spacing={3}>
                         <Grid item xs={12} sm={6}>
                           <TextField
                             required
-                            id="featureType"
-                            name="featureType"
-                            label="Feature Type"
+                            id="VideoTopic"
+                            name="VideoTopic"
+                            label="Video Topic"
                             fullWidth
                             variant="standard"
-                            value={values.featureType}
-                            onChange={handleChange("featureType")}
-                            onBlur={handleBlur("featureType")}
+                            value={values.VideoTopic}
+                            onChange={handleChange("VideoTopic")}
+                            onBlur={handleBlur("VideoTopic")}
                             sx={{ p: 2 }}
                           />
-                          {touched.featureType && errors.featureType && (
-                            <p style={{ color: "red" }}>{errors.featureType}</p>
+                          {touched.VideoTopic && errors.VideoTopic && (
+                            <p style={{ color: "red" }}>{errors.VideoTopic}</p>
                           )}
                         </Grid>
                         <Grid item xs={12}>
                           <TextField
                             required
-                            id="featureDescription"
-                            name="featureDescription"
-                            label="Feature Description"
-                            value={values.featureDescription}
+                            id="videoBody"
+                            name="videoBody"
+                            label="Video Body"
+                            value={values.videoBody}
                             multiline
                             maxRows={10}
                             fullWidth
                             variant="standard"
-                            onChange={handleChange("featureDescription")}
-                            onBlur={handleBlur("featureDescription")}
+                            onChange={handleChange("videoBody")}
+                            onBlur={handleBlur("videoBody")}
                             sx={{ p: 2 }}
                           />
-                          {touched.featureDescription &&
-                            errors.featureDescription && (
-                              <p style={{ color: "red" }}>
-                                {errors.featureDescription}
-                              </p>
-                            )}
+                          {touched.videoBody && errors.videoBody && (
+                            <p style={{ color: "red" }}>{errors.videoBody}</p>
+                          )}
                         </Grid>
                         <Grid item xs={12}>
                           <TextField
                             required
-                            id="featureIcon"
-                            name="featureIcon"
-                            label="Feature Icon"
-                            value={values.featureIcon}
+                            id="videoLink"
+                            name="videoLink"
+                            label="Video Link"
+                            value={values.videoLink}
                             multiline
-                            maxRows={2}
+                            maxRows={10}
                             fullWidth
                             variant="standard"
-                            onChange={handleChange("featureIcon")}
-                            onBlur={handleBlur("featureIcon")}
+                            onChange={handleChange("videoLink")}
+                            onBlur={handleBlur("videoLink")}
                             sx={{ p: 2 }}
                           />
-                          {touched.featureIcon && errors.featureIcon && (
-                            <p style={{ color: "red" }}>{errors.featureIcon}</p>
+                          {touched.videoLink && errors.videoLink && (
+                            <p style={{ color: "red" }}>{errors.videoLink}</p>
                           )}
                         </Grid>
                       </Grid>
-                      <div className="service-desc">
+                      <div className="video-desc">
                         <div className="linksDiv d-flex justify-content-center">
                           <button className="apply-btn" type="submit">
                             Update
                           </button>
                           <button
                             className="apply-btn"
-                            onClick={handleCloseEditFeatureModal}
+                            onClick={handleCloseEditVideoModal}
                           >
                             close
                           </button>
@@ -360,10 +349,7 @@ function Videos() {
                 </Formik>
               </Box>
             </Modal>
-            <Modal
-              open={openAddFeatureModal}
-              onClose={handleCloseAddFeatureModal}
-            >
+            <Modal open={openAddVideoModal} onClose={handleCloseAddVideoModal}>
               <Box sx={style}>
                 {error && (
                   <div
@@ -390,13 +376,13 @@ function Videos() {
                 <Formik
                   enableReinitialize
                   initialValues={addInitialValues}
-                  validationSchema={featureInitSchema}
+                  validationSchema={videoInitSchema}
                   validateOnMount={true}
                   onSubmit={(values, actions) => {
-                    addFeature(
-                      values.featureType,
-                      values.featureDescription,
-                      values.featureIcon
+                    addVideo(
+                      values.VideoTopic,
+                      values.videoBody,
+                      values.videoLink
                     );
                     actions.resetForm();
                   }}
@@ -404,74 +390,71 @@ function Videos() {
                   {({ values, errors, touched, handleChange, handleBlur }) => (
                     <Form>
                       <Typography variant="h6" gutterBottom>
-                        Feature information
+                        Video information
                       </Typography>
                       <Grid container spacing={3}>
                         <Grid item xs={12} sm={6}>
                           <TextField
                             required
-                            id="featureType"
-                            name="featureType"
-                            label="Feature Type"
+                            id="VideoTopic"
+                            name="VideoTopic"
+                            label="Video Topic"
                             fullWidth
                             variant="standard"
-                            value={values.featureType}
-                            onChange={handleChange("featureType")}
-                            onBlur={handleBlur("featureType")}
+                            value={values.VideoTopic}
+                            onChange={handleChange("VideoTopic")}
+                            onBlur={handleBlur("VideoTopic")}
                             sx={{ p: 2 }}
                           />
-                          {touched.featureType && errors.featureType && (
-                            <p style={{ color: "red" }}>{errors.featureType}</p>
+                          {touched.VideoTopic && errors.VideoTopic && (
+                            <p style={{ color: "red" }}>{errors.VideoTopic}</p>
                           )}
                         </Grid>
                         <Grid item xs={12}>
                           <TextField
                             required
-                            id="featureDescription"
-                            name="featureDescription"
-                            label="Loan Description"
-                            value={values.featureDescription}
+                            id="videoBody"
+                            name="videoBody"
+                            label="Video Description"
+                            value={values.videoBody}
                             multiline
                             maxRows={10}
                             fullWidth
                             variant="standard"
-                            onChange={handleChange("featureDescription")}
-                            onBlur={handleBlur("featureDescription")}
+                            onChange={handleChange("videoBody")}
+                            onBlur={handleBlur("videoBody")}
                             sx={{ p: 2 }}
                           />
-                          {touched.featureDescription &&
-                            errors.featureDescription && (
-                              <p style={{ color: "red" }}>
-                                {errors.featureDescription}
-                              </p>
-                            )}
+                          {touched.videoBody && errors.videoBody && (
+                            <p style={{ color: "red" }}>{errors.videoBody}</p>
+                          )}
                         </Grid>
                         <Grid item xs={12}>
                           <TextField
                             required
-                            id="featureIcon"
-                            name="featureIcon"
-                            label="Feature Icon"
-                            value={values.featureIcon}
+                            id="videoLink"
+                            name="videoLink"
+                            label="Video Link"
+                            value={values.videoLink}
                             multiline
-                            maxRows={2}
+                            maxRows={10}
                             fullWidth
                             variant="standard"
-                            onChange={handleChange("featureIcon")}
-                            onBlur={handleBlur("featureIcon")}
+                            onChange={handleChange("videoLink")}
+                            onBlur={handleBlur("videoLink")}
                             sx={{ p: 2 }}
                           />
-                          {touched.featureIcon && errors.featureIcon && (
-                            <p style={{ color: "red" }}>{errors.featureIcon}</p>
+                          {touched.videoLink && errors.videoLink && (
+                            <p style={{ color: "red" }}>{errors.videoLink}</p>
                           )}
                         </Grid>
                       </Grid>
-                      <div className="service-desc">
+                      <div className="video-desc">
                         <div className="linksDiv d-flex justify-content-center">
                           <button className="apply-btn">Save</button>
                           <button
                             className="apply-btn"
-                            onClick={handleCloseAddFeatureModal}
+                            onClick={handleCloseAddVideoModal}
                           >
                             close
                           </button>
@@ -483,10 +466,10 @@ function Videos() {
               </Box>
             </Modal>
           </div>
-        {/* </>
+        </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
-      )} */}
+      )}
     </div>
   );
 }

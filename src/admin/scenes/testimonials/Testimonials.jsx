@@ -1,10 +1,17 @@
 import React from "react";
-import { Box, Grid, IconButton, Modal, Paper, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Modal,
+  Paper,
+  TextField,
+} from "@mui/material";
 import Header from "../../components/Header";
 import Typography from "@mui/material/Typography";
 import { Link, NavLink } from "react-router-dom";
 import { ArrowForwardIos } from "@mui/icons-material";
-import "./testimonials.css";
 import { useState, useEffect } from "react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -15,16 +22,16 @@ import Loader from "../../components/Loader";
 import Error from "../../components/Error";
 
 const Testimonials = () => {
-  const [openEditTestimonialsModal, setOpenEditTestimonialsModal] = useState(
-    false
-  );
-  const [openAddTestimonialsModal, setOpenAddTestimonialsModal] = useState(
-    false
-  );
-  const [editModalClientName, seteditModalClientName] = useState("");
-  const [editModalClientComment, seteditModalClientComment] = useState("");
+  const [openEditTestimonialsModal, setOpenEditTestimonialsModal] =
+    useState(false);
+  const [openAddTestimonialsModal, setOpenAddTestimonialsModal] =
+    useState(false);
+  const [modalClientName, setModalClientName] = useState("");
+  const [modalClientComment, setModalClientComment] = useState("");
+  const [modalClientImg, setModalClientImg] = useState("");
   const [data, setData] = useState([]);
   const [modalId, setModalId] = useState();
+  const [file, setFile] = useState(null);
   const [msg, setMsg] = useState("");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -54,12 +61,31 @@ const Testimonials = () => {
   }, []);
 
   const addTestimonial = async (name, cmt) => {
+    let data = {
+      name: name,
+      comment: cmt,
+    };
+    if (file) {
+      const formData = new FormData();
+      const filename = Date.now() + file.name;
+      formData.append("name", filename);
+      formData.append("file", file);
+      data.img = filename;
+
+      // upload image
+      try {
+        setLoading(true);
+        await axios.post("/upload/", formData);
+        setLoading(false);
+      } catch (error) {
+        Swal.fire("Sorry!", "Failed to upload image!", "error");
+        setLoading(false);
+      }
+    }
+
     try {
       setLoading(true);
-      await axios.post("/testimonials/", {
-        username: name,
-        comment: cmt,
-      });
+      await axios.post("/testimonials/", data);
       setError(false);
       setSuccess(true);
       setMsg("Testimonial added successfully!");
@@ -76,12 +102,31 @@ const Testimonials = () => {
   };
 
   const updateTestimonial = async (id, name, cmt) => {
+    let data = {
+      name: name,
+      comment: cmt,
+    };
+    if (file) {
+      const formData = new FormData();
+      const filename = Date.now() + file.name;
+      formData.append("name", filename);
+      formData.append("file", file);
+      data.img = filename;
+
+      // upload image
+      try {
+        setLoading(true);
+        await axios.post("/upload/", formData);
+        setLoading(false);
+      } catch (error) {
+        Swal.fire("Sorry!", "Failed to upload image!", "error");
+        setLoading(false);
+      }
+    }
+
     try {
       setLoading(true);
-      await axios.patch(`/testimonials/${id}`, {
-        username: name,
-        comment: cmt,
-      });
+      await axios.patch(`/testimonials/${id}`, data);
       Swal.fire(
         "Congratulations!",
         "Testimonial updated successfully!",
@@ -115,6 +160,10 @@ const Testimonials = () => {
     }
   };
 
+  const saveFile = (e) => {
+    setFile(e.target.files[0]);
+  };
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -128,9 +177,10 @@ const Testimonials = () => {
     pb: 3,
   };
 
-  const handleOpenEditTestimonialsModal = (id, name, comment) => {
-    seteditModalClientName(name);
-    seteditModalClientComment(comment);
+  const handleOpenEditTestimonialsModal = (id, name, comment, img) => {
+    setModalClientName(name);
+    setModalClientComment(comment);
+    setModalClientImg(img);
     setModalId(id);
     setOpenEditTestimonialsModal(true);
   };
@@ -139,13 +189,15 @@ const Testimonials = () => {
   };
 
   const editInitialValues = {
-    clientComment: editModalClientComment,
-    clientName: editModalClientName,
+    clientComment: modalClientComment,
+    clientName: modalClientName,
+    clientImg: modalClientImg,
   };
 
   const initSchema = Yup.object().shape({
     clientComment: Yup.string().required("Client comment is required"),
     clientName: Yup.string().required("Client name is required"),
+    clientImg: Yup.string().required("Client photo is required"),
   });
 
   const handleOpenAddTestimonialsModal = () => {
@@ -158,14 +210,15 @@ const Testimonials = () => {
   const addInitialValues = {
     clientComment: "",
     clientName: "",
+    clientImg: "",
   };
 
   return (
     <Box m="20px">
-      {/* {loading ? (
+      {loading ? (
         <Loader />
       ) : data.length ? (
-        <> */}
+        <>
           <Box sx={{ display: "flex" }}>
             <div className="col col-xs-12 col-sm-3">
               <Header title="Testimonials" subtitle="What our clients say" />
@@ -183,7 +236,7 @@ const Testimonials = () => {
           </Box>
 
           {data
-            ? data.map((d, index) => (
+            ? data.map((data, index) => (
                 <Paper
                   variant="outlined"
                   sx={{
@@ -200,16 +253,26 @@ const Testimonials = () => {
                         display: "flex",
                         alignItems: "center",
                         position: "relative",
+                        color: "black",
                       }}
                       onClick={() =>
                         handleOpenEditTestimonialsModal(
-                          d.id,
-                          d.username,
-                          d.comment
+                          data.id,
+                          data.name,
+                          data.comment,
+                          data.img
                         )
                       }
                     >
-                      <Box sx={{ width: "100%" }}>
+                      <div className="m-1">
+                        <img
+                          className="rounded-circle"
+                          src={"http://192.168.57.216:3001/images/" + data.img}
+                          alt=""
+                          style={{ width: "100px", height: "100px" }}
+                        />
+                      </div>
+                      <Box sx={{ width: "100%", marginLeft: "20px" }}>
                         <h1 className="user">
                           <Typography
                             variant="h4"
@@ -221,7 +284,7 @@ const Testimonials = () => {
                               padding: "0 15px",
                             }}
                           >
-                            {d.username}
+                            {data.name}
                           </Typography>
                         </h1>
                         <div className="userMessage">
@@ -234,7 +297,7 @@ const Testimonials = () => {
                               padding: "0 15px",
                             }}
                           >
-                            {d.comment}
+                            {data.comment}
                           </Typography>
                         </div>
                       </Box>
@@ -261,7 +324,8 @@ const Testimonials = () => {
                   updateTestimonial(
                     modalId,
                     values.clientName,
-                    values.clientComment
+                    values.clientComment,
+                    values.clientImg
                   );
                   setOpenEditTestimonialsModal(false);
                 }}
@@ -309,6 +373,30 @@ const Testimonials = () => {
                         {touched.clientComment && errors.clientComment && (
                           <p style={{ color: "red" }}>{errors.clientComment}</p>
                         )}
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Button
+                          variant="contained"
+                          component="label"
+                          size="small"
+                          onChange={handleChange("clientImg")}
+                          onBlur={handleBlur("clientImg")}
+                          color="common"
+                        >
+                          Client image
+                          <input
+                            type="file"
+                            accept="image/png, image/gif, image/jpeg"
+                            hidden
+                            name="clientImg"
+                            onChange={saveFile}
+                          />
+                        </Button>
+                        <div>
+                          {errors.clientImg && touched.clientImg && (
+                            <p style={{ color: "red" }}>{errors.clientImg}</p>
+                          )}
+                        </div>
                       </Grid>
                     </Grid>
                     <div className="service-desc">
@@ -370,7 +458,11 @@ const Testimonials = () => {
                 validationSchema={initSchema}
                 validateOnMount={true}
                 onSubmit={(values, actions) => {
-                  addTestimonial(values.clientName, values.clientComment);
+                  addTestimonial(
+                    values.clientName,
+                    values.clientComment,
+                    values.clientImg
+                  );
                   actions.resetForm();
                 }}
               >
@@ -418,6 +510,30 @@ const Testimonials = () => {
                           <p style={{ color: "red" }}>{errors.clientComment}</p>
                         )}
                       </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Button
+                          variant="contained"
+                          component="label"
+                          size="small"
+                          onChange={handleChange("clientImg")}
+                          onBlur={handleBlur("clientImg")}
+                          color="common"
+                        >
+                          Client image
+                          <input
+                            type="file"
+                            accept="image/png, image/gif, image/jpeg"
+                            hidden
+                            name="clientImg"
+                            onChange={saveFile}
+                          />
+                        </Button>
+                        <div>
+                          {errors.clientImg && touched.clientImg && (
+                            <p style={{ color: "red" }}>{errors.clientImg}</p>
+                          )}
+                        </div>
+                      </Grid>
                     </Grid>
                     <div className="service-desc">
                       <div className="linksDiv d-flex justify-content-center">
@@ -435,10 +551,10 @@ const Testimonials = () => {
               </Formik>
             </Box>
           </Modal>
-        {/* </>
+        </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
-      )} */}
+      )}
     </Box>
   );
 };

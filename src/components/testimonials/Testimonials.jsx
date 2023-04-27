@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import './testimonials.css'
 import axios from "axios";
 import Error from "../../admin/components/Error";
 import Loader from "../../admin/components/Loader";
@@ -41,7 +40,7 @@ function Testimonials() {
                     <div className="m-3">
                       <img
                       className="rounded-circle"
-                        src={data.img}
+                        src={"http://192.168.57.216:3001/images/" + data.img}
                         alt=""
                         style={{width: '100px', height: '100px'}}
                       />
