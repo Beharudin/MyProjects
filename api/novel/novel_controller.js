@@ -2,34 +2,25 @@ import {
   Create,
   Get,
   GetById,
-  GetByName,
   Update,
   Delete,
 } from "./novel_modal.js";
 
 export function createNovel(req, res) {
   const body = req.body;
-  GetByName(body, (error, results) => {
-    if (!results) {
-      Create(body, (error, results) => {
-        if (error) {
-          console.log(error);
-          return res.status(500).json({
-            success: 0,
-            message: error.message,
-          });
-        }
-        return res.status(200).json({
-          success: 1,
-          data: results,
-        });
-      });
-    } else {
-      res.status(409).json({
+
+  Create(body, (error, results) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).json({
         success: 0,
-        message: "Duplicate novel with same name",
+        message: error.message,
       });
     }
+    return res.status(200).json({
+      success: 1,
+      data: results,
+    });
   });
 }
 
@@ -55,7 +46,6 @@ export function getNovelById(req, res) {
     });
   });
 }
-
 
 export function getNovels(req, res) {
   Get((error, results) => {

@@ -8,8 +8,7 @@ import {
 
 export function createPost(req, res) {
   const body = req.body;
-  GetByName(body.name, (error, results) => {
-    if (!results) {
+ 
       Create(body, (error, results) => {
         if (error) {
           console.log(error);
@@ -23,13 +22,6 @@ export function createPost(req, res) {
           data: results,
         });
       });
-    } else {
-      res.status(409).json({
-        success: 0,
-        message: "Duplicate posts with same name",
-      });
-    }
-  });
 }
 
 export function getPostById(req, res) {

@@ -32,18 +32,7 @@ export function GetById(id, callback) {
     }
   );
 }
-export function GetByName(name, callback) {
-  pool.query(
-    `SELECT * FROM novels WHERE topic = ?`,
-    [name],
-    (errors, results, fields) => {
-      if (errors) {
-        return callback(errors);
-      }
-      return callback(null, results[0]);
-    }
-  );
-}
+
 export function Update(data, id, callback) {
   pool.query(
     `UPDATE novels set topic=?, section=?, body=?  WHERE id=?`,
