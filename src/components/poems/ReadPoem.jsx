@@ -33,15 +33,26 @@ function ReadPoem() {
         <Loader />
       ) : data ? (
         <>
-          <div className="text-center mt-5 mb-5">
+          <div className="">
             {data && (
-              <div className="container">
-                <div className="col-12 col-md-offset-1 card">
+              <div className="container ">
+                <div className="col-12 col-md-offset-1 card p-md-5 p-xs-2">
                   <div>
                     <h2>{data.topic}</h2>
                   </div>
                   <div className="text-start">
-                    <p>{data.body}</p>
+                    <div className="poem-div mb-4 mt-4">
+                      {data.body.split("#").map((paragraph) => (
+                        <>
+                          {paragraph.split(",").map((line) => (
+                            <p className="poem-text mb-0 " key={line}>
+                              {line}
+                            </p>
+                          ))}
+                          <br />
+                        </>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

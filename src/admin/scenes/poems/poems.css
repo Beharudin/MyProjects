@@ -1,5 +1,11 @@
+#poems .poem-div{
+  height: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 
-#features i.fa, #faIcon {
+#poems i.fa, #faIcon {
     font-size: 38px;
     margin-bottom: 20px;
     transition: all 0.5s;
@@ -12,7 +18,7 @@
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.05);
   }
 
-.feature-text {
+.poem-text {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
     font-weight: 500;
@@ -25,7 +31,7 @@
     cursor: pointer;
   }
 
-  #features .section-title h2::after {
+  #poems .section-title h2::after {
     position: absolute;
     content: "";
     height: 4px;

@@ -162,250 +162,256 @@ function Poems() {
   });
 
   return (
-    <div id="Poems" className="container">
+    <div id="poems" className="container">
       {loading ? (
         <Loader />
       ) : poems.length ? (
         <>
-      <Box sx={{ display: "flex" }}>
-        <div className="col col-xs-12 col-sm-3">
-          <Header title="Poems" subtitle="Poems we provide" />
-        </div>
-        <div className="d-flex justify-content-end col col-xs-12 col-sm-8">
-          <Link className="Link">
-            <button className="apply-btn" onClick={handleOpenAddPoemModal}>
-              Add New
-            </button>
-          </Link>
-        </div>
-      </Box>
-      <div className="text-center">
-        <div className="row p-5">
-          {poems
-            ? poems.map((data, index) => (
-                <div
-                  key={`${data.topic}-${index}`}
-                  className="col-xs-6 col-md-3"
-                >
-                  <h3>{data.topic}</h3>
-                  <p className="Poem-text">{data.body}</p>
-                  <Link className="Link">
-                    <button
-                      className="apply-btn mb-5"
-                      onClick={() =>
-                        handleOpenPoemModal(
-                          data.id,
-                          data.topic,
-                          data.body
-                        )
-                      }
-                    >
-                      View more
-                    </button>
-                  </Link>
-                </div>
-              ))
-            : "Loading..."}
-        </div>
-        <Modal open={openPoemModal} onClose={handleClosePoemModal}>
-          <Box sx={style}>
-            <div className="poem-desc">
-              <div className="text-center">
-                <h3>{poemTopic}</h3>
-              </div>
-              <p className="poem-text">{poemBody}</p>
-              <div className="linksDiv d-flex justify-content-center">
-                <button className="apply-btn" onClick={handleOpenEditPoemModal}>
-                  Edit
+          <Box sx={{ display: "flex" }}>
+            <div className="col col-xs-12 col-sm-3">
+              <Header title="Poems" subtitle="Poems we provide" />
+            </div>
+            <div className="d-flex justify-content-end col col-xs-12 col-sm-8">
+              <Link className="Link">
+                <button className="apply-btn" onClick={handleOpenAddPoemModal}>
+                  Add New
                 </button>
-                <button
-                  className="apply-btn"
-                  onClick={() => {
-                    handleClosePoemModal();
-                    deletePoem(modalId);
-                  }}
-                >
-                  Delete
-                </button>
-                <button className="apply-btn" onClick={handleClosePoemModal}>
-                  close
-                </button>
-              </div>
+              </Link>
             </div>
           </Box>
-        </Modal>
-        <Modal open={openEditPoemModal} onClose={handleCloseEditPoemModal}>
-          <Box sx={style}>
-            <Formik
-              enableReinitialize
-              initialValues={editInitialValues}
-              validationSchema={poemInitSchema}
-              validateOnMount={true}
-              onSubmit={(values) => {
-                updatePoem(
-                  modalId,
-                  values.poemTopic,
-                  values.poemBody
-                );
-                setOpenEditPoemModal(false);
-              }}
-            >
-              {({ values, errors, touched, handleChange, handleBlur }) => (
-                <Form>
-                  <Typography variant="h6" gutterBottom>
-                    Poem information
-                  </Typography>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        required
-                        id="poemTopic"
-                        name="poemTopic"
-                        label="Poem Topic"
-                        fullWidth
-                        variant="standard"
-                        value={values.poemTopic}
-                        onChange={handleChange("poemTopic")}
-                        onBlur={handleBlur("poemTopic")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.poemTopic && errors.poemTopic && (
-                        <p style={{ color: "red" }}>{errors.poemTopic}</p>
-                      )}
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        required
-                        id="poemBody"
-                        name="poemBody"
-                        label="Poem Body"
-                        value={values.poemBody}
-                        multiline
-                        maxRows={10}
-                        fullWidth
-                        variant="standard"
-                        onChange={handleChange("poemBody")}
-                        onBlur={handleBlur("poemBody")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.poemBody && errors.poemBody && (
-                        <p style={{ color: "red" }}>{errors.poemBody}</p>
-                      )}
-                    </Grid>
-                  </Grid>
-                  <div className="poem-desc">
-                    <div className="linksDiv d-flex justify-content-center">
-                      <button className="apply-btn" type="submit">
-                        Update
-                      </button>
-                      <button
-                        className="apply-btn"
-                        onClick={handleCloseEditPoemModal}
-                      >
-                        close
-                      </button>
+          <div className="text-center">
+            <div className="row p-5">
+              {poems
+                ? poems.map((data, index) => (
+                    <div
+                      key={`${data.topic}-${index}`}
+                      className="col-xs-6 col-md-3"
+                    >
+                      <h3>{data.topic}</h3>
+                      <div className="poem-div mt-4 mb-4">
+                        {data.body.split("#").map((paragraph) =>
+                              paragraph.split(",").map((line) => (
+                                <p className="poem-text m-0" key={line}>
+                                  {line}
+                                </p>
+                              ))
+                            )}
+                      </div>
+                      <Link className="Link">
+                        <button
+                          className="apply-btn mb-5"
+                          onClick={() =>
+                            handleOpenPoemModal(data.id, data.topic, data.body)
+                          }
+                        >
+                          View more
+                        </button>
+                      </Link>
                     </div>
+                  ))
+                : "Loading..."}
+            </div>
+            <Modal open={openPoemModal} onClose={handleClosePoemModal}>
+              <Box sx={style}>
+                <div className="poem-desc">
+                  <div className="text-center">
+                    <h3>{poemTopic}</h3>
                   </div>
-                </Form>
-              )}
-            </Formik>
-          </Box>
-        </Modal>
-        <Modal open={openAddPoemModal} onClose={handleCloseAddPoemModal}>
-          <Box sx={style}>
-            {error && (
-              <div
-                className="alert alert-danger d-flex justify-content-between"
-                role="alert"
-              >
-                {msg}
-                <IconButton onClick={() => setError(false)} sx={{ p: 0 }}>
-                  {<Close />}
-                </IconButton>
-              </div>
-            )}
-            {success && (
-              <div
-                className="alert alert-success d-flex justify-content-between"
-                role="alert"
-              >
-                {msg}
-                <IconButton onClick={() => setSuccess(false)} sx={{ p: 0 }}>
-                  {<Close />}
-                </IconButton>
-              </div>
-            )}
-            <Formik
-              enableReinitialize
-              initialValues={addInitialValues}
-              validationSchema={poemInitSchema}
-              validateOnMount={true}
-              onSubmit={(values, actions) => {
-                addPoem(values.poemTopic, values.poemBody, values.PoemIcon);
-                actions.resetForm();
-              }}
-            >
-              {({ values, errors, touched, handleChange, handleBlur }) => (
-                <Form>
-                  <Typography variant="h6" gutterBottom>
-                    Poem information
-                  </Typography>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        required
-                        id="poemTopic"
-                        name="poemTopic"
-                        label="Poem Topic"
-                        fullWidth
-                        variant="standard"
-                        value={values.poemTopic}
-                        onChange={handleChange("poemTopic")}
-                        onBlur={handleBlur("poemTopic")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.poemTopic && errors.poemTopic && (
-                        <p style={{ color: "red" }}>{errors.poemTopic}</p>
-                      )}
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        required
-                        id="poemBody"
-                        name="poemBody"
-                        label="Poem Body"
-                        value={values.poemBody}
-                        multiline
-                        maxRows={10}
-                        fullWidth
-                        variant="standard"
-                        onChange={handleChange("poemBody")}
-                        onBlur={handleBlur("poemBody")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.poemBody && errors.poemBody && (
-                        <p style={{ color: "red" }}>{errors.poemBody}</p>
-                      )}
-                    </Grid>
-                  </Grid>
-                  <div className="poem-desc">
-                    <div className="linksDiv d-flex justify-content-center">
-                      <button className="apply-btn">Save</button>
-                      <button
-                        className="apply-btn"
-                        onClick={handleCloseAddPoemModal}
-                      >
-                        close
-                      </button>
-                    </div>
+                  <p className="poem-text">{poemBody}</p>
+                  <div className="linksDiv d-flex justify-content-center">
+                    <button
+                      className="apply-btn"
+                      onClick={handleOpenEditPoemModal}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="apply-btn"
+                      onClick={() => {
+                        handleClosePoemModal();
+                        deletePoem(modalId);
+                      }}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="apply-btn"
+                      onClick={handleClosePoemModal}
+                    >
+                      close
+                    </button>
                   </div>
-                </Form>
-              )}
-            </Formik>
-          </Box>
-        </Modal>
-      </div>
-      </>
+                </div>
+              </Box>
+            </Modal>
+            <Modal open={openEditPoemModal} onClose={handleCloseEditPoemModal}>
+              <Box sx={style}>
+                <Formik
+                  enableReinitialize
+                  initialValues={editInitialValues}
+                  validationSchema={poemInitSchema}
+                  validateOnMount={true}
+                  onSubmit={(values) => {
+                    updatePoem(modalId, values.poemTopic, values.poemBody);
+                    setOpenEditPoemModal(false);
+                  }}
+                >
+                  {({ values, errors, touched, handleChange, handleBlur }) => (
+                    <Form>
+                      <Typography variant="h6" gutterBottom>
+                        Poem information
+                      </Typography>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            required
+                            id="poemTopic"
+                            name="poemTopic"
+                            label="Poem Topic"
+                            fullWidth
+                            variant="standard"
+                            value={values.poemTopic}
+                            onChange={handleChange("poemTopic")}
+                            onBlur={handleBlur("poemTopic")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.poemTopic && errors.poemTopic && (
+                            <p style={{ color: "red" }}>{errors.poemTopic}</p>
+                          )}
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            required
+                            id="poemBody"
+                            name="poemBody"
+                            label="Poem Body"
+                            value={values.poemBody}
+                            multiline
+                            maxRows={10}
+                            fullWidth
+                            variant="standard"
+                            onChange={handleChange("poemBody")}
+                            onBlur={handleBlur("poemBody")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.poemBody && errors.poemBody && (
+                            <p style={{ color: "red" }}>{errors.poemBody}</p>
+                          )}
+                        </Grid>
+                      </Grid>
+                      <div className="poem-desc">
+                        <div className="linksDiv d-flex justify-content-center">
+                          <button className="apply-btn" type="submit">
+                            Update
+                          </button>
+                          <button
+                            className="apply-btn"
+                            onClick={handleCloseEditPoemModal}
+                          >
+                            close
+                          </button>
+                        </div>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              </Box>
+            </Modal>
+            <Modal open={openAddPoemModal} onClose={handleCloseAddPoemModal}>
+              <Box sx={style}>
+                {error && (
+                  <div
+                    className="alert alert-danger d-flex justify-content-between"
+                    role="alert"
+                  >
+                    {msg}
+                    <IconButton onClick={() => setError(false)} sx={{ p: 0 }}>
+                      {<Close />}
+                    </IconButton>
+                  </div>
+                )}
+                {success && (
+                  <div
+                    className="alert alert-success d-flex justify-content-between"
+                    role="alert"
+                  >
+                    {msg}
+                    <IconButton onClick={() => setSuccess(false)} sx={{ p: 0 }}>
+                      {<Close />}
+                    </IconButton>
+                  </div>
+                )}
+                <Formik
+                  enableReinitialize
+                  initialValues={addInitialValues}
+                  validationSchema={poemInitSchema}
+                  validateOnMount={true}
+                  onSubmit={(values, actions) => {
+                    addPoem(values.poemTopic, values.poemBody, values.PoemIcon);
+                    actions.resetForm();
+                  }}
+                >
+                  {({ values, errors, touched, handleChange, handleBlur }) => (
+                    <Form>
+                      <Typography variant="h6" gutterBottom>
+                        Poem information
+                      </Typography>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            required
+                            id="poemTopic"
+                            name="poemTopic"
+                            label="Poem Topic"
+                            fullWidth
+                            variant="standard"
+                            value={values.poemTopic}
+                            onChange={handleChange("poemTopic")}
+                            onBlur={handleBlur("poemTopic")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.poemTopic && errors.poemTopic && (
+                            <p style={{ color: "red" }}>{errors.poemTopic}</p>
+                          )}
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            required
+                            id="poemBody"
+                            name="poemBody"
+                            label="Poem Body"
+                            value={values.poemBody}
+                            multiline
+                            maxRows={10}
+                            fullWidth
+                            variant="standard"
+                            onChange={handleChange("poemBody")}
+                            onBlur={handleBlur("poemBody")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.poemBody && errors.poemBody && (
+                            <p style={{ color: "red" }}>{errors.poemBody}</p>
+                          )}
+                        </Grid>
+                      </Grid>
+                      <div className="poem-desc">
+                        <div className="linksDiv d-flex justify-content-center">
+                          <button className="apply-btn">Save</button>
+                          <button
+                            className="apply-btn"
+                            onClick={handleCloseAddPoemModal}
+                          >
+                            close
+                          </button>
+                        </div>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              </Box>
+            </Modal>
+          </div>
+        </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
       )}

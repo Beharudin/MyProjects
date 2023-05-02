@@ -37,14 +37,19 @@ function Poems() {
             <div className="row">
               {data
                 ? data.map((data, index) => (
-                    <div
-                      key={index}
-                      className="col-xs-12 col-md-6 col-lg-4"
-                    >
+                    <div key={index} className="col-xs-12 col-md-6 col-lg-4">
                       <div className="card mb-3">
                         <div className="poem-desc m-2">
                           <h3>{data.topic}</h3>
-                          <p className="poem-text">{data.body}</p>
+                          <div className="poem-div mt-4 mb-4">
+                            {data.body.split("#").map((paragraph) =>
+                              paragraph.split(",").map((line) => (
+                                <p className="poem-text m-0" key={line}>
+                                  {line}
+                                </p>
+                              ))
+                            )}
+                          </div>
                           <Link
                             className="btn btn-primary"
                             to={`/poem/${data.id}`}
