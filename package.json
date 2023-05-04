@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "build": "npm i"
+    "build": "npm i --force"
   },
   "author": "",
   "license": "ISC",
