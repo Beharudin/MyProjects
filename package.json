@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "build": "npm install"
+    "build": "npm i"
   },
   "author": "",
   "license": "ISC",
