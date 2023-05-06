@@ -23,7 +23,7 @@ function Carousel() {
               className="d-block w-100"
               src="../../images/riqicha.jpg"
               alt="First slide"
-              height={(window.innerWidth < 720) ? "600px" : "200px"}
+              height={(window.innerWidth < 720) ? "600px" : "300px"}
             />
             <div class="carousel-caption d-none d-md-block">
             <h5>Riqicha Bultii Islaamaa</h5>
@@ -35,7 +35,7 @@ function Carousel() {
               className="d-block w-100"
               src="../../images/kulkula.jpg"
               alt="Second slide"
-              height="600px"
+              height={(window.innerWidth < 720) ? "600px" : "300px"}
             />
             <div class="carousel-caption d-none d-md-block">
             <h5>Kulkula Dhugaa Dhikkifate</h5>
@@ -47,7 +47,7 @@ function Carousel() {
               className="d-block w-100"
               src="../../images/mohammed.jpg"
               alt="Third slide"
-              height="600px"
+              height={(window.innerWidth < 720) ? "600px" : "300px"}
             />
             <div class="carousel-caption d-none d-md-block">
             <h5>Mohammed Bakar Saido</h5>
