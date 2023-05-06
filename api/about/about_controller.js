@@ -9,6 +9,7 @@ export function getAbout(req, res) {
         success: 0,
         message: "failed to fetch about",
         status: "failed",
+        error:error,
       });
     }
     if (!results) {
