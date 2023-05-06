@@ -13,7 +13,7 @@ function Posts() {
     const getPosts = async () => {
       try {
         setLoading(true);
-        await axios.get("/posts").then((res) => {
+        await axios.get("http://localhost:3001/api/posts").then((res) => {
           setData(res.data.data);
         });
         setLoading(false);

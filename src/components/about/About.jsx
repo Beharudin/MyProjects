@@ -13,7 +13,6 @@ function About() {
       try {
         setLoading(true);
         await axios.get("http://localhost:3001/api/about").then((res) => {
-          console.log("about data: ", res)
           setData(res.data.data[0]);
         });
         setLoading(false);
@@ -34,7 +33,7 @@ function About() {
             <div className="row">
               <div className="col-md-4 col-sm-12">
                 <img
-                  src={"http://192.168.57.216:3001/images/" + data.img}
+                  src={"http://localhost:3001/images/" + data.img}
                   className="img-responsive mr-2"
                   alt=""
                 />

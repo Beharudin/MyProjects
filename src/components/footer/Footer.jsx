@@ -24,7 +24,7 @@ function Footer() {
     const getWebsite = async () => {
       try {
         setLoading(true);
-        await axios.get("/website").then((res) => {
+        await axios.get("http://localhost:3001/api/website").then((res) => {
           setData(res.data.data);
         });
         setLoading(false);

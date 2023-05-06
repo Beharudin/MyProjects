@@ -30,7 +30,7 @@ function About() {
     const getAbout = async () => {
       try {
         setLoading(true);
-        await axios.get("/about").then((res) => {
+        await axios.get("http://localhost:3001/api/about").then((res) => {
           setData(res.data.data[0]);
           console.log(res.data.data)
         });
@@ -66,9 +66,9 @@ function About() {
 
     try {
       setLoading(true);
-      await axios.patch("/about/", data);
+      await axios.patch("http://localhost:3001/api/about/", data);
 
-      await axios.get("/about").then((res) => {
+      await axios.get("http://localhost:3001/api/about").then((res) => {
         setData(res.data.data[0]);
       });
 
@@ -135,7 +135,7 @@ function About() {
         <div className="row">
           <div className="LeftDiv col-xs-12 col-md-6">
             <img
-              src={"http://192.168.57.216:3001/images/" + data.img}
+              src={"http://localhost:3001/images/" + data.img}
               className="img-responsive"
               alt=""
             />{" "}

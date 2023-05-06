@@ -46,7 +46,7 @@ function Novels() {
     const fetchNovels = async () => {
       try {
         setLoading(true);
-        await axios.get("/novels/").then((res) => {
+        await axios.get("http://localhost:3001/api/novels/").then((res) => {
           setNovels(res.data.data);
         });
         setLoading(false);
@@ -60,7 +60,7 @@ function Novels() {
   const addNovel = async (topic, section, body) => {
     try {
       setLoading(true);
-      await axios.post("/novels/", {
+      await axios.post("http://localhost:3001/api/novels/", {
         topic: topic,
         section: section,
         body: body
@@ -68,7 +68,7 @@ function Novels() {
       setError(false);
       setSuccess(true);
       setMsg("Novel added successfully!");
-      await axios.get("/novels/").then((res) => {
+      await axios.get("http://localhost:3001/api/novels/").then((res) => {
         setNovels(res.data.data);
       });
       setLoading(false);
@@ -83,13 +83,13 @@ function Novels() {
   const updateNovel = async (id, topic, section, body) => {
     try {
       setLoading(true);
-      await axios.patch(`/novels/${id}`, {
+      await axios.patch(`http://localhost:3001/api/novels/${id}`, {
         topic: topic,
         section: section,
         body: body
       });
       Swal.fire("Congratulations!", "Novel updated successfully!", "success");
-      await axios.get("/novels/").then((res) => {
+      await axios.get("http://localhost:3001/api/novels/").then((res) => {
         setNovels(res.data.data);
       });
       setLoading(false);
@@ -102,10 +102,10 @@ function Novels() {
   const deleteNovel = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`/novels/${id}`);
+      await axios.delete(`http://localhost:3001/api/novels/${id}`);
 
       Swal.fire("Congratulations!", "Novel deleted successfully!", "success");
-      await axios.get("/novels/").then((res) => {
+      await axios.get("http://localhost:3001/api/novels/").then((res) => {
         setNovels(res.data.data);
       });
       setLoading(false);

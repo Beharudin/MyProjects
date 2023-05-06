@@ -4,7 +4,6 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import Header from "../../components/Header";
 import {
-  Button,
   Container,
   Grid,
   Paper,
@@ -43,7 +42,7 @@ function Website() {
     const getWebsiteInfo = async () => {
       try {
         setLoading(true);
-        await axios.get("/website/").then((res) => {
+        await axios.get("http://localhost:3001/api/website/").then((res) => {
           setWebName(res.data.data[0].name);
           setWebEmail(res.data.data[0].email);
           setWebMobile(res.data.data[0].mobile);
@@ -78,7 +77,7 @@ function Website() {
   ) => {
     try {
       setLoading(true);
-      await axios.patch("/website/", {
+      await axios.patch("http://localhost:3001/api/website/", {
         name: name,
         email: email,
         mobile: mobile,
@@ -95,7 +94,7 @@ function Website() {
         "Website updated successfully!",
         "success"
       );
-      await axios.get("/website/").then((res) => {
+      await axios.get("http://localhost:3001/api/website/").then((res) => {
         setWebName(res.data.data[0].name);
           setWebEmail(res.data.data[0].email);
           setWebMobile(res.data.data[0].mobile);

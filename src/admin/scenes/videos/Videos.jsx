@@ -45,7 +45,7 @@ function Videos() {
     const fetchVideos = async () => {
       try {
         setLoading(true);
-        await axios.get("/videos/").then((res) => {
+        await axios.get("http://localhost:3001/api/videos/").then((res) => {
           setVideos(res.data.data);
         });
         setLoading(false);
@@ -59,7 +59,7 @@ function Videos() {
   const addVideo = async (topic, body, link) => {
     try {
       setLoading(true);
-      await axios.post("/videos/", {
+      await axios.post("http://localhost:3001/api/videos/", {
         topic: topic,
         body: body,
         link: link,
@@ -67,7 +67,7 @@ function Videos() {
       setError(false);
       setSuccess(true);
       setMsg("Video added successfully!");
-      await axios.get("/videos/").then((res) => {
+      await axios.get("http://localhost:3001/api/videos/").then((res) => {
         setVideos(res.data.data);
       });
       setLoading(false);
@@ -83,13 +83,13 @@ function Videos() {
     console.log("link: ",link)
     try {
       setLoading(true);
-      await axios.patch(`/videos/${id}`, {
+      await axios.patch(`http://localhost:3001/api/videos/${id}`, {
         topic: topic,
         body: body,
         link: link,
       });
       Swal.fire("Congratulations!", "Video updated successfully!", "success");
-      await axios.get("/videos/").then((res) => {
+      await axios.get("http://localhost:3001/api/videos/").then((res) => {
         setVideos(res.data.data);
       });
       setLoading(false);
@@ -101,9 +101,9 @@ function Videos() {
   const deleteVideo = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`/videos/${id}`);
+      await axios.delete(`http://localhost:3001/api/videos/${id}`);
       Swal.fire("Congratulations!", "Video deleted successfully!", "success");
-      await axios.get("/videos/").then((res) => {
+      await axios.get("http://localhost:3001/api/videos/").then((res) => {
         setVideos(res.data.data);
       });
       setLoading(false);

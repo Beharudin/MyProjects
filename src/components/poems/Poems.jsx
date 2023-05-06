@@ -13,7 +13,7 @@ function Poems() {
     const getNovels = async () => {
       try {
         setLoading(true);
-        await axios.get("/poems").then((res) => {
+        await axios.get("http://localhost:3001/api/poems").then((res) => {
           setData(res.data.data);
         });
         setLoading(false);

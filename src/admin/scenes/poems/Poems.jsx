@@ -44,7 +44,7 @@ function Poems() {
     const fetchPoems = async () => {
       try {
         setLoading(true);
-        await axios.get("/poems/").then((res) => {
+        await axios.get("http://localhost:3001/api/poems/").then((res) => {
           setPoems(res.data.data);
         });
         setLoading(false);
@@ -58,14 +58,14 @@ function Poems() {
   const addPoem = async (topic, body) => {
     try {
       setLoading(true);
-      await axios.post("/poems/", {
+      await axios.post("http://localhost:3001/api/poems/", {
         topic: topic,
         body: body,
       });
       setError(false);
       setSuccess(true);
       setMsg("Poem added successfully!");
-      await axios.get("/poems/").then((res) => {
+      await axios.get("http://localhost:3001/api/poems/").then((res) => {
         setPoems(res.data.data);
       });
       setLoading(false);
@@ -80,12 +80,12 @@ function Poems() {
   const updatePoem = async (id, topic, body) => {
     try {
       setLoading(true);
-      await axios.patch(`/poems/${id}`, {
+      await axios.patch(`http://localhost:3001/api/poems/${id}`, {
         topic: topic,
         body: body,
       });
       Swal.fire("Congratulations!", "Poem updated successfully!", "success");
-      await axios.get("/poems/").then((res) => {
+      await axios.get("http://localhost:3001/api/poems/").then((res) => {
         setPoems(res.data.data);
       });
       setLoading(false);
@@ -97,9 +97,9 @@ function Poems() {
   const deletePoem = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`/poems/${id}`);
+      await axios.delete(`http://localhost:3001/api/poems/${id}`);
       Swal.fire("Congratulations!", "Poem deleted successfully!", "success");
-      await axios.get("/poems/").then((res) => {
+      await axios.get("http://localhost:3001/api/poems/").then((res) => {
         setPoems(res.data.data);
       });
       setLoading(false);

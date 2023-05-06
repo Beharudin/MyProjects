@@ -44,7 +44,7 @@ function Posts() {
     const fetchPosts = async () => {
       try {
         setLoading(true);
-        await axios.get("/posts/").then((res) => {
+        await axios.get("http://localhost:3001/api/posts/").then((res) => {
           setPosts(res.data.data);
         });
         setLoading(false);
@@ -58,14 +58,14 @@ function Posts() {
   const addPost = async (topic, body) => {
     try {
       setLoading(true);
-      await axios.post("/posts/", {
+      await axios.post("http://localhost:3001/api/posts/", {
         topic: topic,
         body: body,
       });
       setError(false);
       setSuccess(true);
       setMsg("Post added successfully!");
-      await axios.get("/posts/").then((res) => {
+      await axios.get("http://localhost:3001/api/posts/").then((res) => {
         setPosts(res.data.data);
       });
       setLoading(false);
@@ -80,12 +80,12 @@ function Posts() {
   const updatePost = async (id, topic, body) => {
     try {
       setLoading(true);
-      await axios.patch(`/posts/${id}`, {
+      await axios.patch(`http://localhost:3001/api/posts/${id}`, {
         topic: topic,
         body: body,
       });
       Swal.fire("Congratulations!", "Post updated successfully!", "success");
-      await axios.get("/posts/").then((res) => {
+      await axios.get("http://localhost:3001/api/posts/").then((res) => {
         setPosts(res.data.data);
       });
       setLoading(false);
@@ -97,9 +97,9 @@ function Posts() {
   const deletePost = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`/posts/${id}`);
+      await axios.delete(`http://localhost:3001/api/posts/${id}`);
       Swal.fire("Congratulations!", "Post deleted successfully!", "success");
-      await axios.get("/posts/").then((res) => {
+      await axios.get("http://localhost:3001/api/posts/").then((res) => {
         setPosts(res.data.data);
       });
       setLoading(false);

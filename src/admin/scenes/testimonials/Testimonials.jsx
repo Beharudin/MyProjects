@@ -50,7 +50,7 @@ const Testimonials = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("/testimonials/");
+        const res = await axios.get("http://localhost:3001/api/testimonials/");
         setData(res.data.data);
         setLoading(false);
       } catch (error) {
@@ -85,11 +85,11 @@ const Testimonials = () => {
 
     try {
       setLoading(true);
-      await axios.post("/testimonials/", data);
+      await axios.post("http://localhost:3001/api/testimonials/", data);
       setError(false);
       setSuccess(true);
       setMsg("Testimonial added successfully!");
-      await axios.get("/testimonials/").then((res) => {
+      await axios.get("http://localhost:3001/api/testimonials/").then((res) => {
         setData(res.data.data);
       });
       setLoading(false);
@@ -126,13 +126,13 @@ const Testimonials = () => {
 
     try {
       setLoading(true);
-      await axios.patch(`/testimonials/${id}`, data);
+      await axios.patch(`http://localhost:3001/api/testimonials/${id}`, data);
       Swal.fire(
         "Congratulations!",
         "Testimonial updated successfully!",
         "success"
       );
-      await axios.get("/testimonials/").then((res) => {
+      await axios.get("http://localhost:3001/api/testimonials/").then((res) => {
         setData(res.data.data);
       });
       setLoading(false);
@@ -144,13 +144,13 @@ const Testimonials = () => {
   const deleteTestimonial = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`/testimonials/${id}`);
+      await axios.delete(`http://localhost:3001/api/testimonials/${id}`);
       Swal.fire(
         "Congratulations!",
         "Testimonials deleted successfully!",
         "success"
       );
-      await axios.get("/testimonials/").then((res) => {
+      await axios.get("http://localhost:3001/api/testimonials/").then((res) => {
         setData(res.data.data);
       });
       setLoading(false);

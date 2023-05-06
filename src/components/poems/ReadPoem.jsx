@@ -15,7 +15,7 @@ function ReadPoem() {
     const getPoem = async () => {
       try {
         setLoading(true);
-        await axios.get(`/poems/${id}`).then((res) => {
+        await axios.get(`http://localhost:3001/api/poems/${id}`).then((res) => {
           setData(res.data.data);
         });
         setLoading(false);

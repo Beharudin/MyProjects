@@ -11,7 +11,7 @@ function Topbar() {
   useEffect(() => {
     const getTopbar = async () => {
       try {
-        await axios.get("/website").then((res) => {
+        await axios.get("http://localhost:3001/api/website").then((res) => {
           setData(res.data.data);
         });
       } catch (error) {
