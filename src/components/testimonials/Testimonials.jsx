@@ -40,7 +40,7 @@ function Testimonials() {
                     <div className="m-3">
                       <img
                       className="rounded-circle"
-                        src={"http://192.168.57.216:3001/images/" + data.img}
+                        src={"http://localhost:3001/images/" + data.img}
                         alt=""
                         style={{width: '100px', height: '100px'}}
                       />
