@@ -12,7 +12,8 @@ function About() {
     const getAbout = async () => {
       try {
         setLoading(true);
-        await axios.get("/about").then((res) => {
+        await axios.get("http://localhost:3001/api/about").then((res) => {
+          console.log("about data: ", res)
           setData(res.data.data[0]);
         });
         setLoading(false);
