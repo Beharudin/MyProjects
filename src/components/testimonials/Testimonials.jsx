@@ -11,7 +11,7 @@ function Testimonials() {
     const getVideos = async () => {
       try {
         setLoading(true);
-        await axios.get("http://192.168.77.225:3001/api/testimonials/random").then((res) => {
+        await axios.get("http://192.168.137.1:3001/api/testimonials/random").then((res) => {
           setData(res.data.data);
         });
         setLoading(false);
