@@ -23,7 +23,7 @@ function Carousel() {
               className="d-block w-100"
               src="../../images/riqicha.jpg"
               alt="First slide"
-              height="600px"
+              height={(window.innerWidth < 720) ? "600px" : "200px"}
             />
             <div class="carousel-caption d-none d-md-block">
             <h5>Riqicha Bultii Islaamaa</h5>

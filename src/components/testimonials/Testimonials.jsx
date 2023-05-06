@@ -11,7 +11,7 @@ function Testimonials() {
     const getVideos = async () => {
       try {
         setLoading(true);
-        await axios.get("http://localhost:3001/api/testimonials/random").then((res) => {
+        await axios.get("http://192.168.77.225:3001/api/testimonials/random").then((res) => {
           setData(res.data.data);
         });
         setLoading(false);
@@ -23,7 +23,7 @@ function Testimonials() {
   }, []);
 
   return (
-    <div id="testimonials">
+    <div id="testimonials" className='mb-5'>
       {loading ? (
         <Loader />
       ) : data.length ? (
