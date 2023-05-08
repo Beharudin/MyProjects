@@ -15,7 +15,8 @@ function ReadPoem() {
     const getPoem = async () => {
       try {
         setLoading(true);
-        await axios.get(`http://localhost:3001/api/poems/${id}`).then((res) => {
+        await axios.get(`https://mocki.io/v1/47258d39-f46f-4471-966a-3d761653e692`).then((res) => {
+        // await axios.get(`http://localhost:3001/api/poems/${id}`).then((res) => {
           setData(res.data.data);
         });
         setLoading(false);

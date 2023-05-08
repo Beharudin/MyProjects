@@ -14,7 +14,8 @@ function ReadNovel() {
     const getNovel = async () => {
       try {
         setLoading(true);
-        await axios.get(`http://localhost:3001/api/novels/${id}`).then((res) => {
+        await axios.get(`https://mocki.io/v1/7e2d5dab-a144-4cb2-b51f-8c0e339159af`).then((res) => {
+        // await axios.get(`http://localhost:3001/api/novels/${id}`).then((res) => {
           setData(res.data.data);
         });
         setLoading(false);

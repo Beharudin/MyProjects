@@ -15,7 +15,8 @@ function ReadPost() {
     const getPost = async () => {
       try {
         setLoading(true);
-        await axios.get(`http://localhost:3001/api/posts/${id}`).then((res) => {
+        await axios.get(`https://mocki.io/v1/d847cda0-1d82-4863-bff9-fb39c349fc64`).then((res) => {
+        // await axios.get(`http://localhost:3001/api/posts/${id}`).then((res) => {
           setData(res.data.data);
         });
         setLoading(false);
