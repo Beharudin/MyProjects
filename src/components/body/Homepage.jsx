@@ -28,27 +28,27 @@ function Homepage() {
     const getData = async () => {
       try {
         setLoading(true);
-        await axios.get("http://localhost:3001/api/about").then((res) => {
+        await axios.get("http://192.168.57.201:3001/api/about").then((res) => {
           setAboutData(res.data.data[0]);
         });
-        await axios.get("http://localhost:3001/api/novels").then((res) => {
+        await axios.get("http://192.168.57.201:3001/api/novels").then((res) => {
           setNovelsData(res.data.data);
         });
-        await axios.get("http://localhost:3001/api/poems").then((res) => {
+        await axios.get("http://192.168.57.201:3001/api/poems").then((res) => {
           setPoemsData(res.data.data);
         });
-        await axios.get("http://localhost:3001/api/posts").then((res) => {
+        await axios.get("http://192.168.57.201:3001/api/posts").then((res) => {
           setPostsData(res.data.data);
         });
-        await axios.get("http://localhost:3001/api/website").then((res) => {
+        await axios.get("http://192.168.57.201:3001/api/website").then((res) => {
           setWebsiteData(res.data.data);
         });
         await axios
-          .get("http://localhost:3001/api/testimonials/random")
+          .get("http://192.168.57.201:3001/api/testimonials/random")
           .then((res) => {
             setTestimonialsData(res.data.data);
           });
-        await axios.get("http://localhost:3001/api/videos").then((res) => {
+        await axios.get("http://192.168.57.201:3001/api/videos").then((res) => {
           setVideosData(res.data.data);
         });
         setLoading(false);
