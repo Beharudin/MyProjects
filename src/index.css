@@ -23,6 +23,10 @@ body,
   position: relative;
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+}
+
 /* Track */
 ::-webkit-scrollbar-track {
   background: #e0e0e0;

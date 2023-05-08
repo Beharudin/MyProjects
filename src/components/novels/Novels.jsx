@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Novels({ data }) {
   return (
-    <div className="text-center pb-5" id="novels">
+    <div className="text-center pb-2" id="novels">
       <div className="container">
         <div className="col-12 mb-3 mt-5">
           <h2>Asoosama</h2>

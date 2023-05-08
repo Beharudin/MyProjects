@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Posts({ data }) {
   return (
-    <div className="text-center mt-5 pb-5" id="posts">
+    <div className="text-center mt-5 pb-2" id="posts">
       <div className="container">
         <div className="col-12 col-md-offset-1 mb-3">
           <h2>Posts</h2>

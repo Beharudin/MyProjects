@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Videos({ data }) {
   return (
-    <div className="text-center mt-5 pb-5" id="videos">
+    <div className="text-center mt-5" id="videos">
       <div className="container">
         <div className="col-12 col-md-offset-1 mb-3">
           <h2>Videos</h2>
