@@ -2,8 +2,8 @@ import pool from "../../config/database.js";
 
 export function Create(data, callback) {
   pool.query(
-    `INSERT INTO testimonials(name, comment, img) VALUES (?,?, ?)`,
-    [data.name, data.comment, data.img],
+    `INSERT INTO posts(topic, body) VALUES (?,?)`,
+    [data.topic, data.body],
     (errors, results, fields) => {
       if (errors) {
         return callback(errors);
@@ -13,29 +13,16 @@ export function Create(data, callback) {
   );
 }
 export function Get(callback) {
-  pool.query(`SELECT * FROM testimonials`, [], (errors, results, fields) => {
+  pool.query(`SELECT * FROM posts`, [], (errors, results, fields) => {
     if (errors) {
       return callback(errors);
     }
     return callback(null, results);
   });
 }
-
-export function GetRandom(callback) {
-  pool.query(
-    `SELECT * FROM testimonials order by RAND() LIMIT 6`,
-    [],
-    (errors, results, fields) => {
-      if (errors) {
-        return callback(errors);
-      }
-      return callback(null, results);
-    }
-  );
-}
 export function GetById(id, callback) {
   pool.query(
-    `SELECT * FROM testimonials WHERE id=?`,
+    `SELECT * FROM posts WHERE id=?`,
     [id],
     (errors, results, fields) => {
       if (errors) {
@@ -48,8 +35,8 @@ export function GetById(id, callback) {
 
 export function Update(data, id, callback) {
   pool.query(
-    `UPDATE testimonials set name=?, comment=?, img=? WHERE id=?`,
-    [data.name, data.comment, data.img, id],
+    `UPDATE posts set topic=?, body=? WHERE id=?`,
+    [data.topic, data.body, id],
     (errors, results, fields) => {
       if (errors) {
         return callback(errors);
@@ -60,7 +47,7 @@ export function Update(data, id, callback) {
 }
 export function Delete(id, callback) {
   pool.query(
-    `DELETE FROM testimonials WHERE id=?`,
+    `DELETE FROM posts WHERE id=?`,
     [id],
     (errors, results, fields) => {
       if (errors) {

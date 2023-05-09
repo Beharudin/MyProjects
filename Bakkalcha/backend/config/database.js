@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 // dotenv.config();
 
 const pool = mysql.createPool({
-  host: 'localhost',
+  host     : 'localhost',
+  // host: 'localhost',
   user: 'root',
   password: '',
   database: "bakkalcha",
