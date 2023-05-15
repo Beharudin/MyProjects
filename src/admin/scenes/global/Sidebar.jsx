@@ -27,18 +27,14 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-  const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
 
   useEffect(() => {
-    if (!user) {
-      // window.location.href = "/admin/login";
-    } else if (user.role !== "admin") {
-      // window.location.href = "/admin/login";
+    if (!user.length) {
+      window.location.href = "/admin/login";
     } else {
-      setRole((user.role).charAt(0).toUpperCase()+ (user.role).slice(1));
       setLoading(false);
     }
   }, []);
@@ -106,10 +102,10 @@ const Sidebar = () => {
                     alignItems="center"
                   >
                     <img
-                      alt="profile-user"
+                      alt="Profile Img"
                       width="100px"
                       height="100px"
-                      src={`../../assets/Obbo-haile.jpg`}
+                      src={"http://localhost:3001/images/" + user.profile_img}
                       style={{ cursor: "pointer", borderRadius: "50%" }}
                     />
                   </Box>
@@ -120,11 +116,10 @@ const Sidebar = () => {
                       fontWeight="bold"
                       sx={{ m: "10px 0 0 0" }}
                     >
-                      {/* {user.email} */}
-                      Mohammed Baker
+                      {user.email}
                     </Typography>
                     <Typography variant="h5" color="common.main">
-                      {role}
+                      Admin
                     </Typography>
                   </Box>
                 </Box>

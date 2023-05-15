@@ -31,9 +31,11 @@ function Login() {
       email: email,
       password: pwd,
     };
+    
     try {
       setLoading(true);
-      const result = (await axios.post("/users/login", userCridentials)).data;
+      const result = (await axios.post("/user/login", userCridentials)).data;
+      
       if (result.success === 1) {
         setUser(result.data);
         window.location.href = "/admin";
@@ -55,9 +57,9 @@ function Login() {
   }, [user]);
   return (
     <div style={{ height: "100%" }}>
-      {/* {!loading ? (
+      {loading ? (
         <Loader />
-      ) : ( */}
+      ) : (
         <div className="container">
           <div className="row d-flex justify-content-center align-items-center">
             <div className="col-lg-12 col-xl-11">
@@ -176,7 +178,7 @@ function Login() {
             </div>
           </div>
         </div>
-      {/* )} */}
+       )} 
     </div>
   );
 }

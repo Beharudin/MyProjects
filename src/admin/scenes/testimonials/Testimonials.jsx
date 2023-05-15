@@ -38,13 +38,10 @@ const Testimonials = () => {
   const [loading, setLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  // if (!user) {
-  //   setLoading(true);
-  //   window.location.href = "/admin/login";
-  // } else if (user.role !== "admin") {
-  //   setLoading(true);
-  //   window.location.href = "/admin/login";
-  // }
+  if (!user.length) {
+    setLoading(true);
+    window.location.href = "/admin/login";
+  }
 
   useEffect(() => {
     const fetchData = async () => {

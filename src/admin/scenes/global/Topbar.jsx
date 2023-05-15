@@ -13,7 +13,6 @@ import * as Yup from "yup";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Mail, Person } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import YupPassword from "yup-password";
 import Swal from "sweetalert2";
@@ -33,31 +32,29 @@ const Topbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("currentUser");
-    window.location.href = "/login";
+    window.location.href = "/admin/login";
   };
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
   useEffect(() => {
-    if (!user) {
-      // window.location.href = "/admin/login";
-    } else if (user.role !== "admin") {
-      // window.location.href = "/admin/login";
+    if (!user.length) {
+      window.location.href = "/admin/login";
     } else {
       setLoading(false);
     }
-    // setId(user.id);
+    setId(user.id);
   }, []);
 
   const updatePassword = async (pwd) => {
     const data = {
       email: user.email,
       password: pwd,
-      role: user.role,
-      profile_picture: "profile.png",
+      fullname: user.fullname,
+      profile_img: user.profile_img,
     };
     try {
       setLoading(true);
-      await axios.patch(`users/${id}`, data);
+      await axios.patch(`user/${id}`, data);
       Swal.fire(
         "Congratulations!",
         "Password updated successfully!",
@@ -105,122 +102,127 @@ const Topbar = () => {
   });
   return (
     <>
-      {/* {loading ? null : (
-        <> */}
-      <Box display="flex" justifyContent="end" p={2}>
-        {/* ICONS */}
-        <Box display="flex">
-          <div>
-              <Typography p={1} variant="h4">Welcome, Mohammed</Typography>
-          </div>
-
-          <div className="dropdown">
-            <Link
-              id="dropdownMenuLink"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <IconButton>
-                <PersonOutlinedIcon />
-              </IconButton>
-            </Link>
-
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li>
-                <Link
-                  className="dropdown-item"
-                  onClick={handleOpenPasswordModal}
-                >
-                  Change password
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item" onClick={handleLogout}>
-                  Logout
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </Box>
-      </Box>
-
-      <Modal open={openPasswordModal} onClose={handleClosePasswordModal}>
-        <Box sx={style}>
-          <Formik
-            enableReinitialize
-            initialValues={editInitialValues}
-            validationSchema={initSchema}
-            validateOnMount={true}
-            onSubmit={(values) => {
-              updatePassword(values.password);
-              handleClosePasswordModal();
-            }}
-          >
-            {({ values, errors, touched, handleChange, handleBlur }) => (
-              <Form>
-                <Typography variant="h6" gutterBottom>
-                  Change password
+      {loading ? null : (
+        <>
+          <Box display="flex" justifyContent="end" p={2}>
+            {/* ICONS */}
+            <Box display="flex">
+              <div>
+                <Typography p={1} variant="h4">
+                  Welcome, Mohammed
                 </Typography>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      id="password"
-                      name="password"
-                      label="New password"
-                      fullWidth
-                      multiline
-                      maxRows={5}
-                      variant="standard"
-                      value={values.password}
-                      onChange={handleChange("password")}
-                      onBlur={handleBlur("password")}
-                      sx={{ p: 2 }}
-                    />
-                    {touched.password && errors.password && (
-                      <p style={{ color: "red" }}>{errors.password}</p>
-                    )}
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      id="password1"
-                      name="password1"
-                      label="Retype new password"
-                      fullWidth
-                      multiline
-                      maxRows={5}
-                      variant="standard"
-                      value={values.password1}
-                      onChange={handleChange("password1")}
-                      onBlur={handleBlur("password1")}
-                      sx={{ p: 2 }}
-                    />
-                    {touched.password1 && errors.password1 && (
-                      <p style={{ color: "red" }}>{errors.password1}</p>
-                    )}
-                  </Grid>
-                </Grid>
-                <div className="service-desc">
-                  <div className="linksDiv d-flex justify-content-center">
-                    <button className="apply-btn" type="submit">
-                      Update
-                    </button>
-                    <button
-                      className="apply-btn"
-                      onClick={handleClosePasswordModal}
+              </div>
+              <div className="dropdown">
+                <Link
+                  id="dropdownMenuLink"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <IconButton>
+                    <PersonOutlinedIcon />
+                  </IconButton>
+                </Link>
+
+                <ul
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuLink"
+                >
+                  <li>
+                    <Link
+                      className="dropdown-item"
+                      onClick={handleOpenPasswordModal}
                     >
-                      close
-                    </button>
-                  </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </Box>
-      </Modal>
-      {/* </>
-      )} */}
+                      Change password
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" onClick={handleLogout}>
+                      Logout
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </Box>
+          </Box>
+
+          <Modal open={openPasswordModal} onClose={handleClosePasswordModal}>
+            <Box sx={style}>
+              <Formik
+                enableReinitialize
+                initialValues={editInitialValues}
+                validationSchema={initSchema}
+                validateOnMount={true}
+                onSubmit={(values) => {
+                  updatePassword(values.password);
+                  handleClosePasswordModal();
+                }}
+              >
+                {({ values, errors, touched, handleChange, handleBlur }) => (
+                  <Form>
+                    <Typography variant="h6" gutterBottom>
+                      Change password
+                    </Typography>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <TextField
+                          required
+                          id="password"
+                          name="password"
+                          label="New password"
+                          fullWidth
+                          multiline
+                          maxRows={5}
+                          variant="standard"
+                          value={values.password}
+                          onChange={handleChange("password")}
+                          onBlur={handleBlur("password")}
+                          sx={{ p: 2 }}
+                        />
+                        {touched.password && errors.password && (
+                          <p style={{ color: "red" }}>{errors.password}</p>
+                        )}
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          required
+                          id="password1"
+                          name="password1"
+                          label="Retype new password"
+                          fullWidth
+                          multiline
+                          maxRows={5}
+                          variant="standard"
+                          value={values.password1}
+                          onChange={handleChange("password1")}
+                          onBlur={handleBlur("password1")}
+                          sx={{ p: 2 }}
+                        />
+                        {touched.password1 && errors.password1 && (
+                          <p style={{ color: "red" }}>{errors.password1}</p>
+                        )}
+                      </Grid>
+                    </Grid>
+                    <div className="service-desc">
+                      <div className="linksDiv d-flex justify-content-center">
+                        <button className="apply-btn" type="submit">
+                          Update
+                        </button>
+                        <button
+                          className="apply-btn"
+                          onClick={handleClosePasswordModal}
+                        >
+                          close
+                        </button>
+                      </div>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            </Box>
+          </Modal>
+        </>
+      )}
     </>
   );
 };

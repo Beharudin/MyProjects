@@ -12,24 +12,22 @@ import PieChart from "../../components/PieChart";
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
-  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const user = JSON.parse(localStorage.getItem("currentUser"))
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     window.location.href = "/admin/login";
-  //   } else if (user.role !== "admin") {
-  //     window.location.href = "/admin/login";
-  //   } else {
-  //     setLoading(false);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!user.length) {
+      window.location.href = "/admin/login";
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <>
-      {/* {loading ? (
+      {loading ? (
         <Loader />
       ) : true ? (
-        <> */}
+        <>
       <Box m="20px">
         <Box
           display="grid"
@@ -139,10 +137,10 @@ const Dashboard = () => {
           <ServicesList title='posts'/>
         </Box>
       </Box>
-      {/* </>
+      </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
-      )} */}
+      )}
     </>
   );
 };

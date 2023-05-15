@@ -18,13 +18,10 @@ function About() {
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
 
-  // if (!user) {
-  //   setLoading(true);
-  //   window.location.href = "/admin/login";
-  // } else if (user.role !== "admin") {
-  //   setLoading(true);
-  //   window.location.href = "/admin/login";
-  // }
+  if (!user.length) {
+    setLoading(true);
+    window.location.href = "/admin/login";
+  }
 
   useEffect(() => {
     const getAbout = async () => {
@@ -32,7 +29,6 @@ function About() {
         setLoading(true);
         await axios.get("http://localhost:3001/api/about").then((res) => {
           setData(res.data.data[0]);
-          console.log(res.data.data)
         });
         setLoading(false);
       } catch (error) {
