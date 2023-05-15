@@ -1,0 +1,17 @@
+.black-div {
+  background-color: black;
+  opacity: 0.7;
+}
+
+.left-div {
+  height: 100% !important;
+  background-image: url("../../public/images/photo_1.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.right-div {
+  height: 100% !important;
+  background-image: url("../../public/images/photo_2.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
