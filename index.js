@@ -11,10 +11,11 @@ const __dirname = dirname(__filename);
 
 const app = express();
 app.use(express.json());
-// dotenv.config();
+dotenv.config();
 
 app.use(cors());
 // import each routers
+import userRouter from "./api/user/user_route.js";
 import websiteRouter from "./api/website/website_route.js";
 import postRouter from "./api/post/post_route.js";
 import videoRouter from "./api/video/video_route.js";
@@ -47,6 +48,7 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 // app.get("/api/auth/",checkToken);
 
 // get  router
+app.use("/api/user/", userRouter);
 app.use("/api/website/", websiteRouter);
 app.use("/api/posts/", postRouter);
 app.use("/api/videos/", videoRouter);
