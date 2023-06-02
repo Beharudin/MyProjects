@@ -1,3 +1,7 @@
+.fluid-container .row{
+  min-height: 100vh !important;
+}
+
 .black-div {
   background-color: black;
   opacity: 0.7;
@@ -15,3 +19,17 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
+
+.img{
+  z-index: 1000;
+  position: fixed;
+  width: 200px;
+}
+
+@media screen and (max-width: 576px) {
+  .img{
+    position: relative;
+  }
+}
+
+
