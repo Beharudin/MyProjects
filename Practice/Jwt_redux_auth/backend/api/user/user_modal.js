@@ -2,7 +2,7 @@ import pool from "../../config/database.js";
 
 export function Update(data, id, callback) {
   pool.query(
-    `UPDATE user set username=?, email=?, password=? WHERE id=?`,
+    `UPDATE users set username=?, email=?, password=? WHERE id=?`,
     [data.username, data.email, data.password, id],
     (errors, results, fields) => {
       if (errors) {
@@ -15,7 +15,7 @@ export function Update(data, id, callback) {
 
 export function GetByEmail(email, callback) {
   pool.query(
-    `SELECT * FROM user WHERE email=?`,
+    `SELECT * FROM users WHERE email=?`,
     [email],
     (errors, results, fields) => {
       if (errors) {
