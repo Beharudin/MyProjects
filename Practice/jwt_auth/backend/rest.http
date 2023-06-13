@@ -1,0 +1,42 @@
+
+GET http://localhost:4000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhaGFyQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiQmVoYXJ1ZGluIiwiaWF0IjoxNjg2MDM3NDA5LCJleHAiOjE2ODYwNDEwMDl9.D2S7t7DI8_YVg0BxWShxDlNvuJHmCcqQ_vt_u_FZqio
+###
+POST  http://localhost:4000/auth/register
+Content-Type: application/json
+
+{
+    "username": "Waliif",
+    "email": "waliif26@gmail.com",
+    "password": "12345"
+}
+
+###
+POST  http://localhost:4000/auth/update
+
+###
+POST  http://localhost:4000/auth/login
+Content-Type: application/json
+
+{
+    "email": "abdi@gmail.com",
+    "password": "12345"
+}
+
+
+###
+POST  http://localhost:4000/auth/refresh-token
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhaGFyQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiQmVoYXJ1ZGluIiwiaWF0IjoxNjg2MDUwNDczLCJleHAiOjE2ODYwNTQwNzN9.UV6oOVNSYyd-1W8kCECBDpinxxgkcJxC4cX0FKkOL-I"
+}
+
+###
+DELETE   http://localhost:4000/auth/logout
+
+
+###
+GET http://localhost:4000/notfound
+
+
