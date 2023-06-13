@@ -1,0 +1,6 @@
+
+GET http://localhost:3005/fetch/branches
+
+
+###
+GET http://localhost:3005/fetch/districts

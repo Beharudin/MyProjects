@@ -1,46 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Grid, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/actions/authActions";
-import { useLocation, useNavigate } from "react-router-dom";
+import { login } from "../redux/actions/loginActions";
+import { useNavigate } from "react-router-dom";
 
 
-let notFirstTime = false;
-
-function Login() {
+function Register() {
   //   const [loading, setLoading] = useState(false);
   //   const [error, setError] = useState(false);
   //   const [msg, setMsg] = useState("");
-  // const userData = useSelector((state) => state.auth.userData);
-  // const token = useSelector((state) => state.auth.token);
-  const [user, setUser] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location=useLocation();
 
-  const redirectPath=location.state ? location.state.path : '/';
-
+  
   const initialValues = {
+    username: "",
     userEmail: "",
     userPwd: "",
   };
-
+  
   const aboutInitSchema = Yup.object().shape({
+    username: Yup.string().required("Username is required"),
     userEmail: Yup.string().required("Email is required"),
     userPwd: Yup.string().required("Password is required"),
   });
+  
+  const redirectPath = "/login";
+  const registerHandler = async (username, email, password) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/auth/register",
+        { username, email, password }
+      );
 
-  const loginHandler = async (email, pwd) => {
-    notFirstTime = true;
-    dispatch(login(email, pwd, redirectPath, navigate));
+      // Redirect or update the UI as needed
+      navigate(redirectPath, { replace: true });
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  
   return (
     <div style={{ height: "100%" }}>
       {/* {loading ? (
@@ -58,7 +63,7 @@ function Login() {
                 <div className="row justify-content-center">
                   <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                     <p className="text-center h3 fw-bold mb-4 mx-1 mx-md-4 mt-4">
-                      Login
+                      Register
                     </p>
 
                     <Formik
@@ -67,7 +72,8 @@ function Login() {
                       validationSchema={aboutInitSchema}
                       validateOnMount={true}
                       onSubmit={(values) => {
-                        loginHandler(
+                        registerHandler(
+                          values.username,
                           values.userEmail,
                           values.userPwd
                         );
@@ -82,30 +88,30 @@ function Login() {
                       }) => (
                         <Form>
                           <Grid container spacing={3}>
-                          <Grid item xs={12}>
+                            <Grid item xs={12}>
                               <div className="d-flex flex-row align-items-center">
                                 <FontAwesomeIcon
-                                  icon={faEnvelope}
+                                  icon={faUser}
                                   className="fa-lg me-3 fa-fw"
                                 />
                                 <TextField
                                   required
-                                  id="userEmail"
-                                  name="userEmail"
-                                  label="Email"
-                                  value={values.userEmail}
+                                  id="username"
+                                  name="username"
+                                  label="Username"
+                                  value={values.username}
                                   multiline
                                   maxRows={10}
                                   fullWidth
                                   variant="standard"
-                                  onChange={handleChange("userEmail")}
-                                  onBlur={handleBlur("userEmail")}
+                                  onChange={handleChange("username")}
+                                  onBlur={handleBlur("username")}
                                   sx={{ p: 2 }}
                                 />
                               </div>
-                              {touched.userEmail && errors.userEmail && (
+                              {touched.username && errors.username && (
                                 <p style={{ color: "red", marginLeft: "40px" }}>
-                                  {errors.userEmail}
+                                  {errors.username}
                                 </p>
                               )}
                             </Grid>
@@ -170,8 +176,14 @@ function Login() {
                               type="submit"
                               className="btn btn-primary btn-lg"
                             >
-                              Login
+                              Register
                             </button>
+                          </div>
+                          <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                            <p>
+                              Do you have an account?{" "}
+                              <a href="/login">Login</a>
+                            </p>
                           </div>
                         </Form>
                       )}
@@ -188,4 +200,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

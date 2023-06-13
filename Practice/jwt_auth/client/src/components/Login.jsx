@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Grid, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/actions/authActions";
+import { login } from "../redux/actions/loginActions";
 import { useLocation, useNavigate } from "react-router-dom";
-
 
 let notFirstTime = false;
 
@@ -16,14 +15,12 @@ function Login() {
   //   const [loading, setLoading] = useState(false);
   //   const [error, setError] = useState(false);
   //   const [msg, setMsg] = useState("");
-  // const userData = useSelector((state) => state.auth.userData);
-  // const token = useSelector((state) => state.auth.token);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location=useLocation();
+  const location = useLocation();
 
-  const redirectPath=location.state ? location.state.path : '/';
+  const redirectPath = location.state ? location.state.path : "/";
 
   const initialValues = {
     userEmail: "",
@@ -40,7 +37,6 @@ function Login() {
     dispatch(login(email, pwd, redirectPath, navigate));
   };
 
-  
   return (
     <div style={{ height: "100%" }}>
       {/* {loading ? (
@@ -67,10 +63,7 @@ function Login() {
                       validationSchema={aboutInitSchema}
                       validateOnMount={true}
                       onSubmit={(values) => {
-                        loginHandler(
-                          values.userEmail,
-                          values.userPwd
-                        );
+                        loginHandler(values.userEmail, values.userPwd);
                       }}
                     >
                       {({
@@ -79,36 +72,10 @@ function Login() {
                         touched,
                         handleChange,
                         handleBlur,
+                        handleSubmit,
                       }) => (
                         <Form>
                           <Grid container spacing={3}>
-                          <Grid item xs={12}>
-                              <div className="d-flex flex-row align-items-center">
-                                <FontAwesomeIcon
-                                  icon={faEnvelope}
-                                  className="fa-lg me-3 fa-fw"
-                                />
-                                <TextField
-                                  required
-                                  id="userEmail"
-                                  name="userEmail"
-                                  label="Email"
-                                  value={values.userEmail}
-                                  multiline
-                                  maxRows={10}
-                                  fullWidth
-                                  variant="standard"
-                                  onChange={handleChange("userEmail")}
-                                  onBlur={handleBlur("userEmail")}
-                                  sx={{ p: 2 }}
-                                />
-                              </div>
-                              {touched.userEmail && errors.userEmail && (
-                                <p style={{ color: "red", marginLeft: "40px" }}>
-                                  {errors.userEmail}
-                                </p>
-                              )}
-                            </Grid>
                             <Grid item xs={12}>
                               <div className="d-flex flex-row align-items-center">
                                 <FontAwesomeIcon
@@ -172,6 +139,12 @@ function Login() {
                             >
                               Login
                             </button>
+                          </div>
+                          <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                            <p>
+                              Don't have an account?{" "}
+                              <a href="/register">Sign up</a>
+                            </p>
                           </div>
                         </Form>
                       )}
