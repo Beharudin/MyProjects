@@ -5,9 +5,9 @@ import Header from './Header'
 
 const Layout = () => {
     return (
-        <div className="md:flex md:flex-row bg-neutral-100 h-screen w-screen overflow-hidden">
+        <div className="flex flex-col md:flex-row bg-neutral-100 h-screen w-screen overflow-hidden">
             <Sidebar />
-            <div className="flex flex-col flex-1">
+            <div className="flex flex-col flex-1 overflow-auto">
                 <Header />
                 <div className="flex-1 p-4 min-h-0 overflow-auto">
 					<Outlet />

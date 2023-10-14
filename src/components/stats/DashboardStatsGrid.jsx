@@ -3,7 +3,7 @@ import { IoBagHandle, IoPieChart, IoPeople, IoCart } from 'react-icons/io5'
 
 export default function DashboardStatsGrid() {
     return (
-        <div className="flex gap-4">
+        <div className="flex gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <BoxWrapper
                 icon={<IoBagHandle className="text-2xl text-white" />}
                 title={'Total Sales'}
