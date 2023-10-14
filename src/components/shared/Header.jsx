@@ -8,7 +8,7 @@ export default function Header() {
     const navigate = useNavigate()
 
     return (
-        <div className="bg-white h-16 px-4 flex items-center border-b border-gray-200 justify-between overflow-auto">
+        <div className="bg-white h-16 px-4 flex items-center border-b border-gray-200 justify-between">
             <div className="relative ">
                 <HiOutlineSearch fontSize={20} className="text-gray-400 absolute top-1/2 left-3 -translate-y-1/2" />
                 <input
@@ -119,7 +119,7 @@ const HeaderPopever = ({ title, body, icon }) => {
                         leaveFrom="opacity-100 translate-y-0"
                         leaveTo="opacity-0 translate-y-1"
                     >
-                        <Popover.Panel className="absolute right-0 z-10 mt-2.5 transform w-80">
+                        <Popover.Panel className="absolute right-0 z-10 mt-2.5 transform sm:w-80">
                             <div className="bg-white rounded-sm shadow-md ring-1 ring-black ring-opacity-5 px-2 py-2.5">
                                 <strong className="text-gray-700 font-medium">{title}</strong>
                                 <div className="mt-2 py-1 text-sm">{body}</div>
