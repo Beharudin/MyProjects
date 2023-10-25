@@ -64,12 +64,13 @@ export async function DELETE(req, res) {
     const id = data.id;
 
     const deletedComment = comments.find((comment) => comment.id === id);
+    const deletedIndex = comments.findIndex((comment) => comment.id === id);
 
     if (!deletedComment) {
       return NextResponse.error(404, "Comment not found");
     }
 
-    // comments = comments.filter((comment) => comment.id !== id);
+    comments.splice(deletedIndex, 1);
 
     return NextResponse.json(
       {
