@@ -2,12 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .header-icons {
+    @apply bg-gray-200 rounded-md cursor-pointer p-[6px] text-[14px] hover:bg-accent hover:text-white;
+  }
 
-@layer components{
-    .header-icons{
-        @apply bg-gray-200 rounded-md cursor-pointer p-[6px] text-[14px] hover:bg-accent hover:text-white
-    }
-    .badge{
-        @apply flex absolute w-[18px] h-[18px] rounded-full -top-[5px] -right-[5px] text-sm bg-red-600 justify-center items-center text-white text-[12px]
-    }
+  .badge {
+    @apply flex absolute w-[18px] h-[18px] rounded-full -top-[5px] -right-[5px] text-sm bg-red-600 justify-center items-center text-white text-[12px];
+  }
+
+  .navbar-link:hover {
+    color: #ff8f9c;
+    transition: all 0.4s;
+  }
+
+  .navbar-link::after {
+    background-color: #ff8f9c;
+    position: absolute;
+    content: "";
+    height: 3px;
+    width: 100%;
+    bottom: -5px;
+    left: 0;
+    scale: 0;
+    transform-origin: left;
+    transition: all 0.4s;
+  }
+  .navbar-link:hover::after {
+    scale: 1;
+  }
+  .navbar__link:hover::after {
+    scale: 1;
+  }
 }

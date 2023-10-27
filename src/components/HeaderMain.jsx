@@ -5,7 +5,7 @@ import { AiOutlineHeart, AiOutlineUser } from "react-icons/ai";
 
 function HeaderMain() {
   return (
-    <div className="border-b border-gray-200">
+    <div className="hidden sm:block border-b border-gray-200">
       <div className="container p-4">
         <div className="justify-between items-center flex  flex-col sm:flex-row gap-2">
           <div className="text-blackish text-4xl l-2">Logo</div>
