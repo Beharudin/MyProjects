@@ -38,10 +38,10 @@ const Testimonials = () => {
   const [loading, setLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  if (!user.length) {
-    setLoading(true);
-    window.location.href = "/admin/login";
-  }
+  // if (!user.length) {
+  //   setLoading(true);
+  //   window.location.href = "/admin/login";
+  // }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -211,7 +211,7 @@ const Testimonials = () => {
   };
 
   return (
-    <Box m="20px">
+    <div className="container">
       {loading ? (
         <Loader />
       ) : data.length ? (
@@ -552,7 +552,7 @@ const Testimonials = () => {
       ) : (
         <Error message="Something went wrong, please try again later!" />
       )}
-    </Box>
+    </div>
   );
 };
 

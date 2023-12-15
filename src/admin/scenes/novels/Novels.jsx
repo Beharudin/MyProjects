@@ -6,7 +6,8 @@ import {
   Modal,
   TextField,
   Typography,
-  IconButton, Box
+  IconButton,
+  Box,
 } from "@mui/material";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -17,9 +18,14 @@ import axios from "axios";
 import { Close } from "@mui/icons-material";
 import Loader from "../../components/Loader";
 import Error from "../../components/Error";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createNovelData,
+  deleteNovelData,
+  updateNovelData,
+} from "../../../store/novelActions";
 
 function Novels() {
-  const [novels, setNovels] = useState([]);
   const [openEditNovelModal, setOpenEditNovelModal] = useState(false);
   const [openNovelModal, setOpenNovelModal] = useState(false);
   const [openAddNovelModal, setOpenAddNovelModal] = useState(false);
@@ -28,45 +34,27 @@ function Novels() {
   const [modalBody, setModalBody] = useState("");
   const [modalId, setModalId] = useState();
   const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const novels = useSelector((state) => state.novel.novelsList);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  if(!user.length){
-    setLoading(true);
-    window.location.href='/admin/login'
-  }
-  
-  useEffect(() => {
-    const fetchNovels = async () => {
-      try {
-        setLoading(true);
-        await axios.get("http://localhost:3001/api/novels/").then((res) => {
-          setNovels(res.data.data);
-        });
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchNovels();
-  }, []);
 
   const addNovel = async (topic, section, body) => {
     try {
       setLoading(true);
-      await axios.post("http://localhost:3001/api/novels/", {
-        topic: topic,
-        section: section,
-        body: body
-      });
+      dispatch(
+        createNovelData({
+          topic,
+          section,
+          body,
+        })
+      );
       setError(false);
       setSuccess(true);
       setMsg("Novel added successfully!");
-      await axios.get("http://localhost:3001/api/novels/").then((res) => {
-        setNovels(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       setSuccess(false);
@@ -79,15 +67,8 @@ function Novels() {
   const updateNovel = async (id, topic, section, body) => {
     try {
       setLoading(true);
-      await axios.patch(`http://localhost:3001/api/novels/${id}`, {
-        topic: topic,
-        section: section,
-        body: body
-      });
+      dispatch(updateNovelData({ id, topic, section, body }));
       Swal.fire("Congratulations!", "Novel updated successfully!", "success");
-      await axios.get("http://localhost:3001/api/novels/").then((res) => {
-        setNovels(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -98,12 +79,9 @@ function Novels() {
   const deleteNovel = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3001/api/novels/${id}`);
+      dispatch(deleteNovelData(id));
 
       Swal.fire("Congratulations!", "Novel deleted successfully!", "success");
-      await axios.get("http://localhost:3001/api/novels/").then((res) => {
-        setNovels(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       Swal.fire("Sorry!", "Something went wrong!", "error");
@@ -173,300 +151,308 @@ function Novels() {
         <Loader />
       ) : novels.length ? (
         <>
-      <Box sx={{ display: "flex" }}>
-        <div className="col col-xs-12 col-sm-3">
-          <Header
-            title="Novels"
-            subtitle="Novels we provide for our customers"
-          />
-        </div>
-        <div className="d-flex justify-content-end col col-xs-12 col-sm-8">
-          <Link className="Link">
-            <button className="apply-btn" onClick={handleOpenAddNovelModal}>
-              Add New
-            </button>
-          </Link>
-        </div>
-      </Box>
-      <div className=" text-center">
-        <div className="row">
-          {novels
-            ? novels.map((novel, index) => (
-                <>
-                  <div
-                    key={`${novel.topic}-${index}`}
-                    className="col-md-4"
-                  >
-                    <div className="novel-desc">
-                      <h3>{novel.topic} {novel.section}</h3>
-                      <p className="novel-text">{novel.body}</p>
-                      <Link className="Link">
-                        <button
-                          className="apply-btn"
-                          onClick={() =>
-                            handleOpenNovelModal(
-                              novel.id,
-                              novel.topic,
-                              novel.section,
-                              novel.body
-                            )
-                          }
-                        >
-                          View more
-                        </button>
-                      </Link>
-                    </div>
-                  </div>
-                </>
-              ))
-            : "loading"}
-        </div>
-        <Modal open={openNovelModal} onClose={handleCloseNovelModal}>
-          <Box sx={style}>
-            <div className="Novel-desc">
-              <div className="text-center">
-                <h3>{modalTopic} {modalSection}</h3>
-              </div>
-              <p className="Novel-text">{modalBody}</p>
-              <div className="linksDiv d-flex justify-content-center">
-                <button
-                  className="apply-btn"
-                  onClick={handleOpenEditNovelModal}
-                >
-                  Edit
+          <Box sx={{ display: "flex" }}>
+            <div className="col col-xs-12 col-sm-3">
+              <Header
+                title="Novels"
+                subtitle="Novels we provide for our customers"
+              />
+            </div>
+            <div className="d-flex justify-content-end col col-xs-12 col-sm-8">
+              <Link className="Link">
+                <button className="apply-btn" onClick={handleOpenAddNovelModal}>
+                  Add New
                 </button>
-                <button
-                  className="apply-btn"
-                  onClick={() => {
-                    handleCloseNovelModal();
-                    deleteNovel(modalId);
-                  }}
-                >
-                  Delete
-                </button>
-                <button className="apply-btn" onClick={handleCloseNovelModal}>
-                  close
-                </button>
-              </div>
+              </Link>
             </div>
           </Box>
-        </Modal>
-        <Modal
-          open={openEditNovelModal}
-          onClose={handleCloseEditNovelModal}
-        >
-          <Box sx={style}>
-            <Formik
-              enableReinitialize
-              initialValues={editInitialValues}
-              validationSchema={NovelInitSchema}
-              validateOnMount={true}
-              onSubmit={(values) => {
-                updateNovel(
-                  modalId,
-                  values.novelTopic,
-                  values.novelSection,
-                  values.novelBody
-                );
-                setOpenEditNovelModal(false);
-              }}
-            >
-              {({ values, errors, touched, handleChange, handleBlur }) => (
-                <Form>
-                  <Typography variant="h6" gutterBottom>
-                    Novel information
-                  </Typography>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        required
-                        id="novelTopic"
-                        name="novelTopic"
-                        label="Novel Topic"
-                        fullWidth
-                        variant="standard"
-                        value={values.novelTopic}
-                        onChange={handleChange("novelTopic")}
-                        onBlur={handleBlur("novelTopic")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.novelTopic && errors.novelTopic && (
-                        <p style={{ color: "red" }}>{errors.novelTopic}</p>
-                      )}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        required
-                        id="novelSection"
-                        name="novelSection"
-                        label="Novel Section"
-                        fullWidth
-                        variant="standard"
-                        value={values.novelSection}
-                        onChange={handleChange("novelSection")}
-                        onBlur={handleBlur("novelSection")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.novelSection && errors.novelSection && (
-                        <p style={{ color: "red" }}>{errors.novelSection}</p>
-                      )}
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        required
-                        id="novelBody"
-                        name="novelBody"
-                        label="Novel Body"
-                        value={values.novelBody}
-                        multiline
-                        maxRows={10}
-                        fullWidth
-                        variant="standard"
-                        onChange={handleChange("novelBody")}
-                        onBlur={handleBlur("novelBody")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.novelBody && errors.novelBody && (
-                        <p style={{ color: "red" }}>{errors.novelBody}</p>
-                      )}
-                    </Grid>
-                  </Grid>
-                  <div className="Novel-desc">
-                    <div className="linksDiv d-flex justify-content-center">
-                      <button className="apply-btn" type="submit">
-                        Update
-                      </button>
-                      <button
-                        className="apply-btn"
-                        onClick={handleCloseEditNovelModal}
-                      >
-                        close
-                      </button>
-                    </div>
+          <div className=" text-center">
+            <div className="row">
+              {novels
+                ? novels.map((novel, index) => (
+                    <>
+                      <div key={`${novel.topic}-${index}`} className="col-md-4">
+                        <div className="novel-desc">
+                          <h3>
+                            {novel.topic} {novel.section}
+                          </h3>
+                          <p className="novel-text">{novel.body}</p>
+                          <Link className="Link">
+                            <button
+                              className="apply-btn"
+                              onClick={() =>
+                                handleOpenNovelModal(
+                                  novel.id,
+                                  novel.topic,
+                                  novel.section,
+                                  novel.body
+                                )
+                              }
+                            >
+                              View more
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
+                    </>
+                  ))
+                : "loading"}
+            </div>
+            <Modal open={openNovelModal} onClose={handleCloseNovelModal}>
+              <Box sx={style}>
+                <div className="Novel-desc">
+                  <div className="text-center">
+                    <h3>
+                      {modalTopic} {modalSection}
+                    </h3>
                   </div>
-                </Form>
-              )}
-            </Formik>
-          </Box>
-        </Modal>
-        <Modal open={openAddNovelModal} onClose={handleCloseAddNovelModal}>
-          <Box sx={style}>
-            {error && (
-                <div
-                  className="alert alert-danger d-flex justify-content-between"
-                  role="alert"
-                >
-                  {msg}
-                  <IconButton onClick={() => setError(false)} sx={{p:0}}>
-                    {<Close />}
-                  </IconButton>
-                </div>
-            )}
-            {success && (
-                <div
-                  className="alert alert-success d-flex justify-content-between"
-                  role="alert"
-                >
-                  {msg}
-                  <IconButton onClick={() => setSuccess(false)} sx={{p:0}}>
-                    {<Close />}
-                  </IconButton>
-                </div>
-            )}
-            <Formik
-              enableReinitialize
-              initialValues={addInitialValues}
-              validationSchema={NovelInitSchema}
-              validateOnMount={true}
-              onSubmit={(values, actions) => {
-                addNovel(
-                  values.novelTopic,
-                  values.novelSection,
-                  values.novelBody
-                );
-                actions.resetForm();
-              }}
-            >
-              {({ values, errors, touched, handleChange, handleBlur }) => (
-                <Form>
-                  <Typography variant="h6" gutterBottom>
-                    Novel information
-                  </Typography>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        required
-                        id="novelTopic"
-                        name="novelTopic"
-                        label="Novel Topic"
-                        fullWidth
-                        variant="standard"
-                        value={values.novelTopic}
-                        onChange={handleChange("novelTopic")}
-                        onBlur={handleBlur("novelTopic")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.novelTopic && errors.novelTopic && (
-                        <p style={{ color: "red" }}>{errors.novelTopic}</p>
-                      )}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        required
-                        id="novelSection"
-                        name="novelSection"
-                        label="Novel Section"
-                        fullWidth
-                        variant="standard"
-                        value={values.novelSection}
-                        onChange={handleChange("novelSection")}
-                        onBlur={handleBlur("novelSection")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.novelSection && errors.novelSection && (
-                        <p style={{ color: "red" }}>{errors.novelSection}</p>
-                      )}
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        required
-                        id="novelBody"
-                        name="novelBody"
-                        label="Novel Body"
-                        value={values.novelBody}
-                        multiline
-                        maxRows={10}
-                        fullWidth
-                        variant="standard"
-                        onChange={handleChange("novelBody")}
-                        onBlur={handleBlur("novelBody")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.novelBody && errors.novelBody && (
-                        <p style={{ color: "red" }}>{errors.novelBody}</p>
-                      )}
-                    </Grid>
-                  </Grid>
-                  <div className="Novel-desc">
-                    <div className="linksDiv d-flex justify-content-center">
-                      <button className="apply-btn" type="submit">
-                        Save
-                      </button>
-                      <button
-                        className="apply-btn"
-                        onClick={handleCloseAddNovelModal}
-                      >
-                        close
-                      </button>
-                    </div>
+                  <p className="Novel-text">{modalBody}</p>
+                  <div className="linksDiv d-flex justify-content-center">
+                    <button
+                      className="apply-btn"
+                      onClick={handleOpenEditNovelModal}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="apply-btn"
+                      onClick={() => {
+                        handleCloseNovelModal();
+                        deleteNovel(modalId);
+                      }}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="apply-btn"
+                      onClick={handleCloseNovelModal}
+                    >
+                      close
+                    </button>
                   </div>
-                </Form>
-              )}
-            </Formik>
-          </Box>
-        </Modal>
-      </div>
-      </>
+                </div>
+              </Box>
+            </Modal>
+            <Modal
+              open={openEditNovelModal}
+              onClose={handleCloseEditNovelModal}
+            >
+              <Box sx={style}>
+                <Formik
+                  enableReinitialize
+                  initialValues={editInitialValues}
+                  validationSchema={NovelInitSchema}
+                  validateOnMount={true}
+                  onSubmit={(values) => {
+                    updateNovel(
+                      modalId,
+                      values.novelTopic,
+                      values.novelSection,
+                      values.novelBody
+                    );
+                    setOpenEditNovelModal(false);
+                  }}
+                >
+                  {({ values, errors, touched, handleChange, handleBlur }) => (
+                    <Form>
+                      <Typography variant="h6" gutterBottom>
+                        Novel information
+                      </Typography>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            required
+                            id="novelTopic"
+                            name="novelTopic"
+                            label="Novel Topic"
+                            fullWidth
+                            variant="standard"
+                            value={values.novelTopic}
+                            onChange={handleChange("novelTopic")}
+                            onBlur={handleBlur("novelTopic")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.novelTopic && errors.novelTopic && (
+                            <p style={{ color: "red" }}>{errors.novelTopic}</p>
+                          )}
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            required
+                            id="novelSection"
+                            name="novelSection"
+                            label="Novel Section"
+                            fullWidth
+                            variant="standard"
+                            value={values.novelSection}
+                            onChange={handleChange("novelSection")}
+                            onBlur={handleBlur("novelSection")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.novelSection && errors.novelSection && (
+                            <p style={{ color: "red" }}>
+                              {errors.novelSection}
+                            </p>
+                          )}
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            required
+                            id="novelBody"
+                            name="novelBody"
+                            label="Novel Body"
+                            value={values.novelBody}
+                            multiline
+                            maxRows={10}
+                            fullWidth
+                            variant="standard"
+                            onChange={handleChange("novelBody")}
+                            onBlur={handleBlur("novelBody")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.novelBody && errors.novelBody && (
+                            <p style={{ color: "red" }}>{errors.novelBody}</p>
+                          )}
+                        </Grid>
+                      </Grid>
+                      <div className="Novel-desc">
+                        <div className="linksDiv d-flex justify-content-center">
+                          <button className="apply-btn" type="submit">
+                            Update
+                          </button>
+                          <button
+                            className="apply-btn"
+                            onClick={handleCloseEditNovelModal}
+                          >
+                            close
+                          </button>
+                        </div>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              </Box>
+            </Modal>
+            <Modal open={openAddNovelModal} onClose={handleCloseAddNovelModal}>
+              <Box sx={style}>
+                {error && (
+                  <div
+                    className="alert alert-danger d-flex justify-content-between"
+                    role="alert"
+                  >
+                    {msg}
+                    <IconButton onClick={() => setError(false)} sx={{ p: 0 }}>
+                      {<Close />}
+                    </IconButton>
+                  </div>
+                )}
+                {success && (
+                  <div
+                    className="alert alert-success d-flex justify-content-between"
+                    role="alert"
+                  >
+                    {msg}
+                    <IconButton onClick={() => setSuccess(false)} sx={{ p: 0 }}>
+                      {<Close />}
+                    </IconButton>
+                  </div>
+                )}
+                <Formik
+                  enableReinitialize
+                  initialValues={addInitialValues}
+                  validationSchema={NovelInitSchema}
+                  validateOnMount={true}
+                  onSubmit={(values, actions) => {
+                    addNovel(
+                      values.novelTopic,
+                      values.novelSection,
+                      values.novelBody
+                    );
+                    actions.resetForm();
+                  }}
+                >
+                  {({ values, errors, touched, handleChange, handleBlur }) => (
+                    <Form>
+                      <Typography variant="h6" gutterBottom>
+                        Novel information
+                      </Typography>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            required
+                            id="novelTopic"
+                            name="novelTopic"
+                            label="Novel Topic"
+                            fullWidth
+                            variant="standard"
+                            value={values.novelTopic}
+                            onChange={handleChange("novelTopic")}
+                            onBlur={handleBlur("novelTopic")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.novelTopic && errors.novelTopic && (
+                            <p style={{ color: "red" }}>{errors.novelTopic}</p>
+                          )}
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            required
+                            id="novelSection"
+                            name="novelSection"
+                            label="Novel Section"
+                            fullWidth
+                            variant="standard"
+                            value={values.novelSection}
+                            onChange={handleChange("novelSection")}
+                            onBlur={handleBlur("novelSection")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.novelSection && errors.novelSection && (
+                            <p style={{ color: "red" }}>
+                              {errors.novelSection}
+                            </p>
+                          )}
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            required
+                            id="novelBody"
+                            name="novelBody"
+                            label="Novel Body"
+                            value={values.novelBody}
+                            multiline
+                            maxRows={10}
+                            fullWidth
+                            variant="standard"
+                            onChange={handleChange("novelBody")}
+                            onBlur={handleBlur("novelBody")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.novelBody && errors.novelBody && (
+                            <p style={{ color: "red" }}>{errors.novelBody}</p>
+                          )}
+                        </Grid>
+                      </Grid>
+                      <div className="Novel-desc">
+                        <div className="linksDiv d-flex justify-content-center">
+                          <button className="apply-btn" type="submit">
+                            Save
+                          </button>
+                          <button
+                            className="apply-btn"
+                            onClick={handleCloseAddNovelModal}
+                          >
+                            close
+                          </button>
+                        </div>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              </Box>
+            </Modal>
+          </div>
+        </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
       )}

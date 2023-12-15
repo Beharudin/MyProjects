@@ -32,10 +32,10 @@ function Posts() {
   const [loading, setLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  if (!user.length) {
-    setLoading(true);
-    window.location.href = "/admin/login";
-  } 
+  // if (!user.length) {
+  //   setLoading(true);
+  //   window.location.href = "/admin/login";
+  // } 
 
   useEffect(() => {
     const fetchPosts = async () => {

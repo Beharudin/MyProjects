@@ -1,8 +1,12 @@
 import React from "react";
 import "./novel.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-function Novels({ data }) {
+function Novels() {
+  const novelsData=useSelector(state=>state.novel.novelsList)
+  console.log(novelsData)
+
   return (
     <div className="text-center pb-2" id="novels">
       <div className="container">
@@ -10,8 +14,8 @@ function Novels({ data }) {
           <h2>Asoosama</h2>
         </div>
         <div className="row">
-          {data
-            ? data.map((data, index) => (
+          {novelsData
+            ? novelsData.map((data, index) => (
                 <div key={index} className="col-xs-12 col-md-6 col-lg-4">
                   <div className="card mb-3">
                     <div className="novels-desc m-2">

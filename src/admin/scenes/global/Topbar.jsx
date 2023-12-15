@@ -20,7 +20,7 @@ YupPassword(Yup);
 
 const Topbar = () => {
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [id, setId] = useState(-1);
 
   const handleOpenPasswordModal = () => {
@@ -36,14 +36,14 @@ const Topbar = () => {
   };
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  useEffect(() => {
-    if (!user.length) {
-      window.location.href = "/admin/login";
-    } else {
-      setLoading(false);
-    }
-    setId(user.id);
-  }, []);
+  // useEffect(() => {
+  //   if (!user.length) {
+  //     window.location.href = "/admin/login";
+  //   } else {
+  //     setLoading(false);
+  //   }
+  //   setId(user.id);
+  // }, []);
 
   const updatePassword = async (pwd) => {
     const data = {

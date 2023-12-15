@@ -92,7 +92,7 @@ function Homepage() {
         <>
           <Topbar />
           <Carousel />
-          <Novels data={novelsData} />
+          <Novels />
           <Poems data={poemsData} />
           <Posts data={postsData} />
           <Videos data={videosData} />

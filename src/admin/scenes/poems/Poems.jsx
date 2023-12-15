@@ -32,11 +32,11 @@ function Poems() {
   const [loading, setLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  console.log(user)
-  if (!user.length) {
-    setLoading(true);
-    window.location.href = "/admin/login";
-  } 
+  // console.log(user)
+  // if (!user.length) {
+  //   setLoading(true);
+  //   window.location.href = "/admin/login";
+  // } 
 
   useEffect(() => {
     const fetchPoems = async () => {
@@ -160,7 +160,7 @@ function Poems() {
   });
 
   return (
-    <div id="poems" className="container">
+    <div className="container">
       {loading ? (
         <Loader />
       ) : poems.length ? (

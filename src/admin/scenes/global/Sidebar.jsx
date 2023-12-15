@@ -27,17 +27,17 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
 
-  useEffect(() => {
-    if (!user.length) {
-      window.location.href = "/admin/login";
-    } else {
-      setLoading(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!user.length) {
+  //     window.location.href = "/admin/login";
+  //   } else {
+  //     setLoading(false);
+  //   }
+  // }, []);
 
   return (
     <Box
@@ -105,7 +105,8 @@ const Sidebar = () => {
                       alt="Profile Img"
                       width="100px"
                       height="100px"
-                      src={"http://localhost:3001/images/" + user.profile_img}
+                      src={"http://localhost:3001/images/" }
+                      // src={"http://localhost:3001/images/" + user.profile_img}
                       style={{ cursor: "pointer", borderRadius: "50%" }}
                     />
                   </Box>
@@ -116,7 +117,7 @@ const Sidebar = () => {
                       fontWeight="bold"
                       sx={{ m: "10px 0 0 0" }}
                     >
-                      {user.email}
+                      {/* {user.email} */}Mohammed Baker
                     </Typography>
                     <Typography variant="h5" color="common.main">
                       Admin

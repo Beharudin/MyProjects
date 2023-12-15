@@ -10,17 +10,17 @@ import LineChart from "../../components/LineChart";
 import PieChart from "../../components/PieChart";
 
 const Dashboard = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("currentUser"))
 
-  useEffect(() => {
-    if (!user.length) {
-      window.location.href = "/admin/login";
-    } else {
-      setLoading(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!user.length) {
+  //     window.location.href = "/admin/login";
+  //   } else {
+  //     setLoading(false);
+  //   }
+  // }, []);
 
   return (
     <>

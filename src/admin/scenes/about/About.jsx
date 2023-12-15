@@ -18,10 +18,10 @@ function About() {
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
 
-  if (!user.length) {
-    setLoading(true);
-    window.location.href = "/admin/login";
-  }
+  // if (!user.length) {
+  //   setLoading(true);
+  //   window.location.href = "/admin/login";
+  // }
 
   useEffect(() => {
     const getAbout = async () => {
@@ -114,11 +114,11 @@ function About() {
     modalImg: Yup.mixed().required("About image is required"),
   });
   return (
-    <div id="about">
-      {/* {loading ? (
+    <div className="container">
+      {loading ? (
         <Loader />
       ) : data.about_title ? (
-        <> */}
+        <>
       <div className="container">
         <div className="d-flex">
           <div className="col col-xs-12 col-sm-3">
@@ -221,10 +221,10 @@ function About() {
           </Box>
         </Modal>
       </div>
-      {/* </>
+      </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
-      )} */}
+      )}
     </div>
   );
 }
