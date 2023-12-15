@@ -1,7 +1,7 @@
 import axios from "axios";
 import { login, replaceData } from "./authSlice";
-import { showNotificationMessage } from "./uiSlice";
-import { cookies } from "../index";
+import { showNotificationMessage } from "../uiSlice";
+import { cookies } from "../../index";
 
 export const sendUserData = (data, navigate, path) => {
   return async (dispatch) => {

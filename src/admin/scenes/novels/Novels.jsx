@@ -23,7 +23,7 @@ import {
   createNovelData,
   deleteNovelData,
   updateNovelData,
-} from "../../../store/novelActions";
+} from "../../../store/novel/novelActions";
 
 function Novels() {
   const [openEditNovelModal, setOpenEditNovelModal] = useState(false);

@@ -1,5 +1,5 @@
 import { replaceData } from "./novelSlice";
-import { showNotificationMessage } from "./uiSlice";
+import { showNotificationMessage } from "../uiSlice";
 import axios from "axios";
 
 export const fetchNovelData = () => {

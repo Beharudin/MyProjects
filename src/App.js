@@ -20,7 +20,7 @@ import Videos from "./admin/scenes/videos/Videos";
 import { jwtDecode } from "jwt-decode";
 import { useSelector, useDispatch } from "react-redux";
 import AddSidebarAndTopbar from "./components/common/AddSidebarAndTopbar";
-import { fetchNovelData, updateNovelData } from "./store/novelActions";
+import { fetchNovelData, updateNovelData } from "./store/novel/novelActions";
 
 let firstTimeRender = true;
 
