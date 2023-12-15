@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 export function updateUser(req, res) {
   const body = req.body;
   const id = req.params.id;
-
+  
   if (body.password) {
     const salt = bcrypt.genSaltSync(10);
     body.password = bcrypt.hashSync(body.password, salt);
