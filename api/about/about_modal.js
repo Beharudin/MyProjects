@@ -23,8 +23,8 @@ export function GetById(id, callback) {
 
 export function Update(data, callback) {
   pool.query(
-    `UPDATE about set description=?, img=?`,
-    [data.description, data.img],
+    `UPDATE about set description=?, img=? where id=?`,
+    [data.description, data.img, data.id],
     (errors, results, fields) => {
       if (errors) {
         return callback(errors);
