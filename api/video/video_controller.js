@@ -43,6 +43,7 @@ export function getVideo(req, res) {
 export function updateVideo(req, res) {
   const body = req.body;
   const id = req.params.id;
+  
   Update(body, id, (error, results) => {
     if (error) {
       console.log(error);
