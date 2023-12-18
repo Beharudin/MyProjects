@@ -1,16 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  novelsList: [],
+  poemsList: [],
   changed: false,
 };
 
 const novelSlice = createSlice({
-  name: "novel",
+  name: "poem",
   initialState,
   reducers: {
     replaceData(state, action) {
-      state.novelsList = action.payload;
+      state.poemsList = action.payload;
     },
     updateNovel(state, action) {
       state.changed = true;
@@ -27,12 +27,12 @@ const novelSlice = createSlice({
     },
     removeFromNovel(state, action) {
       state.changed = true;
-      
-      const index = state.novelsList.findIndex(
+
+      const index = state.poemsList.findIndex(
         (novel) => novel.id === action.payload
       );
 
-        state.novelsList.splice(index, 1);
+        state.poemsList.splice(index, 1);
     },
   },
 });

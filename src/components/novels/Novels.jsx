@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 
 function Novels() {
   const novelsData=useSelector(state=>state.novel.novelsList)
-  console.log(novelsData)
 
   return (
     <div className="text-center pb-2" id="novels">

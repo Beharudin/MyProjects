@@ -1,6 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-function Testimonials({ data }) {
+function Testimonials() {
+  const data=useSelector(state=>state.novel.novelsList);
+
   return (
     <div id="testimonials" className="mb-5">
       <div className="container">

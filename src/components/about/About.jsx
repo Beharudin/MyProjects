@@ -1,14 +1,17 @@
 import React from "react";
 import "./about.css";
 
-function About({ data }) {
+function About() {
+  const data=null;
+  
   return (
     <div id="about">
       <div className="container pt-5 pb-5">
         <div className="row">
           <div className="col-md-4 col-sm-12">
             <img
-              src={"http://localhost:3001/images/" + data.img}
+              src={"http://localhost:3001/images/mohammed.jpeg"}
+              // src={"http://localhost:3001/images/" + data.img}
               className="img-responsive mr-2"
               alt=""
             />

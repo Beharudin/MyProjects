@@ -1,8 +1,11 @@
 import React from "react";
 import "./poem.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-function Poems({ data }) {
+function Poems() {
+  const data=useSelector(state=>state.novel.novelsList);
+
   return (
     <div className="text-center pb-2" id="poems">
       <div className="container">

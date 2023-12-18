@@ -1,8 +1,11 @@
 import React from "react";
 import "./posts.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-function Posts({ data }) {
+function Posts() {
+  const data=useSelector(state=>state.novel.novelsList);
+
   return (
     <div className="text-center mt-5 pb-2" id="posts">
       <div className="container">

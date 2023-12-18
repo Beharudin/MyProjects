@@ -1,8 +1,11 @@
 import React from "react";
 import "./videos.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-function Videos({ data }) {
+function Videos() {
+  const data=useSelector(state=>state.novel.novelsList);
+
   return (
     <div className="text-center mt-5" id="videos">
       <div className="container">
