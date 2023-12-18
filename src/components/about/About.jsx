@@ -1,8 +1,9 @@
 import React from "react";
 import "./about.css";
+import { useSelector } from "react-redux";
 
 function About() {
-  const data=null;
+  const data=useSelector(state=>state.about);
   
   return (
     <div id="about">
@@ -10,8 +11,7 @@ function About() {
         <div className="row">
           <div className="col-md-4 col-sm-12">
             <img
-              src={"http://localhost:3001/images/mohammed.jpeg"}
-              // src={"http://localhost:3001/images/" + data.img}
+              src={"http://localhost:3001/images/" + data.img}
               className="img-responsive mr-2"
               alt=""
             />

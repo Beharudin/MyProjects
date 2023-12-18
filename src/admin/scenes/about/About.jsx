@@ -9,12 +9,15 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Error from "../../components/Error";
 import Loader from "../../components/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { updateAboutData } from "../../../store/about/aboutActions";
 
 function About() {
   const [openEditAboutModal, setOpenEditAboutModal] = useState(false);
-  const [data, setData] = useState([]);
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.about);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -23,23 +26,9 @@ function About() {
   //   window.location.href = "/admin/login";
   // }
 
-  useEffect(() => {
-    const getAbout = async () => {
-      try {
-        setLoading(true);
-        await axios.get("http://localhost:3001/api/about").then((res) => {
-          setData(res.data.data[0]);
-        });
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    getAbout();
-  }, []);
-
-  const updateAbout = async ( desc) => {
-    let data = {
+  const updateAbout = async (desc) => {
+    let newdata = {
+      id:data.id,
       description: desc,
     };
     if (file) {
@@ -47,7 +36,7 @@ function About() {
       const filename = Date.now() + file.name;
       formData.append("name", filename);
       formData.append("file", file);
-      data.img = filename;
+      newdata.img = filename;
 
       // upload image
       try {
@@ -62,11 +51,7 @@ function About() {
 
     try {
       setLoading(true);
-      await axios.patch("http://localhost:3001/api/about/", data);
-
-      await axios.get("http://localhost:3001/api/about").then((res) => {
-        setData(res.data.data[0]);
-      });
+      dispatch(updateAboutData(newdata));
 
       Swal.fire(
         "Congratulations!",
@@ -117,111 +102,120 @@ function About() {
     <div className="container">
       {loading ? (
         <Loader />
-      ) : data.about_title ? (
+      ) : data ? (
         <>
-      <div className="container">
-        <div className="d-flex">
-          <div className="col col-xs-12 col-sm-3">
-            <Header title="About Us" subtitle="About our services we provide" />
-          </div>
-          <div className="editDiv d-flex justify-content-end col col-xs-8">
-            <button onClick={handleOpenEditAboutModal}>Edit</button>
-          </div>
-        </div>
-        <div className="row">
-          <div className="LeftDiv col-xs-12 col-md-6">
-            <img
-              src={"http://localhost:3001/images/" + data.img}
-              className="img-responsive"
-              alt=""
-            />{" "}
-          </div>
-          <div className="col-xs-12 col-md-6">
-            <div className="about-text">
-              <p>{data ? data.description : "loading..."}</p>
+          <div className="container">
+            <div className="d-flex">
+              <div className="col col-xs-12 col-sm-3">
+                <Header
+                  title="About Us"
+                  subtitle="About our services we provide"
+                />
+              </div>
+              <div className="editDiv d-flex justify-content-end col col-xs-8">
+                <button onClick={handleOpenEditAboutModal}>Edit</button>
+              </div>
             </div>
-          </div>
-        </div>
+            <div className="row">
+              <div className="LeftDiv col-xs-12 col-md-6">
+                <img
+                  src={`${process.env.REACT_APP_BACKEND_BASE_URL}/images/` + data.img}
+                  className="img-responsive"
+                  alt=""
+                />{" "}
+              </div>
+              <div className="col-xs-12 col-md-6">
+                <div className="about-text">
+                  <p>{data ? data.description : "loading..."}</p>
+                </div>
+              </div>
+            </div>
 
-        <Modal open={openEditAboutModal} onClose={handleCloseEditAboutModal}>
-          <Box sx={style}>
-            <Formik
-              enableReinitialize
-              initialValues={initialValues}
-              validationSchema={aboutInitSchema}
-              validateOnMount={true}
-              onSubmit={(values) => {
-                updateAbout(values.aboutDescription);
-                handleCloseEditAboutModal();
-              }}
+            <Modal
+              open={openEditAboutModal}
+              onClose={handleCloseEditAboutModal}
             >
-              {({ values, errors, touched, handleChange, handleBlur }) => (
-                <Form>
-                  <Typography variant="h6" gutterBottom>
-                    About information
-                  </Typography>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <TextField
-                        required
-                        id="aboutDescription"
-                        name="aboutDescription"
-                        label="Description"
-                        value={values.aboutDescription}
-                        multiline
-                        maxRows={10}
-                        fullWidth
-                        variant="standard"
-                        onChange={handleChange("aboutDescription")}
-                        onBlur={handleBlur("aboutDescription")}
-                        sx={{ p: 2 }}
-                      />
-                      {touched.aboutDescription && errors.aboutDescription && (
-                        <p style={{ color: "red" }}>
-                          {errors.aboutDescription}
-                        </p>
-                      )}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Button
-                        variant="contained"
-                        component="label"
-                        size="small"
-                        onChange={handleChange("modalImg")}
-                        onBlur={handleBlur("modalImg")}
-                        color="common"
-                      >
-                        About image
-                        <input
-                          type="file"
-                          accept="image/png, image/gif, image/jpeg"
-                          hidden
-                          name="modalImg"
-                          onChange={saveFile}
-                        />
-                      </Button>
-                      <div>
-                        {errors.modalImg && touched.modalImg && (
-                          <p style={{ color: "red" }}>{errors.modalImg}</p>
-                        )}
+              <Box sx={style}>
+                <Formik
+                  enableReinitialize
+                  initialValues={initialValues}
+                  validationSchema={aboutInitSchema}
+                  validateOnMount={true}
+                  onSubmit={(values) => {
+                    updateAbout(values.aboutDescription);
+                    handleCloseEditAboutModal();
+                  }}
+                >
+                  {({ values, errors, touched, handleChange, handleBlur }) => (
+                    <Form>
+                      <Typography variant="h6" gutterBottom>
+                        About information
+                      </Typography>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                          <TextField
+                            required
+                            id="aboutDescription"
+                            name="aboutDescription"
+                            label="Description"
+                            value={values.aboutDescription}
+                            multiline
+                            maxRows={10}
+                            fullWidth
+                            variant="standard"
+                            onChange={handleChange("aboutDescription")}
+                            onBlur={handleBlur("aboutDescription")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.aboutDescription &&
+                            errors.aboutDescription && (
+                              <p style={{ color: "red" }}>
+                                {errors.aboutDescription}
+                              </p>
+                            )}
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <Button
+                            variant="contained"
+                            component="label"
+                            size="small"
+                            onChange={handleChange("modalImg")}
+                            onBlur={handleBlur("modalImg")}
+                            color="common"
+                          >
+                            About image
+                            <input
+                              type="file"
+                              accept="image/png, image/gif, image/jpeg"
+                              hidden
+                              name="modalImg"
+                              onChange={saveFile}
+                            />
+                          </Button>
+                          <div>
+                            {errors.modalImg && touched.modalImg && (
+                              <p style={{ color: "red" }}>{errors.modalImg}</p>
+                            )}
+                          </div>
+                        </Grid>
+                      </Grid>
+                      <div className="service-desc">
+                        <div className="linksDiv d-flex justify-content-center">
+                          <button className="" type="submit">
+                            Update
+                          </button>
+                          <button onClick={handleCloseEditAboutModal}>
+                            close
+                          </button>
+                        </div>
                       </div>
-                    </Grid>
-                  </Grid>
-                  <div className="service-desc">
-                    <div className="linksDiv d-flex justify-content-center">
-                      <button className="" type="submit">
-                        Update
-                      </button>
-                      <button onClick={handleCloseEditAboutModal}>close</button>
-                    </div>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </Box>
-        </Modal>
-      </div>
-      </>
+                    </Form>
+                  )}
+                </Formik>
+              </Box>
+            </Modal>
+          </div>
+        </>
       ) : (
         <Error message="Something went wrong, please try again later!" />
       )}

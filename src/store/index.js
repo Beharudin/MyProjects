@@ -5,6 +5,8 @@ import uiSlice from "./uiSlice";
 import poemSlice from "./poem/poemSlice";
 import postSlice from "./post/postSlice";
 import videoSlice from "./video/videoSlice";
+import aboutSlice from "./about/aboutSlice";
+import testimonialSlice from "./testimonial/testimonialSlice";
 
 const store = configureStore({
   reducer: {
@@ -13,7 +15,8 @@ const store = configureStore({
     poem: poemSlice.reducer,
     post: postSlice.reducer,
     video: videoSlice.reducer,
-    testtimonial: novelSlice.reducer,
+    about: aboutSlice.reducer,
+    testimonial: testimonialSlice.reducer,
     website: novelSlice.reducer,
     ui: uiSlice.reducer,
   },

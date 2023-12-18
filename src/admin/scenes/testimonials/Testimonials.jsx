@@ -20,6 +20,8 @@ import Swal from "sweetalert2";
 import { Close } from "@mui/icons-material";
 import Loader from "../../components/Loader";
 import Error from "../../components/Error";
+import { useDispatch, useSelector } from "react-redux";
+import { createTestimonialData, deleteTestimonialData, updateTestimonialData } from "../../../store/testimonial/testimonialActions";
 
 const Testimonials = () => {
   const [openEditTestimonialsModal, setOpenEditTestimonialsModal] =
@@ -29,13 +31,14 @@ const Testimonials = () => {
   const [modalClientName, setModalClientName] = useState("");
   const [modalClientComment, setModalClientComment] = useState("");
   const [modalClientImg, setModalClientImg] = useState("");
-  const [data, setData] = useState([]);
   const [modalId, setModalId] = useState();
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState("");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.testimonial.testimonialsList);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
   // if (!user.length) {
@@ -43,23 +46,9 @@ const Testimonials = () => {
   //   window.location.href = "/admin/login";
   // }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get("http://localhost:3001/api/testimonials/");
-        setData(res.data.data);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
   const addTestimonial = async (name, cmt) => {
     let data = {
-      name: name,
+      name,
       comment: cmt,
     };
     if (file) {
@@ -82,13 +71,10 @@ const Testimonials = () => {
 
     try {
       setLoading(true);
-      await axios.post("http://localhost:3001/api/testimonials/", data);
+      dispatch(createTestimonialData(data));
       setError(false);
       setSuccess(true);
       setMsg("Testimonial added successfully!");
-      await axios.get("http://localhost:3001/api/testimonials/").then((res) => {
-        setData(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       setSuccess(false);
@@ -100,7 +86,8 @@ const Testimonials = () => {
 
   const updateTestimonial = async (id, name, cmt) => {
     let data = {
-      name: name,
+      id,
+      name,
       comment: cmt,
     };
     if (file) {
@@ -123,15 +110,12 @@ const Testimonials = () => {
 
     try {
       setLoading(true);
-      await axios.patch(`http://localhost:3001/api/testimonials/${id}`, data);
+      dispatch(updateTestimonialData(data));
       Swal.fire(
         "Congratulations!",
         "Testimonial updated successfully!",
         "success"
       );
-      await axios.get("http://localhost:3001/api/testimonials/").then((res) => {
-        setData(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       Swal.fire("Sorry!", "Something went wrong!", "error");
@@ -141,15 +125,12 @@ const Testimonials = () => {
   const deleteTestimonial = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3001/api/testimonials/${id}`);
+      dispatch(deleteTestimonialData(id));
       Swal.fire(
         "Congratulations!",
         "Testimonials deleted successfully!",
         "success"
       );
-      await axios.get("http://localhost:3001/api/testimonials/").then((res) => {
-        setData(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       Swal.fire("Sorry!", "Something went wrong!", "error");
@@ -214,7 +195,7 @@ const Testimonials = () => {
     <div className="container">
       {loading ? (
         <Loader />
-      ) : data.length ? (
+      ) : data ? (
         <>
           <Box sx={{ display: "flex" }}>
             <div className="col col-xs-12 col-sm-3">
@@ -264,7 +245,7 @@ const Testimonials = () => {
                       <div className="m-1">
                         <img
                           className="rounded-circle"
-                          src={"http://192.168.57.216:3001/images/" + data.img}
+                          src={`${process.env.REACT_APP_BACKEND_BASE_URL}/images/` + data.img}
                           alt=""
                           style={{ width: "100px", height: "100px" }}
                         />

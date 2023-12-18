@@ -24,6 +24,8 @@ import { fetchNovelData } from "./store/novel/novelActions";
 import { fetchPoemData } from "./store/poem/poemActions";
 import { fetchPostData } from "./store/post/postActions";
 import { fetchVideoData } from "./store/video/videoActions";
+import { fetchAboutData } from "./store/about/aboutActions";
+import { fetchTestimonialData } from "./store/testimonial/testimonialActions";
 
 let firstTimeRender = true;
 
@@ -37,6 +39,8 @@ function App() {
       dispatch(fetchPoemData());
       dispatch(fetchPostData());
       dispatch(fetchVideoData());
+      dispatch(fetchAboutData());
+      dispatch(fetchTestimonialData());
     
   }, []);
 

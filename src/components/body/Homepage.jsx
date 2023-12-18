@@ -92,7 +92,7 @@ function Homepage() {
           <Posts />
           <Videos />
           <About />
-          <Testimonials data={testimonialsData} />
+          <Testimonials/>
           <Contact data={websiteData} />
         </>
       ) : (
