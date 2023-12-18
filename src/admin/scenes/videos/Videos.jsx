@@ -17,9 +17,14 @@ import axios from "axios";
 import { Close } from "@mui/icons-material";
 import Error from "../../components/Error";
 import Loader from "../../components/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createVideoData,
+  deleteVideoData,
+  updateVideoData,
+} from "../../../store/video/videoActions";
 
 function Videos() {
-  const [videos, setVideos] = useState([]);
   const [openEditVideoModal, setOpenEditVideoModal] = useState(false);
   const [openVideoModal, setOpenVideoModal] = useState(false);
   const [openAddVideoModal, setOpenAddVideoModal] = useState(false);
@@ -30,7 +35,9 @@ function Videos() {
   const [msg, setMsg] = useState("");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const videos = useSelector((state) => state.video.videosList);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
   // if (!user.length) {
@@ -38,35 +45,19 @@ function Videos() {
   //   window.location.href = "/admin/login";
   // }
 
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        setLoading(true);
-        await axios.get("http://localhost:3001/api/videos/").then((res) => {
-          setVideos(res.data.data);
-        });
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchVideos();
-  }, []);
-
   const addVideo = async (topic, body, link) => {
     try {
       setLoading(true);
-      await axios.post("http://localhost:3001/api/videos/", {
-        topic: topic,
-        body: body,
-        link: link,
-      });
+      dispatch(
+        createVideoData({
+          topic: topic,
+          body: body,
+          link: link,
+        })
+      );
       setError(false);
       setSuccess(true);
       setMsg("Video added successfully!");
-      await axios.get("http://localhost:3001/api/videos/").then((res) => {
-        setVideos(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       setSuccess(false);
@@ -77,18 +68,17 @@ function Videos() {
   };
 
   const updateVideo = async (id, topic, body, link) => {
-    console.log("link: ",link)
     try {
       setLoading(true);
-      await axios.patch(`http://localhost:3001/api/videos/${id}`, {
-        topic: topic,
-        body: body,
-        link: link,
-      });
+      dispatch(
+        updateVideoData({
+          id,
+          topic: topic,
+          body: body,
+          link: link,
+        })
+      );
       Swal.fire("Congratulations!", "Video updated successfully!", "success");
-      await axios.get("http://localhost:3001/api/videos/").then((res) => {
-        setVideos(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       Swal.fire("Sorry!", "Something went wrong!", "error");
@@ -98,11 +88,8 @@ function Videos() {
   const deleteVideo = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3001/api/videos/${id}`);
+      dispatch(deleteVideoData(id));
       Swal.fire("Congratulations!", "Video deleted successfully!", "success");
-      await axios.get("http://localhost:3001/api/videos/").then((res) => {
-        setVideos(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       Swal.fire("Sorry!", "Something went wrong!", "error");

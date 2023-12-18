@@ -20,22 +20,23 @@ import Videos from "./admin/scenes/videos/Videos";
 import { jwtDecode } from "jwt-decode";
 import { useSelector, useDispatch } from "react-redux";
 import AddSidebarAndTopbar from "./components/common/AddSidebarAndTopbar";
-import { fetchNovelData, updateNovelData } from "./store/novel/novelActions";
+import { fetchNovelData } from "./store/novel/novelActions";
+import { fetchPoemData } from "./store/poem/poemActions";
+import { fetchPostData } from "./store/post/postActions";
+import { fetchVideoData } from "./store/video/videoActions";
 
 let firstTimeRender = true;
 
 function App() {
-  const [isSidebar, setIsSidebar] = useState(false);
-  const [isTopbar, setIsTopbar] = useState(false);
-  const location = useLocation().pathname;
   const token = useSelector((state) => state.auth.accessToken);
-  const novel = useSelector((state) => state.novel);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-      // const decodedToken = jwtDecode(token);
       dispatch(fetchNovelData());
+      dispatch(fetchPoemData());
+      dispatch(fetchPostData());
+      dispatch(fetchVideoData());
     
   }, []);
 

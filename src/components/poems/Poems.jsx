@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function Poems() {
-  const data=useSelector(state=>state.novel.novelsList);
+  const data=useSelector(state=>state.poem.poemsList);
 
   return (
     <div className="text-center pb-2" id="poems">

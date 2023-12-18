@@ -17,9 +17,10 @@ import axios from "axios";
 import { Close } from "@mui/icons-material";
 import Error from "../../components/Error";
 import Loader from "../../components/Loader";
+import { createPoemData, deletePoemData, updatePoemData } from "../../../store/poem/poemActions";
+import { useDispatch, useSelector } from "react-redux";
 
 function Poems() {
-  const [poems, setPoems] = useState([]);
   const [openEditPoemModal, setOpenEditPoemModal] = useState(false);
   const [openPoemModal, setOpenPoemModal] = useState(false);
   const [openAddPoemModal, setOpenAddPoemModal] = useState(false);
@@ -29,7 +30,9 @@ function Poems() {
   const [msg, setMsg] = useState("");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const poems = useSelector((state) => state.poem.poemsList);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
   // console.log(user)
@@ -38,34 +41,18 @@ function Poems() {
   //   window.location.href = "/admin/login";
   // } 
 
-  useEffect(() => {
-    const fetchPoems = async () => {
-      try {
-        setLoading(true);
-        await axios.get("http://localhost:3001/api/poems/").then((res) => {
-          setPoems(res.data.data);
-        });
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchPoems();
-  }, []);
-
   const addPoem = async (topic, body) => {
     try {
       setLoading(true);
-      await axios.post("http://localhost:3001/api/poems/", {
-        topic: topic,
-        body: body,
-      });
+      dispatch(
+        createPoemData({
+          topic,
+          body,
+        })
+      );
       setError(false);
       setSuccess(true);
       setMsg("Poem added successfully!");
-      await axios.get("http://localhost:3001/api/poems/").then((res) => {
-        setPoems(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       setSuccess(false);
@@ -78,14 +65,8 @@ function Poems() {
   const updatePoem = async (id, topic, body) => {
     try {
       setLoading(true);
-      await axios.patch(`http://localhost:3001/api/poems/${id}`, {
-        topic: topic,
-        body: body,
-      });
+      dispatch(updatePoemData({ id, topic, body }));
       Swal.fire("Congratulations!", "Poem updated successfully!", "success");
-      await axios.get("http://localhost:3001/api/poems/").then((res) => {
-        setPoems(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       Swal.fire("Sorry!", "Something went wrong!", "error");
@@ -95,11 +76,8 @@ function Poems() {
   const deletePoem = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3001/api/poems/${id}`);
+      dispatch(deletePoemData(id));
       Swal.fire("Congratulations!", "Poem deleted successfully!", "success");
-      await axios.get("http://localhost:3001/api/poems/").then((res) => {
-        setPoems(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       Swal.fire("Sorry!", "Something went wrong!", "error");

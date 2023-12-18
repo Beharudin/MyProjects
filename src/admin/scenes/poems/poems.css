@@ -1,4 +1,4 @@
-#poems .poem-div{
+.poem-div{
   height: 100px;
   text-overflow: ellipsis;
   overflow: hidden;

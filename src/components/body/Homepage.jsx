@@ -13,11 +13,6 @@ import Error from "../../admin/components/Error";
 import Loader from "../../admin/components/Loader";
 
 function Homepage() {
-  const [aboutData, setAboutData] = useState([]);
-  const [novelsData, setNovelsData] = useState([]);
-  const [poemsData, setPoemsData] = useState([]);
-  const [postsData, setPostsData] = useState([]);
-  const [videosData, setVideosData] = useState([]);
   const [testimonialsData, setTestimonialsData] = useState([]);
   const [websiteData, setWebsiteData] = useState([]);
   const [userData, setUserData] = useState([]);

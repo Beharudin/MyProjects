@@ -1,12 +1,12 @@
-import { removeFromPoem, replaceData, updatePoem } from "./poemSlice";
+import { removeFromPost, replaceData, updatePost } from "./postSlice";
 import { showNotificationMessage } from "../uiSlice";
 import axios from "axios";
 
-export const fetchPoemData = () => {
+export const fetchPostData = () => {
   return async (dispatch) => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/poems`
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/posts`
       );
       const data = await res.data.data;
 
@@ -23,11 +23,11 @@ export const fetchPoemData = () => {
   };
 };
 
-export const createPoemData = (data) => {
+export const createPostData = (data) => {
   return async (dispatch) => {
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/poems`,
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/posts`,
 
         data,
         {
@@ -36,7 +36,7 @@ export const createPoemData = (data) => {
           },
         }
       );
-      dispatch(fetchPoemData());
+      dispatch(fetchPostData());
       dispatch(
         showNotificationMessage({
           open: false,
@@ -47,18 +47,18 @@ export const createPoemData = (data) => {
         showNotificationMessage({
           open: true,
           type: "error",
-          message: error.message ? error.message : "Sending poem Failed!",
+          message: error.message ? error.message : "Sending post Failed!",
         })
       );
     }
   };
 };
 
-export const updatePoemData = (data) => {
+export const updatePostData = (data) => {
   return async (dispatch) => {
     try {
       await axios.patch(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/poems/${data.id}`,
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/posts/${data.id}`,
 
         data,
         {
@@ -67,7 +67,7 @@ export const updatePoemData = (data) => {
           },
         }
       );
-      dispatch(updatePoem(data));
+      dispatch(updatePost(data));
       dispatch(
         showNotificationMessage({
           open: false,
@@ -78,20 +78,20 @@ export const updatePoemData = (data) => {
         showNotificationMessage({
           open: true,
           type: "error",
-          message: error.message ? error.message : "Updating poem Failed!",
+          message: error.message ? error.message : "Updating post Failed!",
         })
       );
     }
   };
 };
 
-export const deletePoemData = (id) => {
+export const deletePostData = (id) => {
   return async (dispatch) => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/poems/${id}`
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/posts/${id}`
       );
-      dispatch(removeFromPoem(id));
+      dispatch(removeFromPost(id));
       dispatch(
         showNotificationMessage({
           open: false,
@@ -102,7 +102,7 @@ export const deletePoemData = (id) => {
         showNotificationMessage({
           open: true,
           type: "error",
-          message: error.message ? error.message : "Deleting poem Failed!",
+          message: error.message ? error.message : "Deleting post Failed!",
         })
       );
     }

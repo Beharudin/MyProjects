@@ -17,9 +17,10 @@ import axios from "axios";
 import { Close } from "@mui/icons-material";
 import Error from "../../components/Error";
 import Loader from "../../components/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { createPostData, deletePostData, updatePostData } from "../../../store/post/postActions";
 
 function Posts() {
-  const [posts, setPosts] = useState([]);
   const [openEditPostModal, setOpenEditPostModal] = useState(false);
   const [openPostModal, setOpenPostModal] = useState(false);
   const [openAddPostModal, setOpenAddPostModal] = useState(false);
@@ -29,7 +30,9 @@ function Posts() {
   const [msg, setMsg] = useState("");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.post.postsList);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
   // if (!user.length) {
@@ -37,34 +40,18 @@ function Posts() {
   //   window.location.href = "/admin/login";
   // } 
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        await axios.get("http://localhost:3001/api/posts/").then((res) => {
-          setPosts(res.data.data);
-        });
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchPosts();
-  }, []);
 
   const addPost = async (topic, body) => {
     try {
       setLoading(true);
-      await axios.post("http://localhost:3001/api/posts/", {
-        topic: topic,
-        body: body,
-      });
+      dispatch(createPostData({
+        topic,
+        body,
+      })
+    );
       setError(false);
       setSuccess(true);
       setMsg("Post added successfully!");
-      await axios.get("http://localhost:3001/api/posts/").then((res) => {
-        setPosts(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       setSuccess(false);
@@ -77,14 +64,8 @@ function Posts() {
   const updatePost = async (id, topic, body) => {
     try {
       setLoading(true);
-      await axios.patch(`http://localhost:3001/api/posts/${id}`, {
-        topic: topic,
-        body: body,
-      });
+      dispatch(updatePostData({ id, topic, body }));
       Swal.fire("Congratulations!", "Post updated successfully!", "success");
-      await axios.get("http://localhost:3001/api/posts/").then((res) => {
-        setPosts(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       Swal.fire("Sorry!", "Something went wrong!", "error");
@@ -94,11 +75,8 @@ function Posts() {
   const deletePost = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3001/api/posts/${id}`);
+      dispatch(deletePostData(id));
       Swal.fire("Congratulations!", "Post deleted successfully!", "success");
-      await axios.get("http://localhost:3001/api/posts/").then((res) => {
-        setPosts(res.data.data);
-      });
       setLoading(false);
     } catch (error) {
       Swal.fire("Sorry!", "Something went wrong!", "error");

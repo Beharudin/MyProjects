@@ -5,31 +5,31 @@ const initialState = {
   changed: false,
 };
 
-const novelSlice = createSlice({
+const poemSlice = createSlice({
   name: "poem",
   initialState,
   reducers: {
     replaceData(state, action) {
       state.poemsList = action.payload;
     },
-    updateNovel(state, action) {
+    updatePoem(state, action) {
       state.changed = true;
-      const updatedNovel=action.payload;
+      const updatedPoem=action.payload;
 
-      const index = state.novelsList.findIndex(
-        (novel) => novel.id === action.payload.id
+      const index = state.poemsList.findIndex(
+        (poem) => poem.id === action.payload.id
       );
 
       if (index !== -1) {
-        state.novelsList.splice(index, 1);
-        state.novelsList.splice(index, 0, updatedNovel);
+        state.poemsList.splice(index, 1);
+        state.poemsList.splice(index, 0, updatedPoem);
       }
     },
-    removeFromNovel(state, action) {
+    removeFromPoem(state, action) {
       state.changed = true;
 
       const index = state.poemsList.findIndex(
-        (novel) => novel.id === action.payload
+        (poem) => poem.id === action.payload
       );
 
         state.poemsList.splice(index, 1);
@@ -37,6 +37,6 @@ const novelSlice = createSlice({
   },
 });
 
-export const { removeFromNovel, updateNovel, replaceData} =
-  novelSlice.actions;
-export default novelSlice;
+export const { removeFromPoem, updatePoem, replaceData} =
+  poemSlice.actions;
+export default poemSlice;
