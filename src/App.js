@@ -51,6 +51,7 @@ function App() {
     <ThemeProvider theme={mytheme}>
       <CssBaseline />
       <div className="app">
+      <main className="content">
         <Routes>
           <Route path="/" exact element={<Homepage />} />
           <Route path="/novel/:id" exact element={<ReadNovel />} />
@@ -124,6 +125,7 @@ function App() {
           />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
+        </main>
       </div>
     </ThemeProvider>
   );

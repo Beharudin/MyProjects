@@ -5,7 +5,7 @@ import './loader.css'
 function Loader() {
 
   return (
-    <div className='container'>
+    <div className='container' id='loader'>
       <div className="loader d-flex justify-content-center align-items-center">
         <PuffLoader
           color='#12b8e1'

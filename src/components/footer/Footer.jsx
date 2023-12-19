@@ -18,7 +18,7 @@ function Footer() {
   const data = useSelector((state) => state.website.webInfo);
 
   return (
-    <div className="fluid-container my-5" id="footer">
+    <div className="fluid-container" id="footer">
       <footer className="text-white" style={{ backgroundColor: "#23242a" }}>
         <div className="card p-4" style={{ backgroundColor: "#23242a" }}>
           <div className="row mt-4">

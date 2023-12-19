@@ -21,7 +21,7 @@ function Novels() {
                       <h3>
                         {data.topic} {data.section}
                       </h3>
-                      <p className="novels-text">{data.body}</p>
+                      <p className="text-left">{data.body}</p>
                       <Link
                         className="btn btn-primary"
                         to={`/novel/${data.id}`}

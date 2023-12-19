@@ -19,7 +19,7 @@ function Videos() {
                   <div className="card mb-3">
                     <div className="videos-desc m-2">
                       <h3>{data.topic}</h3>
-                      <p className="videos-text">{data.body}</p>
+                      <p className="text-left">{data.body}</p>
                       <Link className="btn btn-primary" to={data.link}>
                         Watch
                       </Link>

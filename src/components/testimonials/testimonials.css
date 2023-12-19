@@ -1,0 +1,10 @@
+
+  #testimonials .section-title h2::after {
+    position: absolute;
+    content: "";
+    height: 4px;
+    width: 60px;
+    bottom: 0;
+    margin-left: -30px;
+    left: 50%;
+  }

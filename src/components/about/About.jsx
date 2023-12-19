@@ -11,7 +11,7 @@ function About() {
         <div className="row">
           <div className="col-md-4 col-sm-12">
             <img
-              src={"http://localhost:3001/images/" + data.img}
+              src={`${process.env.REACT_APP_BACKEND_BASE_URL}/images/` + data.img}
               className="img-responsive mr-2"
               alt=""
             />
