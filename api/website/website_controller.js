@@ -25,7 +25,9 @@ export function getWebsite(req, res) {
 }
 export function updateWebsite(req, res) {
   const body = req.body;
-  Update(body, (error, results) => {
+  const id=req.params.id;
+
+  Update(id, body, (error, results) => {
     if (error) {
       console.log(error);
       res.status(500).json({

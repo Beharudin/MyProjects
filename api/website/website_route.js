@@ -7,6 +7,6 @@ import express from "express";
 const router = express.Router();
 
 router.get("/", getWebsite);
-router.patch("/", updateWebsite);
+router.patch("/:id", updateWebsite);
 
 export default router;

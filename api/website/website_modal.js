@@ -1,7 +1,7 @@
 import mysql from "../../config/database.js";
 
 export function Get(callback) {
-  mysql.query(`SELECT * FROM website`, [], (errors, results, fields) => {
+  mysql.query(`SELECT * FROM webinfo`, [], (errors, results, fields) => {
     if (errors) {
       return callback(errors);
     }
@@ -9,9 +9,9 @@ export function Get(callback) {
   });
 }
 
-export function Update(data, callback) {
+export function Update(id, data, callback) {
   mysql.query(
-    `UPDATE website set name=?, email=?, mobile=?, address=?, facebook=?, twitter=?, youtube=?, instagram=?, books=?, footer_description=? WHERE id=1`,
+    `UPDATE webinfo set name=?, email=?, mobile=?, address=?, facebook=?, twitter=?, youtube=?, instagram=?, books=?, footer_description=? WHERE id=${id}`,
     [
       data.name,
       data.email,
