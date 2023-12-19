@@ -26,6 +26,7 @@ import { fetchPostData } from "./store/post/postActions";
 import { fetchVideoData } from "./store/video/videoActions";
 import { fetchAboutData } from "./store/about/aboutActions";
 import { fetchTestimonialData } from "./store/testimonial/testimonialActions";
+import { fetchWebInfoData } from "./store/website/webActions";
 
 let firstTimeRender = true;
 
@@ -41,6 +42,7 @@ function App() {
       dispatch(fetchVideoData());
       dispatch(fetchAboutData());
       dispatch(fetchTestimonialData());
+      dispatch(fetchWebInfoData());
     
   }, []);
 

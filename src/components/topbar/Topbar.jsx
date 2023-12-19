@@ -3,27 +3,16 @@ import "./topbar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function Topbar() {
-  const [data, setData] = useState([]);
+  const data = useSelector(state=>state.website.name);
 
-  useEffect(() => {
-    const getTopbar = async () => {
-      try {
-        await axios.get("http://localhost:3001/api/website").then((res) => {
-          setData(res.data.data);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getTopbar();
-  }, []);
 
   return (
     <nav className="navbar navbar-expand-lg bg-primary fixed-top">
       <a className="navbar-brand" href="/">
-      {data.length ? data[0].name : 'Bakkalcha Fedis'}
+      {data ? data.name : 'Bakkalcha Fedis'}
       </a>
       <button
         className="navbar-toggler"
@@ -39,17 +28,17 @@ function Topbar() {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav mr-5 ml-auto">
           <li className="nav-item active">
-            <a className="nav-link" href="#novels">
+            <a className="nav-link" href="/#novels">
               Novels
             </a>
           </li>
           <li className="nav-item active">
-            <a className="nav-link" href="#poems">
+            <a className="nav-link" href="/#poems">
               Poems
             </a>
           </li>
           <li className="nav-item active">
-            <a className="nav-link" href="#posts">
+            <a className="nav-link" href="/#posts">
               Posts
             </a>
           </li>
@@ -59,17 +48,17 @@ function Topbar() {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#about">
+            <a className="nav-link" href="/#about">
               About
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#testimonials">
+            <a className="nav-link" href="/#testimonials">
               Testimonials
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#footer">
+            <a className="nav-link" href="/#footer">
               Contacts
             </a>
           </li>

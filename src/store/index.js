@@ -7,6 +7,7 @@ import postSlice from "./post/postSlice";
 import videoSlice from "./video/videoSlice";
 import aboutSlice from "./about/aboutSlice";
 import testimonialSlice from "./testimonial/testimonialSlice";
+import webInfoSlice from "./website/webSlice";
 
 const store = configureStore({
   reducer: {
@@ -17,7 +18,7 @@ const store = configureStore({
     video: videoSlice.reducer,
     about: aboutSlice.reducer,
     testimonial: testimonialSlice.reducer,
-    website: novelSlice.reducer,
+    website: webInfoSlice.reducer,
     ui: uiSlice.reducer,
   },
 });

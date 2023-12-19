@@ -1,63 +1,21 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import Header from "../../components/Header";
-import {
-  Container,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
-import axios from "axios";
+import { Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
+import { updateWebInfoData } from "../../../store/website/webActions";
 
 function Website() {
-  const [webName, setWebName] = useState("");
-  const [webEmail, setWebEmail] = useState("");
-  const [webMobile, setWebMobile] = useState("");
-  const [webAddress, setWebaddress] = useState("");
-  const [webFacebookUrl, setWebfacebookUrl] = useState("");
-  const [webTwitterUrl, setWebTwitterUrl] = useState("");
-  const [webYoutubeUrl, setWebYoutubeUrl] = useState("");
-  const [webInstagramUrl, setWebInstagrameUrl] = useState("");
-  const [webDescription, setWebDescription] = useState("");
-  const [webBooks, setWebBooks] = useState("");
-  const [loading, setLoading] = useState(true);
-  
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.website.webInfo);
+
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  // if(!user.length){
-  //   setLoading(true);
-  //   window.location.href='/admin/login'
-  // }
-  
-  useEffect(() => {
-    const getWebsiteInfo = async () => {
-      try {
-        setLoading(true);
-        await axios.get("http://localhost:3001/api/website/").then((res) => {
-          setWebName(res.data.data[0].name);
-          setWebEmail(res.data.data[0].email);
-          setWebMobile(res.data.data[0].mobile);
-          setWebaddress(res.data.data[0].address);
-          setWebfacebookUrl(res.data.data[0].facebook);
-          setWebTwitterUrl(res.data.data[0].twitter);
-          setWebInstagrameUrl(res.data.data[0].twitter);
-          setWebYoutubeUrl(res.data.data[0].youtube);
-          setWebDescription(res.data.data[0].footer_description);
-          setWebBooks(res.data.data[0].books);
-        });
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
-    getWebsiteInfo();
-  }, []);
 
   const updateWebsiteInfo = async (
     name,
@@ -73,35 +31,23 @@ function Website() {
   ) => {
     try {
       setLoading(true);
-      await axios.patch("http://localhost:3001/api/website/", {
-        name: name,
-        email: email,
-        mobile: mobile,
-        address: address,
-        facebook: facebook,
-        twitter: twitter,
-        instagram: instagram,
-        youtube: youtube,
-        footer_description: description,
-        books: books
-      });
-      Swal.fire(
-        "Congratulations!",
-        "Website updated successfully!",
-        "success"
+      dispatch(
+        updateWebInfoData({
+          id:data.id,
+          name,
+          email,
+          mobile,
+          address,
+          facebook,
+          twitter,
+          instagram,
+          youtube,
+          footer_description: description,
+          books,
+        })
       );
-      await axios.get("http://localhost:3001/api/website/").then((res) => {
-        setWebName(res.data.data[0].name);
-          setWebEmail(res.data.data[0].email);
-          setWebMobile(res.data.data[0].mobile);
-          setWebaddress(res.data.data[0].address);
-          setWebfacebookUrl(res.data.data[0].facebook);
-          setWebTwitterUrl(res.data.data[0].twitter);
-          setWebInstagrameUrl(res.data.data[0].twitter);
-          setWebYoutubeUrl(res.data.data[0].youtube);
-          setWebDescription(res.data.data[0].footer_description);
-          setWebBooks(res.data.data[0].books);
-      });
+      Swal.fire("Congratulations!", "Website updated successfully!", "success");
+
       setLoading(false);
     } catch (error) {
       Swal.fire("Sorry!", "Something went wrong!", "error");
@@ -110,16 +56,16 @@ function Website() {
   };
 
   const initialValues = {
-    webName: webName,
-    webEmail: webEmail,
-    webMobile: webMobile,
-    webAddress: webAddress,
-    webFacebookUrl: webFacebookUrl,
-    webTwitterUrl: webTwitterUrl,
-    webInstagramUrl: webInstagramUrl,
-    webYoutubeUrl: webYoutubeUrl,
-    webDescription: webDescription,
-    webBooks: webBooks,
+    webName: data.name,
+    webEmail: data.email,
+    webMobile: data.mobile,
+    webAddress: data.address,
+    webFacebookUrl: data.facebook,
+    webTwitterUrl: data.twitter,
+    webInstagramUrl: data.instagram,
+    webYoutubeUrl: data.youtube,
+    webDescription: data.footer_description,
+    webBooks: data.books,
   };
 
   const initSchema = Yup.object().shape({
@@ -138,7 +84,7 @@ function Website() {
     <div className="container">
       {loading ? (
         <Loader />
-      ) : webName ? (
+      ) : data ? (
         <>
           <div className="d-flex">
             <div className="col col-xs-12 col-sm-3">
@@ -327,7 +273,9 @@ function Website() {
                           sx={{ p: 2 }}
                         />
                         {touched.webInstagramUrl && errors.webInstagramUrl && (
-                          <p style={{ color: "red" }}>{errors.webInstagramUrl}</p>
+                          <p style={{ color: "red" }}>
+                            {errors.webInstagramUrl}
+                          </p>
                         )}
                       </Grid>
 
@@ -367,7 +315,9 @@ function Website() {
                           sx={{ p: 2 }}
                         />
                         {touched.webDescription && errors.webDescription && (
-                          <p style={{ color: "red" }}>{errors.webDescription}</p>
+                          <p style={{ color: "red" }}>
+                            {errors.webDescription}
+                          </p>
                         )}
                       </Grid>
                     </Grid>
