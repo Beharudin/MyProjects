@@ -1,6 +1,6 @@
-import { removeFromPoem, replaceData, updatePoem } from "./poemSlice";
-import { showNotificationMessage } from "../uiSlice";
 import axios from "axios";
+import { showNotificationMessage } from "../uiSlice";
+import { removeFromPoem, replaceData, updatePoem } from "./poemSlice";
 
 export const fetchPoemData = () => {
   return async (dispatch) => {
@@ -26,7 +26,7 @@ export const fetchPoemData = () => {
 export const createPoemData = (data) => {
   return async (dispatch) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_BACKEND_BASE_URL}/api/poems`,
 
         data,
@@ -39,7 +39,8 @@ export const createPoemData = (data) => {
       dispatch(fetchPoemData());
       dispatch(
         showNotificationMessage({
-          open: false,
+          open: true,
+          message: "Video Added Successfully!",
         })
       );
     } catch (error) {

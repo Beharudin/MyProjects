@@ -1,10 +1,4 @@
-import {
-  Box,
-  Grid,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Modal, TextField, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +11,7 @@ import {
   deleteNovelData,
   updateNovelData,
 } from "../../../store/novel/novelActions";
+import { showNotificationMessage } from "../../../store/uiSlice";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import "./novels.css";
@@ -33,8 +28,6 @@ function Novels() {
   const dispatch = useDispatch();
   const novels = useSelector((state) => state.novel.novelsList);
   const notification = useSelector((state) => state.ui.notification);
-
-  const user = JSON.parse(localStorage.getItem("currentUser"));
 
   const addNovel = async (topic, section, body) => {
     try {
@@ -109,6 +102,11 @@ function Novels() {
   };
 
   const handleOpenAddNovelModal = () => {
+    dispatch(
+      showNotificationMessage({
+        open: false,
+      })
+    );
     setOpenAddNovelModal(true);
   };
   const handleCloseAddNovelModal = () => {
@@ -128,7 +126,7 @@ function Novels() {
 
   const NovelInitSchema = Yup.object().shape({
     novelTopic: Yup.string().required("Novel topic is required"),
-    novelBody: Yup.string().required("Novel section is required"),
+    novelSection: Yup.string().required("Novel section is required"),
     novelBody: Yup.mixed().required("Novel body is required"),
   });
 
@@ -322,8 +320,7 @@ function Novels() {
             </Modal>
             <Modal open={openAddNovelModal} onClose={handleCloseAddNovelModal}>
               <Box sx={style}>
-                
-              {notification && (
+                {notification && (
                   <Notifications
                     type={notification.type}
                     message={notification.message}

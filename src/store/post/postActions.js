@@ -1,6 +1,6 @@
-import { removeFromPost, replaceData, updatePost } from "./postSlice";
-import { showNotificationMessage } from "../uiSlice";
 import axios from "axios";
+import { showNotificationMessage } from "../uiSlice";
+import { removeFromPost, replaceData, updatePost } from "./postSlice";
 
 export const fetchPostData = () => {
   return async (dispatch) => {
@@ -26,7 +26,7 @@ export const fetchPostData = () => {
 export const createPostData = (data) => {
   return async (dispatch) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_BACKEND_BASE_URL}/api/posts`,
 
         data,
@@ -39,7 +39,8 @@ export const createPostData = (data) => {
       dispatch(fetchPostData());
       dispatch(
         showNotificationMessage({
-          open: false,
+          open: true,
+          message: "Video Added Successfully!",
         })
       );
     } catch (error) {

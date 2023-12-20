@@ -20,6 +20,7 @@ import {
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import "./videos.css";
+import { showNotificationMessage } from "../../../store/uiSlice";
 
 function Videos() {
   const [openEditVideoModal, setOpenEditVideoModal] = useState(false);
@@ -113,6 +114,11 @@ function Videos() {
   };
 
   const handleOpenAddVideoModal = () => {
+    dispatch(
+      showNotificationMessage({
+        open: false,
+      })
+    );
     setOpenAddVideoModal(true);
   };
   const handleCloseAddVideoModal = () => {

@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from "react";
-import Header from "../../components/Header";
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import "./posts.css";
-import { Link } from "react-router-dom";
 import {
   Box,
   Grid,
-  IconButton,
   Modal,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import Swal from "sweetalert2";
-import Loader from "../../components/Loader";
+import { Form, Formik } from "formik";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import * as Yup from "yup";
+import Notifications from "../../../components/common/Notifications";
 import {
   createPostData,
   deletePostData,
   updatePostData,
 } from "../../../store/post/postActions";
-import Notifications from "../../../components/common/Notifications";
+import { showNotificationMessage } from "../../../store/uiSlice";
+import Header from "../../components/Header";
+import Loader from "../../components/Loader";
+import "./posts.css";
 
 function Posts() {
   const [openEditPostModal, setOpenEditPostModal] = useState(false);
@@ -104,6 +104,11 @@ function Posts() {
   };
 
   const handleOpenAddPostModal = () => {
+    dispatch(
+      showNotificationMessage({
+        open: false,
+      })
+    );
     setOpenAddPostModal(true);
   };
   const handleCloseAddPostModal = () => {

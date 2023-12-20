@@ -1,6 +1,6 @@
-import { removeFromNovel, replaceData, updateNovel } from "./novelSlice";
-import { showNotificationMessage } from "../uiSlice";
 import axios from "axios";
+import { showNotificationMessage } from "../uiSlice";
+import { removeFromNovel, replaceData, updateNovel } from "./novelSlice";
 
 export const fetchNovelData = () => {
   return async (dispatch) => {
@@ -26,7 +26,7 @@ export const fetchNovelData = () => {
 export const createNovelData = (data) => {
   return async (dispatch) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_BACKEND_BASE_URL}/api/novels`,
 
         data,
@@ -39,7 +39,8 @@ export const createNovelData = (data) => {
       dispatch(fetchNovelData());
       dispatch(
         showNotificationMessage({
-          open: false,
+          open: true,
+          message: "Novel Added Successfully!",
         })
       );
     } catch (error) {

@@ -1,6 +1,6 @@
-import { removeTestimonial, replaceData, updateTestimonial } from "./testimonialSlice";
-import { showNotificationMessage } from "../uiSlice";
 import axios from "axios";
+import { showNotificationMessage } from "../uiSlice";
+import { removeTestimonial, replaceData, updateTestimonial } from "./testimonialSlice";
 
 export const fetchTestimonialData = () => {
   return async (dispatch) => {
@@ -26,7 +26,7 @@ export const fetchTestimonialData = () => {
 export const createTestimonialData = (data) => {
   return async (dispatch) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_BACKEND_BASE_URL}/api/testimonials`,
 
         data,
@@ -39,7 +39,8 @@ export const createTestimonialData = (data) => {
       dispatch(fetchTestimonialData());
       dispatch(
         showNotificationMessage({
-          open: false,
+          open: true,
+          message: "Testimonial Added Successfully!",
         })
       );
     } catch (error) {

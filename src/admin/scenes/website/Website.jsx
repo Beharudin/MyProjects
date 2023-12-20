@@ -16,8 +16,6 @@ function Website() {
   const data = useSelector((state) => state.website.webInfo);
   const notification = useSelector((state) => state.ui.notification);
 
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-
   const updateWebsiteInfo = async (
     name,
     email,

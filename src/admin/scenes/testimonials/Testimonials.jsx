@@ -1,30 +1,29 @@
-import React from "react";
+import { ArrowForwardIos } from "@mui/icons-material";
 import {
   Box,
   Button,
   Grid,
-  IconButton,
   Modal,
   Paper,
-  TextField,
+  TextField
 } from "@mui/material";
-import Header from "../../components/Header";
 import Typography from "@mui/material/Typography";
-import { Link, NavLink } from "react-router-dom";
-import { ArrowForwardIos } from "@mui/icons-material";
-import { useState, useEffect } from "react";
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
 import axios from "axios";
-import Swal from "sweetalert2";
-import Loader from "../../components/Loader";
+import { Form, Formik } from "formik";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
+import * as Yup from "yup";
+import Notifications from "../../../components/common/Notifications";
 import {
   createTestimonialData,
   deleteTestimonialData,
   updateTestimonialData,
 } from "../../../store/testimonial/testimonialActions";
-import Notifications from "../../../components/common/Notifications";
+import Header from "../../components/Header";
+import Loader from "../../components/Loader";
+import { showNotificationMessage } from "../../../store/uiSlice";
 
 const Testimonials = () => {
   const [openEditTestimonialsModal, setOpenEditTestimonialsModal] =
@@ -168,6 +167,11 @@ const Testimonials = () => {
   });
 
   const handleOpenAddTestimonialsModal = () => {
+    dispatch(
+      showNotificationMessage({
+        open: false,
+      })
+    );
     setOpenAddTestimonialsModal(true);
   };
   const handleCloseAddTestimonialsModal = () => {

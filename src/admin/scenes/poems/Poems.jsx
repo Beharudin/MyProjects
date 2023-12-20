@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from "react";
-import Header from "../../components/Header";
+import { Box, Grid, Modal, TextField, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import "./poems.css";
-import { Link } from "react-router-dom";
-import {
-  Box,
-  Grid,
-  IconButton,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
-import Swal from "sweetalert2";
-import Loader from "../../components/Loader";
-import { createPoemData, deletePoemData, updatePoemData } from "../../../store/poem/poemActions";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import * as Yup from "yup";
 import Notifications from "../../../components/common/Notifications";
+import {
+  createPoemData,
+  deletePoemData,
+  updatePoemData,
+} from "../../../store/poem/poemActions";
+import Header from "../../components/Header";
+import Loader from "../../components/Loader";
+import "./poems.css";
+import { showNotificationMessage } from "../../../store/uiSlice";
 
 function Poems() {
   const [openEditPoemModal, setOpenEditPoemModal] = useState(false);
@@ -100,6 +98,11 @@ function Poems() {
   };
 
   const handleOpenAddPoemModal = () => {
+    dispatch(
+      showNotificationMessage({
+        open: false,
+      })
+    );
     setOpenAddPoemModal(true);
   };
   const handleCloseAddPoemModal = () => {
@@ -149,12 +152,12 @@ function Poems() {
                       <h3>{data.topic}</h3>
                       <div className="poem-div mt-4 mb-4">
                         {data.body.split("#").map((paragraph) =>
-                              paragraph.split(",").map((line) => (
-                                <p className="poem-text m-0" key={line}>
-                                  {line}
-                                </p>
-                              ))
-                            )}
+                          paragraph.split(",").map((line) => (
+                            <p className="poem-text m-0" key={line}>
+                              {line}
+                            </p>
+                          ))
+                        )}
                       </div>
                       <Link className="Link">
                         <button
@@ -278,7 +281,7 @@ function Poems() {
             </Modal>
             <Modal open={openAddPoemModal} onClose={handleCloseAddPoemModal}>
               <Box sx={style}>
-              {notification && (
+                {notification && (
                   <Notifications
                     type={notification.type}
                     message={notification.message}
