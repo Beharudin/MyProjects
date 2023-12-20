@@ -111,7 +111,7 @@ function About() {
               </div>
             </div>
             <div className="row">
-              <div className="LeftDiv col-xs-12 col-md-6">
+              <div className="LeftDiv col-xs-12 col-md-6" id="aboutImg">
                 <img
                   src={`${process.env.REACT_APP_BACKEND_BASE_URL}/images/` + data.img}
                   className="img-responsive"

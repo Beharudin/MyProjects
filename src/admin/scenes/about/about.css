@@ -1,37 +1,5 @@
 
- h3 {
-  font-size: 22px;
-  margin: 0 0 20px;
-}
- h2 {
-  position: relative;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-}
- h2::after {
-  position: absolute;
-  content: "";
-  background: linear-gradient(to right, #5ca9fb 0%, #6372ff 100%);
-  height: 4px;
-  width: 60px;
-  bottom: 0;
-  left: 0;
-}
- .about-text li {
-  margin-bottom: 6px;
-  margin-left: 6px;
-  list-style: none;
-  padding: 0;
-}
- .about-text li:before {
-  content: "\f00c";
-  font-family: "FontAwesome";
-  color: #5ca9fb;
-  font-size: 11px;
-  font-weight: 300;
-  padding-right: 8px;
-}
- img {
+ #aboutImg img {
   width: 100%;
   margin-top: 10px;
   background: #fff;
@@ -56,7 +24,7 @@
 
 
 @media (max-width: 768px) {
-   img {
+  #aboutImg img {
     margin: 50px 0;
   }
 }

@@ -1,23 +1,17 @@
-import { Badge, Button } from "@mui/material";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import {
-  IconButton,
-  Typography,
-  Box,
-  Grid,
-  Modal,
-  TextField,
+  Box, Button, Grid, IconButton, Modal,
+  TextField, Typography
 } from "@mui/material";
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
 import axios from "axios";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import YupPassword from "yup-password";
-import Swal from "sweetalert2";
-import { useDispatch, useSelector } from "react-redux";
+import { Form, Formik } from "formik";
 import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import * as Yup from "yup";
+import YupPassword from "yup-password";
 import { cookies } from "../../..";
 import {
   updateUserData,
@@ -177,7 +171,7 @@ const Topbar = () => {
             <Box display="flex">
               <div>
                 <Typography p={1} variant="h4">
-                  Welcome, Mohammed
+                  Welcome, {user.fullname.split(" ")[0]}
                 </Typography>
               </div>
               <div className="dropdown">

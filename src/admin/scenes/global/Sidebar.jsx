@@ -5,8 +5,19 @@ import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { Dvr, FeaturedPlayList, HelpOutline, Info, Language, Message, PeopleAlt } from "@mui/icons-material";
+import {
+  Dvr,
+  FeaturedPlayList,
+  HelpOutline,
+  Info,
+  Language,
+  Message,
+  PeopleAlt,
+} from "@mui/icons-material";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import { cookies } from "../../..";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   return (
@@ -28,16 +39,14 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const accessToken = useSelector((state) => state.auth.accessToken);
+  const token = cookies.get("token");
+  let user = jwtDecode(token);
 
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-
-  // useEffect(() => {
-  //   if (!user.length) {
-  //     window.location.href = "/admin/login";
-  //   } else {
-  //     setLoading(false);
-  //   }
-  // }, []);
+  useEffect(() => {
+    user = jwtDecode(cookies.get("token"));
+  }, [accessToken]);
 
   return (
     <Box
@@ -105,8 +114,10 @@ const Sidebar = () => {
                       alt="Profile Img"
                       width="100px"
                       height="100px"
-                      src={"http://localhost:3001/images/" }
-                      // src={"http://localhost:3001/images/" + user.profile_img}
+                      src={
+                        `${process.env.REACT_APP_BACKEND_BASE_URL}/images/` +
+                        user.profile_img
+                      }
                       style={{ cursor: "pointer", borderRadius: "50%" }}
                     />
                   </Box>

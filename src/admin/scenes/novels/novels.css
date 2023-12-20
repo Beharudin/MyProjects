@@ -1,43 +1,10 @@
 
- .service-desc {
+ .novel-desc {
   margin: 10px 10px 20px;
-}
-
- .section-title h2::after {
-  position: absolute;
-  content: "";
-  height: 4px;
-  width: 60px;
-  bottom: 0;
-  margin-left: -30px;
-  left: 50%;
-}
- i.fa {
-  font-size: 42px;
-  width: 120px;
-  height: 120px;
-  padding: 40px 0;
-  border-radius: 50%;
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.05);
-}
- h3 {
-  font-weight: 500;
-  padding: 5px 0;
-}
-
- .service-desc {
   margin-bottom: 40px;
 }
 
-.service-img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  cursor: pointer;
-}
-
-.service-text {
+.novel-text {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 13px;
   font-weight: 500;
