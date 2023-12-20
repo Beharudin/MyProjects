@@ -16,45 +16,102 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import YupPassword from "yup-password";
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import { cookies } from "../../..";
+import {
+  updateUserData,
+  updateUserPassword,
+} from "../../../store/auth/authActions";
+import { logout } from "../../../store/auth/authSlice";
 YupPassword(Yup);
 
 const Topbar = () => {
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
+  const [openProfileModal, setOpenProfileModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [id, setId] = useState(-1);
+  const [file, setFile] = useState(null);
+  const dispatch = useDispatch();
+  const accessToken = useSelector((state) => state.auth.accessToken);
+  const token = cookies.get("token");
+  let user = jwtDecode(token);
+
+  useEffect(() => {
+    user = jwtDecode(cookies.get("token"));
+  }, [accessToken]);
 
   const handleOpenPasswordModal = () => {
     setOpenPasswordModal(true);
   };
+
   const handleClosePasswordModal = () => {
     setOpenPasswordModal(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("currentUser");
-    window.location.href = "/admin/login";
+  const handleOpenProfileModal = () => {
+    setOpenProfileModal(true);
   };
 
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-  // useEffect(() => {
-  //   if (!user.length) {
-  //     window.location.href = "/admin/login";
-  //   } else {
-  //     setLoading(false);
-  //   }
-  //   setId(user.id);
-  // }, []);
+  const handleCloseProfileModal = () => {
+    setOpenProfileModal(false);
+  };
+
+  const handleLogout = () => {
+    cookies.remove("token");
+    dispatch(logout());
+  };
+  const saveFile = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const updateProfile = async (email, fullname, profile_img) => {
+    const data = {
+      userId: user.userId,
+      email,
+      fullname,
+    };
+    if (file) {
+      const formData = new FormData();
+      const filename = Date.now() + file.name;
+      formData.append("name", filename);
+      formData.append("file", file);
+      data.profile_img = filename;
+
+      // upload image
+      try {
+        setLoading(true);
+        await axios.post("/upload/", formData);
+        setLoading(false);
+      } catch (error) {
+        Swal.fire("Sorry!", "Failed to upload image!", "error");
+        setLoading(false);
+      }
+    }
+
+    try {
+      setLoading(true);
+      dispatch(updateUserData(data));
+      setOpenProfileModal(false);
+      Swal.fire(
+        "Congratulations!",
+        "Password updated successfully!",
+        "success"
+      );
+      setLoading(false);
+    } catch (error) {
+      Swal.fire("Sorry!", "Something went wrong!", "error");
+    }
+  };
 
   const updatePassword = async (pwd) => {
     const data = {
-      email: user.email,
+      userId: user.userId,
       password: pwd,
-      fullname: user.fullname,
-      profile_img: user.profile_img,
     };
     try {
       setLoading(true);
-      await axios.patch(`user/${id}`, data);
+      dispatch(updateUserPassword(data));
+      setOpenPasswordModal(false);
       Swal.fire(
         "Congratulations!",
         "Password updated successfully!",
@@ -83,6 +140,11 @@ const Topbar = () => {
     password: "",
     password1: "",
   };
+  const profileInitialValues = {
+    fullname: user.fullname,
+    email: user.email,
+    profile_img: "",
+  };
 
   const initSchema = Yup.object().shape({
     password: Yup.string()
@@ -99,6 +161,12 @@ const Topbar = () => {
       [Yup.ref("password"), null],
       "Passwords must match"
     ),
+  });
+
+  const profileSchema = Yup.object().shape({
+    fullname: Yup.string().required("No name provided."),
+    email: Yup.string().email("Invalid email address").required("Required"),
+    profile_img: Yup.string().required("No image provided."),
   });
   return (
     <>
@@ -128,6 +196,14 @@ const Topbar = () => {
                   className="dropdown-menu"
                   aria-labelledby="dropdownMenuLink"
                 >
+                  <li>
+                    <Link
+                      className="dropdown-item"
+                      onClick={handleOpenProfileModal}
+                    >
+                      Change profile
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       className="dropdown-item"
@@ -211,6 +287,112 @@ const Topbar = () => {
                         <button
                           className="apply-btn"
                           onClick={handleClosePasswordModal}
+                        >
+                          close
+                        </button>
+                      </div>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            </Box>
+          </Modal>
+
+          {/* profile modal */}
+          <Modal open={openProfileModal} onClose={handleCloseProfileModal}>
+            <Box sx={style}>
+              <Formik
+                enableReinitialize
+                initialValues={profileInitialValues}
+                validationSchema={profileSchema}
+                validateOnMount={true}
+                onSubmit={(values) => {
+                  updateProfile(
+                    values.email,
+                    values.fullname,
+                    values.profile_img
+                  );
+                  handleClosePasswordModal();
+                }}
+              >
+                {({ values, errors, touched, handleChange, handleBlur }) => (
+                  <Form>
+                    <Typography variant="h6" gutterBottom>
+                      Change Profile
+                    </Typography>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <TextField
+                          required
+                          id="fullname"
+                          name="fullname"
+                          label="Fullname"
+                          fullWidth
+                          multiline
+                          maxRows={5}
+                          variant="standard"
+                          value={values.fullname}
+                          onChange={handleChange("fullname")}
+                          onBlur={handleBlur("fullname")}
+                          sx={{ p: 2 }}
+                        />
+                        {touched.fullname && errors.fullname && (
+                          <p style={{ color: "red" }}>{errors.fullname}</p>
+                        )}
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          required
+                          id="email"
+                          name="email"
+                          label="Email"
+                          fullWidth
+                          multiline
+                          maxRows={5}
+                          variant="standard"
+                          value={values.email}
+                          onChange={handleChange("email")}
+                          onBlur={handleBlur("email")}
+                          sx={{ p: 2 }}
+                        />
+                        {touched.email && errors.email && (
+                          <p style={{ color: "red" }}>{errors.email}</p>
+                        )}
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <Button
+                          variant="contained"
+                          component="label"
+                          size="small"
+                          onChange={handleChange("profile_img")}
+                          onBlur={handleBlur("profile_img")}
+                          color="common"
+                        >
+                          Profile image
+                          <input
+                            type="file"
+                            accept="image/png, image/gif, image/jpeg"
+                            hidden
+                            name="profile_img"
+                            onChange={saveFile}
+                          />
+                        </Button>
+                        <div>
+                          {errors.profile_img && touched.profile_img && (
+                            <p style={{ color: "red" }}>{errors.profile_img}</p>
+                          )}
+                        </div>
+                      </Grid>
+                    </Grid>
+                    <div className="service-desc">
+                      <div className="linksDiv d-flex justify-content-center">
+                        <button className="apply-btn" type="submit">
+                          Update
+                        </button>
+                        <button
+                          className="apply-btn"
+                          onClick={handleCloseProfileModal}
                         >
                           close
                         </button>

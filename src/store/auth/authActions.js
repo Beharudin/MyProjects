@@ -1,5 +1,5 @@
 import axios from "axios";
-import { login, replaceData } from "./authSlice";
+import { login, replaceData, tokenLogin } from "./authSlice";
 import { showNotificationMessage } from "../uiSlice";
 import { cookies } from "../../index";
 
@@ -58,8 +58,8 @@ export const updateUserData = (data) => {
           message: "Sending Request to Database!",
         })
       );
-      const res = await axios.post(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/update`,
+      const res = await axios.patch(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/user/update`,
         data,
         {
           headers: {
@@ -81,7 +81,65 @@ export const updateUserData = (data) => {
         );
       } else {
         dispatch(replaceData(newData));
+        cookies.remove("token");
+        cookies.set("token", newData.accessToken, { path: "/" });
 
+        dispatch(
+          showNotificationMessage({
+            open: true,
+            type: "success",
+            message: res.data
+              ? res.data.message
+              : "Request Sent Successfully to Database!",
+          })
+        );
+      }
+    } catch (error) {
+      dispatch(
+        showNotificationMessage({
+          open: true,
+          type: "error",
+          message: error.response.data
+            ? error.response.data.message
+            : "Sending Request Failed!",
+        })
+      );
+    }
+  };
+};
+
+export const updateUserPassword = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch(
+        showNotificationMessage({
+          open: true,
+          type: "warning",
+          message: "Sending Request to Database!",
+        })
+      );
+      const res = await axios.patch(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/user/updatePwd`,
+        data,
+        {
+          headers: {
+            "Content-Type": "Application/json",
+          },
+        }
+      );
+      const newData = await res.data;
+
+      if (newData.success === 0) {
+        dispatch(
+          showNotificationMessage({
+            open: true,
+            type: "error",
+            message: newData.message
+              ? newData.message
+              : "User Update Request Failed!",
+          })
+        );
+      } else {
         dispatch(
           showNotificationMessage({
             open: true,
@@ -110,7 +168,7 @@ export const loginUser = (credentials, navigate, path) => {
   return async (dispatch) => {
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/login`,
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/user/login`,
         credentials,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -151,16 +209,16 @@ export const loginUser = (credentials, navigate, path) => {
 export const verifyToken = (token, navigate, path) => {
   return async (dispatch) => {
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/verify-token`,
+      await axios.get(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/user/verify-token`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      const data = await res.data;
-      dispatch(login(data));
+
+      dispatch(tokenLogin());
       navigate(path, { replace: true });
     } catch (error) {
       console.log(error);

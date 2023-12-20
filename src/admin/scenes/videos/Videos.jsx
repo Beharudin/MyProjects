@@ -1,28 +1,25 @@
-import React, { useState, useEffect } from "react";
-import Header from "../../components/Header";
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import "./videos.css";
-import { Link } from "react-router-dom";
 import {
   Box,
   Grid,
-  IconButton,
   Modal,
   TextField,
   Typography,
 } from "@mui/material";
-import Swal from "sweetalert2";
-import axios from "axios";
-import { Close } from "@mui/icons-material";
-import Error from "../../components/Error";
-import Loader from "../../components/Loader";
+import { Form, Formik } from "formik";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import * as Yup from "yup";
+import Notifications from "../../../components/common/Notifications";
 import {
   createVideoData,
   deleteVideoData,
   updateVideoData,
 } from "../../../store/video/videoActions";
+import Header from "../../components/Header";
+import Loader from "../../components/Loader";
+import "./videos.css";
 
 function Videos() {
   const [openEditVideoModal, setOpenEditVideoModal] = useState(false);
@@ -32,18 +29,10 @@ function Videos() {
   const [videoBody, setVideoBody] = useState("");
   const [videoLink, setVideoLink] = useState("");
   const [modalId, setModalId] = useState();
-  const [msg, setMsg] = useState("");
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const videos = useSelector((state) => state.video.videosList);
-
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-  // if (!user.length) {
-  //   setLoading(true);
-  //   window.location.href = "/admin/login";
-  // }
+  const notification = useSelector((state) => state.ui.notification);
 
   const addVideo = async (topic, body, link) => {
     try {
@@ -55,14 +44,8 @@ function Videos() {
           link: link,
         })
       );
-      setError(false);
-      setSuccess(true);
-      setMsg("Video added successfully!");
       setLoading(false);
     } catch (error) {
-      setSuccess(false);
-      setError(true);
-      setMsg("Something went wrong!");
       setLoading(false);
     }
   };
@@ -335,27 +318,11 @@ function Videos() {
             </Modal>
             <Modal open={openAddVideoModal} onClose={handleCloseAddVideoModal}>
               <Box sx={style}>
-                {error && (
-                  <div
-                    className="alert alert-danger d-flex justify-content-between"
-                    role="alert"
-                  >
-                    {msg}
-                    <IconButton onClick={() => setError(false)} sx={{ p: 0 }}>
-                      {<Close />}
-                    </IconButton>
-                  </div>
-                )}
-                {success && (
-                  <div
-                    className="alert alert-success d-flex justify-content-between"
-                    role="alert"
-                  >
-                    {msg}
-                    <IconButton onClick={() => setSuccess(false)} sx={{ p: 0 }}>
-                      {<Close />}
-                    </IconButton>
-                  </div>
+                {notification && (
+                  <Notifications
+                    type={notification.type}
+                    message={notification.message}
+                  />
                 )}
                 <Formik
                   enableReinitialize
@@ -451,8 +418,13 @@ function Videos() {
             </Modal>
           </div>
         </>
+      ) : notification ? (
+        <Notifications
+          type={notification.type}
+          message={notification.message}
+        />
       ) : (
-        <Error message="Something went wrong, please try again later!" />
+        "Loading..."
       )}
     </div>
   );

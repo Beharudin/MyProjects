@@ -1,29 +1,25 @@
-import React from "react";
-import "./novels.css";
-import { Link } from "react-router-dom";
 import {
+  Box,
   Grid,
   Modal,
   TextField,
   Typography,
-  IconButton,
-  Box,
 } from "@mui/material";
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import { useState, useEffect } from "react";
-import Header from "../../components/Header";
-import Swal from "sweetalert2";
-import axios from "axios";
-import { Close } from "@mui/icons-material";
-import Loader from "../../components/Loader";
-import Error from "../../components/Error";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import * as Yup from "yup";
+import Notifications from "../../../components/common/Notifications";
 import {
   createNovelData,
   deleteNovelData,
   updateNovelData,
 } from "../../../store/novel/novelActions";
+import Header from "../../components/Header";
+import Loader from "../../components/Loader";
+import "./novels.css";
 
 function Novels() {
   const [openEditNovelModal, setOpenEditNovelModal] = useState(false);
@@ -33,12 +29,10 @@ function Novels() {
   const [modalSection, setModalSection] = useState("");
   const [modalBody, setModalBody] = useState("");
   const [modalId, setModalId] = useState();
-  const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
   const dispatch = useDispatch();
   const novels = useSelector((state) => state.novel.novelsList);
+  const notification = useSelector((state) => state.ui.notification);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -52,14 +46,8 @@ function Novels() {
           body,
         })
       );
-      setError(false);
-      setSuccess(true);
-      setMsg("Novel added successfully!");
       setLoading(false);
     } catch (error) {
-      setSuccess(false);
-      setError(true);
-      setMsg("Something went wrong!");
       setLoading(false);
     }
   };
@@ -71,7 +59,6 @@ function Novels() {
       Swal.fire("Congratulations!", "Novel updated successfully!", "success");
       setLoading(false);
     } catch (error) {
-      console.log(error);
       Swal.fire("Sorry!", "Something went wrong!", "error");
       setLoading(false);
     }
@@ -335,27 +322,12 @@ function Novels() {
             </Modal>
             <Modal open={openAddNovelModal} onClose={handleCloseAddNovelModal}>
               <Box sx={style}>
-                {error && (
-                  <div
-                    className="alert alert-danger d-flex justify-content-between"
-                    role="alert"
-                  >
-                    {msg}
-                    <IconButton onClick={() => setError(false)} sx={{ p: 0 }}>
-                      {<Close />}
-                    </IconButton>
-                  </div>
-                )}
-                {success && (
-                  <div
-                    className="alert alert-success d-flex justify-content-between"
-                    role="alert"
-                  >
-                    {msg}
-                    <IconButton onClick={() => setSuccess(false)} sx={{ p: 0 }}>
-                      {<Close />}
-                    </IconButton>
-                  </div>
+                
+              {notification && (
+                  <Notifications
+                    type={notification.type}
+                    message={notification.message}
+                  />
                 )}
                 <Formik
                   enableReinitialize
@@ -453,8 +425,13 @@ function Novels() {
             </Modal>
           </div>
         </>
+      ) : notification ? (
+        <Notifications
+          type={notification.type}
+          message={notification.message}
+        />
       ) : (
-        <Error message="Something went wrong, please try again later!" />
+        "Something went wrong, please try again later!"
       )}
     </div>
   );

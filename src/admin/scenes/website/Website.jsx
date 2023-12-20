@@ -4,16 +4,17 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import Header from "../../components/Header";
 import { Container, Grid, Paper, TextField, Typography } from "@mui/material";
-import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { updateWebInfoData } from "../../../store/website/webActions";
+import Notifications from "../../../components/common/Notifications";
 
 function Website() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const data = useSelector((state) => state.website.webInfo);
+  const notification = useSelector((state) => state.ui.notification);
 
   const user = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -33,7 +34,7 @@ function Website() {
       setLoading(true);
       dispatch(
         updateWebInfoData({
-          id:data.id,
+          id: data.id,
           name,
           email,
           mobile,
@@ -332,8 +333,13 @@ function Website() {
             </Paper>
           </Container>
         </>
+      ) : notification ? (
+        <Notifications
+          type={notification.type}
+          message={notification.message}
+        />
       ) : (
-        <Error message="Something went wrong, please try again later!" />
+        "Loading..."
       )}
     </div>
   );

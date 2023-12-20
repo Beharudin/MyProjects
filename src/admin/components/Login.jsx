@@ -5,15 +5,33 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import Loader from "./Loader";
-import Error from "./Error";
 import { Grid, TextField } from "@mui/material";
 import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { cookies } from "../..";
+import { loginUser, verifyToken } from "../../store/auth/authActions";
+import Notifications from "../../components/common/Notifications";
+
+let notFirstTime = false;
 
 function Login() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [msg, setMsg] = useState("");
-  const [user, setUser] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const notification = useSelector((state) => state.ui.notification);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  const redirectPath = location.state ? location.state.path : "/admin";
+
+  useEffect(() => {
+    const token = cookies.get("token");
+    if (!notFirstTime && token) {
+      notFirstTime = true;
+      dispatch(verifyToken(token, navigate, redirectPath));
+    }
+  }, [notFirstTime, isLoggedIn, dispatch]);
 
   const initialValues = {
     userEmail: "",
@@ -31,30 +49,16 @@ function Login() {
       email: email,
       password: pwd,
     };
-    
+
     try {
       setLoading(true);
-      const result = (await axios.post("/user/login", userCridentials)).data;
-      
-      if (result.success === 1) {
-        setUser(result.data);
-        window.location.href = "/admin";
-      } else if (result.success === 0) {
-        setMsg("Wrong cridentials. Try again!");
-        setError(true);
-      }
+      dispatch(loginUser(userCridentials, navigate, redirectPath));
       setLoading(false);
     } catch (error) {
-      setMsg("Something is wrong!. Try again!");
       setLoading(false);
-      setError(true);
     }
   }
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("currentUser", JSON.stringify(user));
-    }
-  }, [user]);
+
   return (
     <div style={{ height: "100%" }}>
       {loading ? (
@@ -67,7 +71,12 @@ function Login() {
                 className="card text-black m-5"
                 style={{ borderRadius: "25px" }}
               >
-                {error && <Error message={msg} />}
+                {notification && (
+                <Notifications
+                  type={notification.type}
+                  message={notification.message}
+                />
+              )}
                 <div className="card-body">
                   <div className="row justify-content-center">
                     <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
@@ -178,7 +187,8 @@ function Login() {
             </div>
           </div>
         </div>
-       )} 
+      )
+      }
     </div>
   );
 }

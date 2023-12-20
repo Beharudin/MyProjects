@@ -27,104 +27,58 @@ import { fetchVideoData } from "./store/video/videoActions";
 import { fetchAboutData } from "./store/about/aboutActions";
 import { fetchTestimonialData } from "./store/testimonial/testimonialActions";
 import { fetchWebInfoData } from "./store/website/webActions";
+import { ProtectedRoute } from "./components/common/ProtectedRoute";
 
 let firstTimeRender = true;
 
 function App() {
-  const token = useSelector((state) => state.auth.accessToken);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-      dispatch(fetchNovelData());
-      dispatch(fetchPoemData());
-      dispatch(fetchPostData());
-      dispatch(fetchVideoData());
-      dispatch(fetchAboutData());
-      dispatch(fetchTestimonialData());
-      dispatch(fetchWebInfoData());
-    
+    dispatch(fetchNovelData());
+    dispatch(fetchPoemData());
+    dispatch(fetchPostData());
+    dispatch(fetchVideoData());
+    dispatch(fetchAboutData());
+    dispatch(fetchTestimonialData());
+    dispatch(fetchWebInfoData());
   }, []);
-
 
   return (
     <ThemeProvider theme={mytheme}>
       <CssBaseline />
       <div className="app">
-      <main className="content">
-        <Routes>
-          <Route path="/" exact element={<Homepage />} />
-          <Route path="/novel/:id" exact element={<ReadNovel />} />
-          <Route path="/poem/:id" exact element={<ReadPoem />} />
-          <Route path="/post/:id" exact element={<ReadPost />} />
+        <main className="content">
+          <Routes>
+            <Route path="/" exact element={<Homepage />} />
+            <Route path="/novel/:id" exact element={<ReadNovel />} />
+            <Route path="/poem/:id" exact element={<ReadPoem />} />
+            <Route path="/post/:id" exact element={<ReadPost />} />
 
-          <Route
-            path="/admin"
-            element={
-              <AddSidebarAndTopbar>
-                <Dashboard />
-              </AddSidebarAndTopbar>
-            }
-          />
-          <Route path="/admin/login" element={<Login />} />
-          <Route
-            path="/admin/website"
-            element={
-              <AddSidebarAndTopbar>
-                <Website />
-              </AddSidebarAndTopbar>
-            }
-          />
-          <Route
-            path="/admin/about"
-            element={
-              <AddSidebarAndTopbar>
-                <About />
-              </AddSidebarAndTopbar>
-            }
-          />
-          <Route
-            path="/admin/novels"
-            element={
-              <AddSidebarAndTopbar>
-                <Novels />
-              </AddSidebarAndTopbar>
-            }
-          />
-          <Route
-            path="/admin/posts"
-            element={
-              <AddSidebarAndTopbar>
-                <Posts />
-              </AddSidebarAndTopbar>
-            }
-          />
-          <Route
-            path="/admin/poems"
-            element={
-              <AddSidebarAndTopbar>
-                <Poems />
-              </AddSidebarAndTopbar>
-            }
-          />
-          <Route
-            path="/admin/videos"
-            element={
-              <AddSidebarAndTopbar>
-                <Videos />
-              </AddSidebarAndTopbar>
-            }
-          />
-          <Route
-            path="/admin/testimonials"
-            element={
-              <AddSidebarAndTopbar>
-                <Testimonials />
-              </AddSidebarAndTopbar>
-            }
-          />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
+            <Route
+              path="/admin/*"
+              element={
+                <ProtectedRoute>
+                  <AddSidebarAndTopbar>
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/website" element={<Website />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/novels" element={<Novels />} />
+                      <Route path="/posts" element={<Posts />} />
+                      <Route path="/poems" element={<Poems />} />
+                      <Route path="/videos" element={<Videos />} />
+                      <Route path="/testimonials" element={<Testimonials />} />
+                    </Routes>
+                  </AddSidebarAndTopbar>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/admin/login" element={<Login />} />
+           
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
         </main>
       </div>
     </ThemeProvider>

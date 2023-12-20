@@ -8,12 +8,14 @@ import Testimonials from "../testimonials/Testimonials";
 import Novels from "../novels/Novels";
 import Videos from "../videos/Videos";
 import Poems from "../poems/Poems";
-import Error from "../../admin/components/Error";
 import Loader from "../../admin/components/Loader";
+import Notifications from "../common/Notifications";
+import { useSelector } from "react-redux";
 
 function Homepage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(true);
+  const notification = useSelector((state) => state.ui.notification);
 
   useEffect(() => {
     const getData = async () => {
@@ -68,8 +70,13 @@ function Homepage() {
           <Testimonials/>
           <Contact />
         </>
+      ) : notification ? (
+        <Notifications
+          type={notification.type}
+          message={notification.message}
+        />
       ) : (
-        <Error message="Something went wrong, please try again later!" />
+        "Something went wrong, please try again later!"
       )}
     </div>
   );

@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import "./posts.css";
 import Topbar from "../topbar/Topbar";
 import axios from "axios";
-import Error from "../../admin/components/Error";
 import Loader from "../../admin/components/Loader";
 import { useParams } from "react-router-dom";
+import Notifications from "../common/Notifications";
+import { useSelector } from "react-redux";
 
 function ReadPost() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const notification = useSelector((state) => state.ui.notification);
 
   useEffect(() => {
     const getPost = async () => {
@@ -49,8 +51,13 @@ function ReadPost() {
         )}
       </div>
       </>
+      ) : notification ? (
+        <Notifications
+          type={notification.type}
+          message={notification.message}
+        />
       ) : (
-        <Error message="Something went wrong, please try again later!" />
+        "Loading..."
       )}
     </div>
   );

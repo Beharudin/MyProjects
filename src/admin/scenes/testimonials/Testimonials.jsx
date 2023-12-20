@@ -17,11 +17,14 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Close } from "@mui/icons-material";
 import Loader from "../../components/Loader";
-import Error from "../../components/Error";
 import { useDispatch, useSelector } from "react-redux";
-import { createTestimonialData, deleteTestimonialData, updateTestimonialData } from "../../../store/testimonial/testimonialActions";
+import {
+  createTestimonialData,
+  deleteTestimonialData,
+  updateTestimonialData,
+} from "../../../store/testimonial/testimonialActions";
+import Notifications from "../../../components/common/Notifications";
 
 const Testimonials = () => {
   const [openEditTestimonialsModal, setOpenEditTestimonialsModal] =
@@ -33,18 +36,10 @@ const Testimonials = () => {
   const [modalClientImg, setModalClientImg] = useState("");
   const [modalId, setModalId] = useState();
   const [file, setFile] = useState(null);
-  const [msg, setMsg] = useState("");
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const data = useSelector((state) => state.testimonial.testimonialsList);
-
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-  // if (!user.length) {
-  //   setLoading(true);
-  //   window.location.href = "/admin/login";
-  // }
+  const notification = useSelector((state) => state.ui.notification);
 
   const addTestimonial = async (name, cmt) => {
     let data = {
@@ -72,14 +67,8 @@ const Testimonials = () => {
     try {
       setLoading(true);
       dispatch(createTestimonialData(data));
-      setError(false);
-      setSuccess(true);
-      setMsg("Testimonial added successfully!");
       setLoading(false);
     } catch (error) {
-      setSuccess(false);
-      setError(true);
-      setMsg("Something went wrong!");
       setLoading(false);
     }
   };
@@ -245,7 +234,10 @@ const Testimonials = () => {
                       <div className="m-1">
                         <img
                           className="rounded-circle"
-                          src={`${process.env.REACT_APP_BACKEND_BASE_URL}/images/` + data.img}
+                          src={
+                            `${process.env.REACT_APP_BACKEND_BASE_URL}/images/` +
+                            data.img
+                          }
                           alt=""
                           style={{ width: "100px", height: "100px" }}
                         />
@@ -408,28 +400,13 @@ const Testimonials = () => {
             onClose={handleCloseAddTestimonialsModal}
           >
             <Box sx={style}>
-              {error && (
-                <div
-                  className="alert alert-danger d-flex justify-content-between"
-                  role="alert"
-                >
-                  {msg}
-                  <IconButton onClick={() => setError(false)} sx={{ p: 0 }}>
-                    {<Close />}
-                  </IconButton>
-                </div>
+              {notification && (
+                <Notifications
+                  type={notification.type}
+                  message={notification.message}
+                />
               )}
-              {success && (
-                <div
-                  className="alert alert-success d-flex justify-content-between"
-                  role="alert"
-                >
-                  {msg}
-                  <IconButton onClick={() => setSuccess(false)} sx={{ p: 0 }}>
-                    {<Close />}
-                  </IconButton>
-                </div>
-              )}
+
               <Formik
                 enableReinitialize
                 initialValues={addInitialValues}
@@ -530,8 +507,13 @@ const Testimonials = () => {
             </Box>
           </Modal>
         </>
+      ) : notification ? (
+        <Notifications
+          type={notification.type}
+          message={notification.message}
+        />
       ) : (
-        <Error message="Something went wrong, please try again later!" />
+        "Loading..."
       )}
     </div>
   );

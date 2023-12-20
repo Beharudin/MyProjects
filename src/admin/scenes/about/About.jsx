@@ -7,10 +7,10 @@ import { useState } from "react";
 import Header from "../../components/Header";
 import axios from "axios";
 import Swal from "sweetalert2";
-import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAboutData } from "../../../store/about/aboutActions";
+import Notifications from "../../../components/common/Notifications";
 
 function About() {
   const [openEditAboutModal, setOpenEditAboutModal] = useState(false);
@@ -18,13 +18,7 @@ function About() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const data = useSelector((state) => state.about);
-
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-
-  // if (!user.length) {
-  //   setLoading(true);
-  //   window.location.href = "/admin/login";
-  // }
+  const notification = useSelector((state) => state.ui.notification);
 
   const updateAbout = async (desc) => {
     let newdata = {
@@ -216,8 +210,13 @@ function About() {
             </Modal>
           </div>
         </>
+      ) : notification ? (
+        <Notifications
+          type={notification.type}
+          message={notification.message}
+        />
       ) : (
-        <Error message="Something went wrong, please try again later!" />
+        "Something went wrong, please try again later!"
       )}
     </div>
   );

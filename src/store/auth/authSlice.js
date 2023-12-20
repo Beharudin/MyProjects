@@ -12,6 +12,9 @@ const AuthSlice = createSlice({
     replaceData(state, action) {
       state.accessToken = action.payload.accessToken;
     },
+    tokenLogin(state) {
+      state.isLoggedIn = true;
+    },
     login(state, action) {
       state.isLoggedIn = true;
       state.accessToken = action.payload.accessToken;
@@ -23,5 +26,5 @@ const AuthSlice = createSlice({
   },
 });
 
-export const { login, register, logout, replaceData } = AuthSlice.actions;
+export const { login, register, logout, replaceData, tokenLogin } = AuthSlice.actions;
 export default AuthSlice;
