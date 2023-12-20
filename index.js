@@ -23,9 +23,6 @@ import novelRouter from "./api/novel/novel_route.js";
 import aboutRouter from "./api/about/about_route.js";
 import poemRouter from "./api/poem/poem_route.js";
 import TestimonialRouter from "./api/testimonial/testimonial_route.js";
-// import MailerRouter from "./api/nodeMailer/mailerRouter.js";
-
-// import { checkToken } from "./auth/token_validation.js";
 
 
 // image route
@@ -45,8 +42,6 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   res.status(200).json("file has been uploaded");
 });
 
-// app.get("/api/auth/",checkToken);
-
 // get  router
 app.use("/api/user/", userRouter);
 app.use("/api/website/", websiteRouter);
@@ -56,7 +51,6 @@ app.use("/api/novels/", novelRouter);
 app.use("/api/about/", aboutRouter);
 app.use("/api/poems/", poemRouter);
 app.use("/api/testimonials/", TestimonialRouter);
-// app.use("/api/mailer/", MailerRouter);
 
 
 const port = 3001;
