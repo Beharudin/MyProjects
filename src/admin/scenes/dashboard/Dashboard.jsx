@@ -1,19 +1,18 @@
-import React from "react";
-import { Box, Typography } from "@mui/material";
-import StatBox from "../../components/StatBox";
-import Loader from "../../components/Loader";
-import { useState, useEffect } from "react";
 import { MenuBook } from "@mui/icons-material";
-import ServicesList from "../../components/ServicesList";
+import { Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Notifications from "../../../components/common/Notifications";
+import { fetchAboutData } from "../../../store/about/aboutActions";
 import { fetchNovelData } from "../../../store/novel/novelActions";
 import { fetchPoemData } from "../../../store/poem/poemActions";
 import { fetchPostData } from "../../../store/post/postActions";
-import { fetchVideoData } from "../../../store/video/videoActions";
-import { fetchAboutData } from "../../../store/about/aboutActions";
 import { fetchTestimonialData } from "../../../store/testimonial/testimonialActions";
+import { fetchVideoData } from "../../../store/video/videoActions";
 import { fetchWebInfoData } from "../../../store/website/webActions";
+import Loader from "../../components/Loader";
+import ServicesList from "../../components/ServicesList";
+import StatBox from "../../components/StatBox";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);

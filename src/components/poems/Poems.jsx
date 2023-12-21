@@ -35,7 +35,7 @@ function Poems() {
                   </div>
                 </div>
               ))
-            : "Loading..."}
+            : "Something went wrong, please try again later!"}
         </div>
       </div>
     </div>

@@ -36,7 +36,7 @@ function Testimonials() {
                 </div>
               </div>
             ))
-          : "loading"}
+          : "Something went wrong, please try again later!"}
       </div>
     </div>
   );

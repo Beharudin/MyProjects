@@ -517,7 +517,7 @@ const Testimonials = () => {
           message={notification.message}
         />
       ) : (
-        "Loading..."
+        "Something went wrong, please try again later!"
       )}
     </div>
   );

@@ -1,40 +1,21 @@
-import React, { useEffect, useState } from "react";
-import "./posts.css";
-import Topbar from "../topbar/Topbar";
-import axios from "axios";
-import Loader from "../../admin/components/Loader";
+import React from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Notifications from "../common/Notifications";
-import { useSelector } from "react-redux";
+import Topbar from "../topbar/Topbar";
+import "./posts.css";
 
 function ReadPost() {
-  const [data, setData] = useState({});
-  const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const notification = useSelector((state) => state.ui.notification);
-
-  useEffect(() => {
-    const getPost = async () => {
-      try {
-        setLoading(true);
-        await axios.get(`https://mocki.io/v1/d847cda0-1d82-4863-bff9-fb39c349fc64`).then((res) => {
-        // await axios.get(`http://localhost:3001/api/posts/${id}`).then((res) => {
-          setData(res.data.data);
-        });
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    getPost();
-  }, [id]);
+  const data = useSelector(
+    (state) => state.post.postsList.find((post) => post.id === parseInt(id))
+  );
 
   return (
     <div style={{ marginTop: "80px" }}>
       <Topbar />
-      {loading ? (
-        <Loader />
-      ) : data ? (
+      {data ? (
         <>
       <div className="text-center mt-5 mb-5">
         {data && (
@@ -57,7 +38,7 @@ function ReadPost() {
           message={notification.message}
         />
       ) : (
-        "Loading..."
+        "Something went wrong, please try again later!"
       )}
     </div>
   );
