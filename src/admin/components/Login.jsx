@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import axios from "axios";
-import Loader from "./Loader";
 import { Grid, TextField } from "@mui/material";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Form, Formik } from "formik";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 import { cookies } from "../..";
-import { loginUser, verifyToken } from "../../store/auth/authActions";
 import Notifications from "../../components/common/Notifications";
+import { loginUser, verifyToken } from "../../store/auth/authActions";
+import Loader from "./Loader";
 
 let notFirstTime = false;
 
@@ -142,6 +140,7 @@ function Login() {
                                     id="userPwd"
                                     name="userPwd"
                                     label="password"
+                                    type="password"
                                     value={values.userPwd}
                                     multiline
                                     maxRows={10}

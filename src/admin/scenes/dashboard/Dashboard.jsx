@@ -7,18 +7,47 @@ import { MenuBook } from "@mui/icons-material";
 import ServicesList from "../../components/ServicesList";
 import LineChart from "../../components/LineChart";
 import PieChart from "../../components/PieChart";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Notifications from "../../../components/common/Notifications";
+import { fetchNovelData } from "../../../store/novel/novelActions";
+import { fetchPoemData } from "../../../store/poem/poemActions";
+import { fetchPostData } from "../../../store/post/postActions";
+import { fetchVideoData } from "../../../store/video/videoActions";
+import { fetchAboutData } from "../../../store/about/aboutActions";
+import { fetchTestimonialData } from "../../../store/testimonial/testimonialActions";
+import { fetchWebInfoData } from "../../../store/website/webActions";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const notification = useSelector((state) => state.ui.notification);
+  const novelsList = useSelector((state) => state.novel.novelsList);
+  const poemsList = useSelector((state) => state.poem.poemsList);
+  const postsList = useSelector((state) => state.post.postsList);
+  const videosList = useSelector((state) => state.video.videosList);
+  
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    try {
+      setLoading(true);
+      dispatch(fetchNovelData());
+      dispatch(fetchPoemData());
+      dispatch(fetchPostData());
+      dispatch(fetchVideoData());
+      dispatch(fetchAboutData());
+      dispatch(fetchTestimonialData());
+      dispatch(fetchWebInfoData());
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <>
       {loading ? (
         <Loader />
-      ) : true ? (
+      ) : !notification ? (
         <>
           <Box m="20px">
             <Box
@@ -124,9 +153,10 @@ const Dashboard = () => {
               </Box>
             </Box>
             <Box>
-              <ServicesList title="novels" />
-              <ServicesList title="poems" />
-              <ServicesList title="posts" />
+              <ServicesList title="novels" data={novelsList}/>
+              <ServicesList title="poems" data={poemsList} />
+              <ServicesList title="posts" data={postsList} />
+              <ServicesList title="videos" data={videosList} />
             </Box>
           </Box>
         </>
