@@ -1,4 +1,4 @@
-import { replaceData, updateAbout} from "./aboutSlice";
+import { replaceData, updateAbout } from "./aboutSlice";
 import { showNotificationMessage } from "../uiSlice";
 import axios from "axios";
 
@@ -12,17 +12,22 @@ export const fetchAboutData = () => {
 
       dispatch(replaceData(data[0]));
     } catch (error) {
+      const errData = error.response.data;
       dispatch(
         showNotificationMessage({
           open: true,
           type: "error",
-          message: "Sending Request Failed!",
+          message:
+            error.code === "ERR_BAD_RESPONSE"
+              ? "Server is not running, please try again later!"
+              : errData.message
+              ? errData.message
+              : "Something went wrong, please try again later!",
         })
       );
     }
   };
 };
-
 
 export const updateAboutData = (data) => {
   return async (dispatch) => {
@@ -54,4 +59,3 @@ export const updateAboutData = (data) => {
     }
   };
 };
-

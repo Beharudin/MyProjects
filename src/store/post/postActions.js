@@ -12,11 +12,17 @@ export const fetchPostData = () => {
 
       dispatch(replaceData(data));
     } catch (error) {
+      const errData = error.response.data;
       dispatch(
         showNotificationMessage({
           open: true,
           type: "error",
-          message: "Sending Request Failed!",
+          message:
+            error.code === "ERR_BAD_RESPONSE"
+              ? "Server is not running, please try again later!"
+              : errData.message
+              ? errData.message
+              : "Something went wrong, please try again later!",
         })
       );
     }

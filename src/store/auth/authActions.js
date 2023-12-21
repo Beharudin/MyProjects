@@ -3,50 +3,6 @@ import { login, replaceData, tokenLogin } from "./authSlice";
 import { showNotificationMessage } from "../uiSlice";
 import { cookies } from "../../index";
 
-export const sendUserData = (data, navigate, path) => {
-  return async (dispatch) => {
-    try {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "warning",
-          message: "Sending Request to Database!",
-        })
-      );
-      const res = await axios.post(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/register`,
-
-        data,
-        {
-          headers: {
-            "Content-Type": "Application/json",
-          },
-        }
-      );
-
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "success",
-          message: res.data
-            ? res.data.message
-            : "Request Sent Successfully to Database!",
-        })
-      );
-      navigate(path);
-    } catch (error) {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "error",
-          message: error.response.data
-            ? error.response.data.message
-            : "Sending Request Failed!",
-        })
-      );
-    }
-  };
-};
 
 export const updateUserData = (data) => {
   return async (dispatch) => {

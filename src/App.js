@@ -17,33 +17,12 @@ import { mytheme } from "./theme";
 import About from "./admin/scenes/about/About";
 import Posts from "./admin/scenes/posts/Posts";
 import Videos from "./admin/scenes/videos/Videos";
-import { jwtDecode } from "jwt-decode";
-import { useSelector, useDispatch } from "react-redux";
 import AddSidebarAndTopbar from "./components/common/AddSidebarAndTopbar";
-import { fetchNovelData } from "./store/novel/novelActions";
-import { fetchPoemData } from "./store/poem/poemActions";
-import { fetchPostData } from "./store/post/postActions";
-import { fetchVideoData } from "./store/video/videoActions";
-import { fetchAboutData } from "./store/about/aboutActions";
-import { fetchTestimonialData } from "./store/testimonial/testimonialActions";
-import { fetchWebInfoData } from "./store/website/webActions";
 import { ProtectedRoute } from "./components/common/ProtectedRoute";
 
 let firstTimeRender = true;
 
 function App() {
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchNovelData());
-    dispatch(fetchPoemData());
-    dispatch(fetchPostData());
-    dispatch(fetchVideoData());
-    dispatch(fetchAboutData());
-    dispatch(fetchTestimonialData());
-    dispatch(fetchWebInfoData());
-  }, []);
 
   return (
     <ThemeProvider theme={mytheme}>

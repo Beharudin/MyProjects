@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from "react";
-import Topbar from "../topbar/Topbar";
-import Carousel from "./Carousel";
-import Posts from "../posts/Posts";
-import About from "../about/About";
-import Contact from "../footer/Footer";
-import Testimonials from "../testimonials/Testimonials";
-import Novels from "../novels/Novels";
-import Videos from "../videos/Videos";
-import Poems from "../poems/Poems";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../admin/components/Loader";
+import { fetchAboutData } from "../../store/about/aboutActions";
+import { fetchNovelData } from "../../store/novel/novelActions";
+import { fetchPoemData } from "../../store/poem/poemActions";
+import { fetchPostData } from "../../store/post/postActions";
+import { fetchTestimonialData } from "../../store/testimonial/testimonialActions";
+import { fetchVideoData } from "../../store/video/videoActions";
+import { fetchWebInfoData } from "../../store/website/webActions";
+import About from "../about/About";
 import Notifications from "../common/Notifications";
-import { useSelector } from "react-redux";
+import Contact from "../footer/Footer";
+import Novels from "../novels/Novels";
+import Poems from "../poems/Poems";
+import Posts from "../posts/Posts";
+import Testimonials from "../testimonials/Testimonials";
+import Topbar from "../topbar/Topbar";
+import Videos from "../videos/Videos";
+import Carousel from "./Carousel";
 
 function Homepage() {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(true);
   const notification = useSelector((state) => state.ui.notification);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const getData = async () => {
       try {
         setLoading(true);
         // await axios.get("https://mocki.io/v1/cca834f9-58d3-4b1e-aa62-fe9c8eab02d0").then((res) => {
@@ -44,21 +50,24 @@ function Homepage() {
         // await axios.get("https://mocki.io/v1/59683a1a-2db0-4c31-8994-80725358fac9").then((res) => {
         //   setVideosData(res.data.data);
         // });
+        dispatch(fetchNovelData());
+        dispatch(fetchPoemData());
+        dispatch(fetchPostData());
+        dispatch(fetchVideoData());
+        dispatch(fetchAboutData());
+        dispatch(fetchTestimonialData());
+        dispatch(fetchWebInfoData());
         setLoading(false);
-        setError(false);
       } catch (error) {
         setLoading(false);
-        setError(true);
       }
-    };
-    getData();
   }, []);
 
   return (
     <div>
       {loading ? (
         <Loader />
-      ) : !error ? (
+      ) : !notification ? (
         <>
           <Topbar />
           <Carousel />
@@ -67,16 +76,14 @@ function Homepage() {
           <Posts />
           <Videos />
           <About />
-          <Testimonials/>
+          <Testimonials />
           <Contact />
         </>
-      ) : notification ? (
+      ) : (
         <Notifications
           type={notification.type}
           message={notification.message}
         />
-      ) : (
-        "Something went wrong, please try again later!"
       )}
     </div>
   );
