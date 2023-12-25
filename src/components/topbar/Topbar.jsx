@@ -62,11 +62,6 @@ function Topbar() {
               Contacts
             </a>
           </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/hello">
-              login
-            </a>
-          </li>
         </ul>
       </div>
     </nav>

@@ -60,7 +60,6 @@ function App() {
             <Route path="/novel/:id" exact element={<ReadNovel />} />
             <Route path="/poem/:id" exact element={<ReadPoem />} />
             <Route path="/post/:id" exact element={<ReadPost />} />
-            <Route path="/hello" element={<Dashboard />} />
 
             <Route
               path="/admin/*"
