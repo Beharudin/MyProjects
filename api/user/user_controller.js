@@ -1,11 +1,10 @@
-import { Update, GetByEmail, UpdatePassword } from "./user_modal.js";
 import bcrypt from "bcrypt";
 import createError from "http-errors";
 import {
   signAccessToken,
   verifyUserToken,
 } from "../../middlewares/jwt.controller.js";
-import jwt from "jsonwebtoken";
+import { GetByEmail, Update, UpdatePassword } from "./user_modal.js";
 
 export function updateUser(req, res, next) {
   const body = req.body;
