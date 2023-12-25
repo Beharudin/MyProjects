@@ -24,7 +24,6 @@
     "font-awesome": "^4.7.0",
     "formik": "^2.2.9",
     "jwt-decode": "^4.0.0",
-    "nivo": "^0.31.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-pro-sidebar": "^0.7.1",
