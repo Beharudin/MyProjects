@@ -11,6 +11,16 @@ export const fetchWebInfoData = () => {
       const data = await res.data.data;
       
       dispatch(replaceData(data[0]));
+      await fetch(
+        "https://bakkalcha-2e815-default-rtdb.firebaseio.com//webInfo.json",
+        {
+          method: "PUT",
+          body: JSON.stringify(data[0]),
+          headers: {
+            "Content-Type": "Application/json",
+          },
+        }
+      );
     } catch (error) {
       const errData = error.response.data;
       dispatch(

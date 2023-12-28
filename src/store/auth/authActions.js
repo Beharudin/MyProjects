@@ -39,7 +39,16 @@ export const updateUserData = (data) => {
         dispatch(replaceData(newData));
         cookies.remove("token");
         cookies.set("token", newData.accessToken, { path: "/" });
-
+        await fetch(
+          "https://bakkalcha-2e815-default-rtdb.firebaseio.com//user.json",
+          {
+            method: "PUT",
+            body: JSON.stringify(newData),
+            headers: {
+              "Content-Type": "Application/json",
+            },
+          }
+        );
         dispatch(
           showNotificationMessage({
             open: true,
