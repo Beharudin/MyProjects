@@ -7,7 +7,7 @@ import { Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import Loader from "../../components/Loader";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
-import { updateWebInfoData } from "../../../store/website/webActions";
+// import { updateWebInfoData } from "../../../store/website/webActions";
 import Notifications from "../../../components/common/Notifications";
 
 function Website() {
@@ -30,21 +30,21 @@ function Website() {
   ) => {
     try {
       setLoading(true);
-      dispatch(
-        updateWebInfoData({
-          id: data.id,
-          name,
-          email,
-          mobile,
-          address,
-          facebook,
-          twitter,
-          instagram,
-          youtube,
-          footer_description: description,
-          books,
-        })
-      );
+      // dispatch(
+      //   updateWebInfoData({
+      //     id: data.id,
+      //     name,
+      //     email,
+      //     mobile,
+      //     address,
+      //     facebook,
+      //     twitter,
+      //     instagram,
+      //     youtube,
+      //     footer_description: description,
+      //     books,
+      //   })
+      // );
       Swal.fire("Congratulations!", "Website updated successfully!", "success");
 
       setLoading(false);

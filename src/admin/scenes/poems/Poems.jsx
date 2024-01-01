@@ -6,11 +6,11 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import Notifications from "../../../components/common/Notifications";
-import {
-  createPoemData,
-  deletePoemData,
-  updatePoemData,
-} from "../../../store/poem/poemActions";
+// import {
+//   createPoemData,
+//   deletePoemData,
+//   updatePoemData,
+// } from "../../../store/poem/poemActions";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import "./poems.css";
@@ -31,12 +31,12 @@ function Poems() {
   const addPoem = async (topic, body) => {
     try {
       setLoading(true);
-      dispatch(
-        createPoemData({
-          topic,
-          body,
-        })
-      );
+      // dispatch(
+      //   createPoemData({
+      //     topic,
+      //     body,
+      //   })
+      // );
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -46,7 +46,7 @@ function Poems() {
   const updatePoem = async (id, topic, body) => {
     try {
       setLoading(true);
-      dispatch(updatePoemData({ id, topic, body }));
+      // dispatch(updatePoemData({ id, topic, body }));
       Swal.fire("Congratulations!", "Poem updated successfully!", "success");
       setLoading(false);
     } catch (error) {
@@ -57,7 +57,7 @@ function Poems() {
   const deletePoem = async (id) => {
     try {
       setLoading(true);
-      dispatch(deletePoemData(id));
+      // dispatch(deletePoemData(id));
       Swal.fire("Congratulations!", "Poem deleted successfully!", "success");
       setLoading(false);
     } catch (error) {

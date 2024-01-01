@@ -73,56 +73,56 @@ export const createVideoData = (data) => {
 
 export const updateVideoData = (data) => {
   return async (dispatch) => {
-    try {
-      await axios.patch(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/videos/${data.id}`,
+    // try {
+    //   await axios.patch(
+    //     `${process.env.REACT_APP_BACKEND_BASE_URL}/api/videos/${data.id}`,
 
-        data,
-        {
-          headers: {
-            "Content-Type": "Application/json",
-          },
-        }
-      );
+    //     data,
+    //     {
+    //       headers: {
+    //         "Content-Type": "Application/json",
+    //       },
+    //     }
+    //   );
 
-      dispatch(updateVideo(data));
-      dispatch(
-        showNotificationMessage({
-          open: false,
-        })
-      );
-    } catch (error) {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "error",
-          message: error.message ? error.message : "Updating video Failed!",
-        })
-      );
-    }
+    //   dispatch(updateVideo(data));
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: false,
+    //     })
+    //   );
+    // } catch (error) {
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: true,
+    //       type: "error",
+    //       message: error.message ? error.message : "Updating video Failed!",
+    //     })
+    //   );
+    // }
   };
 };
 
 export const deleteVideoData = (id) => {
   return async (dispatch) => {
-    try {
-      await axios.delete(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/videos/${id}`
-      );
-      dispatch(removeFromVideo(id));
-      dispatch(
-        showNotificationMessage({
-          open: false,
-        })
-      );
-    } catch (error) {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "error",
-          message: error.message ? error.message : "Deleting video Failed!",
-        })
-      );
-    }
+    // try {
+    //   await axios.delete(
+    //     `${process.env.REACT_APP_BACKEND_BASE_URL}/api/videos/${id}`
+    //   );
+    //   dispatch(removeFromVideo(id));
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: false,
+    //     })
+    //   );
+    // } catch (error) {
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: true,
+    //       type: "error",
+    //       message: error.message ? error.message : "Deleting video Failed!",
+    //     })
+    //   );
+    // }
   };
 };

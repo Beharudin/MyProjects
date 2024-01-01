@@ -12,15 +12,16 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import Notifications from "../../../components/common/Notifications";
-import {
-  createPostData,
-  deletePostData,
-  updatePostData,
-} from "../../../store/post/postActions";
+// import {
+//   createPostData,
+//   deletePostData,
+//   updatePostData,
+// } from "../../../store/post/postActions";
 import { showNotificationMessage } from "../../../store/uiSlice";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import "./posts.css";
+import { createPost, deletePostData } from "../../../store/post/postSlice";
 
 function Posts() {
   const [openEditPostModal, setOpenEditPostModal] = useState(false);
@@ -38,9 +39,10 @@ function Posts() {
     try {
       setLoading(true);
       dispatch(
-        createPostData({
+        createPost({
           topic,
           body,
+          id: posts.length,
         })
       );
       setLoading(false);
@@ -52,7 +54,7 @@ function Posts() {
   const updatePost = async (id, topic, body) => {
     try {
       setLoading(true);
-      dispatch(updatePostData({ id, topic, body }));
+      // dispatch(updatePostData({ id, topic, body }));
       Swal.fire("Congratulations!", "Post updated successfully!", "success");
       setLoading(false);
     } catch (error) {
@@ -63,6 +65,7 @@ function Posts() {
   const deletePost = async (id) => {
     try {
       setLoading(true);
+      console.log(id)
       dispatch(deletePostData(id));
       Swal.fire("Congratulations!", "Post deleted successfully!", "success");
       setLoading(false);
@@ -131,11 +134,10 @@ function Posts() {
 
   return (
     <div id="Posts" className="container">
-      {loading ? (
+      {loading && (
         <Loader />
-      ) : posts.length ? (
-        <>
-          <Box sx={{ display: "flex" }}>
+      ) }
+      <Box sx={{ display: "flex" }}>
             <div className="col col-xs-12 col-sm-3">
               <Header title="Posts" subtitle="Posts we provide" />
             </div>
@@ -147,6 +149,85 @@ function Posts() {
               </Link>
             </div>
           </Box>
+          <Modal open={openAddPostModal} onClose={handleCloseAddPostModal}>
+              <Box sx={style}>
+                {notification && (
+                  <Notifications
+                    type={notification.type}
+                    message={notification.message}
+                  />
+                )}
+                <Formik
+                  enableReinitialize
+                  initialValues={addInitialValues}
+                  validationSchema={postInitSchema}
+                  validateOnMount={true}
+                  onSubmit={(values, actions) => {
+                    addPost(values.postTopic, values.postBody);
+                    actions.resetForm();
+                  }}
+                >
+                  {({ values, errors, touched, handleChange, handleBlur }) => (
+                    <Form>
+                      <Typography variant="h6" gutterBottom>
+                        Post information
+                      </Typography>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            required
+                            id="postTopic"
+                            name="postTopic"
+                            label="Post Topic"
+                            fullWidth
+                            variant="standard"
+                            value={values.postTopic}
+                            onChange={handleChange("postTopic")}
+                            onBlur={handleBlur("postTopic")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.postTopic && errors.postTopic && (
+                            <p style={{ color: "red" }}>{errors.postTopic}</p>
+                          )}
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            required
+                            id="postBody"
+                            name="postBody"
+                            label="Loan Body"
+                            value={values.postBody}
+                            multiline
+                            maxRows={10}
+                            fullWidth
+                            variant="standard"
+                            onChange={handleChange("postBody")}
+                            onBlur={handleBlur("postBody")}
+                            sx={{ p: 2 }}
+                          />
+                          {touched.postBody && errors.postBody && (
+                            <p style={{ color: "red" }}>{errors.postBody}</p>
+                          )}
+                        </Grid>
+                      </Grid>
+                      <div className="post-desc">
+                        <div className="linksDiv d-flex justify-content-center">
+                          <button className="apply-btn">Save</button>
+                          <button
+                            className="apply-btn"
+                            onClick={handleCloseAddPostModal}
+                          >
+                            close
+                          </button>
+                        </div>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              </Box>
+            </Modal>
+      { posts.length ? (
+        <>
           <div className="text-center">
             <div className="row p-5">
               {posts
@@ -277,83 +358,7 @@ function Posts() {
                 </Formik>
               </Box>
             </Modal>
-            <Modal open={openAddPostModal} onClose={handleCloseAddPostModal}>
-              <Box sx={style}>
-                {notification && (
-                  <Notifications
-                    type={notification.type}
-                    message={notification.message}
-                  />
-                )}
-                <Formik
-                  enableReinitialize
-                  initialValues={addInitialValues}
-                  validationSchema={postInitSchema}
-                  validateOnMount={true}
-                  onSubmit={(values, actions) => {
-                    addPost(values.postTopic, values.postBody);
-                    actions.resetForm();
-                  }}
-                >
-                  {({ values, errors, touched, handleChange, handleBlur }) => (
-                    <Form>
-                      <Typography variant="h6" gutterBottom>
-                        Post information
-                      </Typography>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                          <TextField
-                            required
-                            id="postTopic"
-                            name="postTopic"
-                            label="Post Topic"
-                            fullWidth
-                            variant="standard"
-                            value={values.postTopic}
-                            onChange={handleChange("postTopic")}
-                            onBlur={handleBlur("postTopic")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.postTopic && errors.postTopic && (
-                            <p style={{ color: "red" }}>{errors.postTopic}</p>
-                          )}
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            required
-                            id="postBody"
-                            name="postBody"
-                            label="Loan Body"
-                            value={values.postBody}
-                            multiline
-                            maxRows={10}
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange("postBody")}
-                            onBlur={handleBlur("postBody")}
-                            sx={{ p: 2 }}
-                          />
-                          {touched.postBody && errors.postBody && (
-                            <p style={{ color: "red" }}>{errors.postBody}</p>
-                          )}
-                        </Grid>
-                      </Grid>
-                      <div className="post-desc">
-                        <div className="linksDiv d-flex justify-content-center">
-                          <button className="apply-btn">Save</button>
-                          <button
-                            className="apply-btn"
-                            onClick={handleCloseAddPostModal}
-                          >
-                            close
-                          </button>
-                        </div>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
-              </Box>
-            </Modal>
+            
           </div>
         </>
       ) : notification ? (

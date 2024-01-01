@@ -16,11 +16,11 @@ import { Link, NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import Notifications from "../../../components/common/Notifications";
-import {
-  createTestimonialData,
-  deleteTestimonialData,
-  updateTestimonialData,
-} from "../../../store/testimonial/testimonialActions";
+// import {
+//   createTestimonialData,
+//   deleteTestimonialData,
+//   updateTestimonialData,
+// } from "../../../store/testimonial/testimonialActions";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import { showNotificationMessage } from "../../../store/uiSlice";
@@ -65,7 +65,7 @@ const Testimonials = () => {
 
     try {
       setLoading(true);
-      dispatch(createTestimonialData(data));
+      // dispatch(createTestimonialData(data));
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -98,7 +98,7 @@ const Testimonials = () => {
 
     try {
       setLoading(true);
-      dispatch(updateTestimonialData(data));
+      // dispatch(updateTestimonialData(data));
       Swal.fire(
         "Congratulations!",
         "Testimonial updated successfully!",
@@ -113,7 +113,7 @@ const Testimonials = () => {
   const deleteTestimonial = async (id) => {
     try {
       setLoading(true);
-      dispatch(deleteTestimonialData(id));
+      // dispatch(deleteTestimonialData(id));
       Swal.fire(
         "Congratulations!",
         "Testimonials deleted successfully!",

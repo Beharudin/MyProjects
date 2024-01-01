@@ -12,6 +12,11 @@ const postSlice = createSlice({
     replaceData(state, action) {
       state.postsList = action.payload;
     },
+    createPost(state, action) {
+      const newPost= action.payload;
+      state.postsList.push(newPost); 
+      state.changed = true;
+    },
     updatePost(state, action) {
       state.changed = true;
       const updatedPost=action.payload;
@@ -25,18 +30,18 @@ const postSlice = createSlice({
         state.postsList.splice(index, 0, updatedPost);
       }
     },
-    removeFromPost(state, action) {
+    deletePostData(state, action) {
       state.changed = true;
 
       const index = state.postsList.findIndex(
         (post) => post.id === action.payload
       );
-
+      
         state.postsList.splice(index, 1);
     },
   },
 });
 
-export const { removeFromPost, updatePost, replaceData} =
+export const { deletePostData, updatePost, replaceData, createPost} =
   postSlice.actions;
 export default postSlice;

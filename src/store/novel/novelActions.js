@@ -5,22 +5,22 @@ import { removeFromNovel, replaceData, updateNovel } from "./novelSlice";
 export const fetchNovelData = () => {
   return async (dispatch) => {
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/novels`
-      );
-      const data = await res.data.data;
+      // const res = await axios.get(
+      //   `${process.env.REACT_APP_BACKEND_BASE_URL}/api/novels`
+      // );
+      // const data = await res.data.data;
 
-      dispatch(replaceData(data));
-      await fetch(
-        "https://bakkalcha-2e815-default-rtdb.firebaseio.com//novels.json",
-        {
-          method: "PUT",
-          body: JSON.stringify(data),
-          headers: {
-            "Content-Type": "Application/json",
-          },
-        }
-      );
+      // dispatch(replaceData(data));
+      // await fetch(
+      //   "https://bakkalcha-2e815-default-rtdb.firebaseio.com//novels.json",
+      //   {
+      //     method: "PUT",
+      //     body: JSON.stringify(data),
+      //     headers: {
+      //       "Content-Type": "Application/json",
+      //     },
+      //   }
+      // );
     } catch (error) {
       const errData = error.response.data;
       dispatch(
@@ -41,87 +41,87 @@ export const fetchNovelData = () => {
 
 export const createNovelData = (data) => {
   return async (dispatch) => {
-    try {
-      await axios.post(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/novels`,
+    // try {
+    //   await axios.post(
+    //     `${process.env.REACT_APP_BACKEND_BASE_URL}/api/novels`,
 
-        data,
-        {
-          headers: {
-            "Content-Type": "Application/json",
-          },
-        }
-      );
-      dispatch(fetchNovelData());
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          message: "Novel Added Successfully!",
-        })
-      );
-    } catch (error) {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "error",
-          message: error.message ? error.message : "Sending Novel Failed!",
-        })
-      );
-    }
+    //     data,
+    //     {
+    //       headers: {
+    //         "Content-Type": "Application/json",
+    //       },
+    //     }
+    //   );
+    //   dispatch(fetchNovelData());
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: true,
+    //       message: "Novel Added Successfully!",
+    //     })
+    //   );
+    // } catch (error) {
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: true,
+    //       type: "error",
+    //       message: error.message ? error.message : "Sending Novel Failed!",
+    //     })
+    //   );
+    // }
   };
 };
 
 export const updateNovelData = (data) => {
   return async (dispatch) => {
-    try {
-      await axios.patch(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/novels/${data.id}`,
+    // try {
+    //   await axios.patch(
+    //     `${process.env.REACT_APP_BACKEND_BASE_URL}/api/novels/${data.id}`,
 
-        data,
-        {
-          headers: {
-            "Content-Type": "Application/json",
-          },
-        }
-      );
-      dispatch(updateNovel(data));
-      dispatch(
-        showNotificationMessage({
-          open: false,
-        })
-      );
-    } catch (error) {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "error",
-          message: error.message ? error.message : "Updating Novel Failed!",
-        })
-      );
-    }
+    //     data,
+    //     {
+    //       headers: {
+    //         "Content-Type": "Application/json",
+    //       },
+    //     }
+    //   );
+    //   dispatch(updateNovel(data));
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: false,
+    //     })
+    //   );
+    // } catch (error) {
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: true,
+    //       type: "error",
+    //       message: error.message ? error.message : "Updating Novel Failed!",
+    //     })
+    //   );
+    // }
   };
 };
 
 export const deleteNovelData = (id) => {
   return async (dispatch) => {
-    try {
-      await axios.delete(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/novels/${id}`
-      );
-      dispatch(removeFromNovel(id));
-      dispatch(
-        showNotificationMessage({
-          open: false,
-        })
-      );
-    } catch (error) {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "error",
-          message: error.message ? error.message : "Deleting Novel Failed!",
-        })
-      );
-    }
+    // try {
+    //   await axios.delete(
+    //     `${process.env.REACT_APP_BACKEND_BASE_URL}/api/novels/${id}`
+    //   );
+    //   dispatch(removeFromNovel(id));
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: false,
+    //     })
+    //   );
+    // } catch (error) {
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: true,
+    //       type: "error",
+    //       message: error.message ? error.message : "Deleting Novel Failed!",
+    //     })
+    //   );
+    // }
   };
 };

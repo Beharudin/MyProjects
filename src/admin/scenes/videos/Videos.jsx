@@ -12,11 +12,11 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import Notifications from "../../../components/common/Notifications";
-import {
-  createVideoData,
-  deleteVideoData,
-  updateVideoData,
-} from "../../../store/video/videoActions";
+// import {
+//   createVideoData,
+//   deleteVideoData,
+//   updateVideoData,
+// } from "../../../store/video/videoActions";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import "./videos.css";
@@ -38,13 +38,13 @@ function Videos() {
   const addVideo = async (topic, body, link) => {
     try {
       setLoading(true);
-      dispatch(
-        createVideoData({
-          topic: topic,
-          body: body,
-          link: link,
-        })
-      );
+      // dispatch(
+      //   createVideoData({
+      //     topic: topic,
+      //     body: body,
+      //     link: link,
+      //   })
+      // );
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -54,14 +54,14 @@ function Videos() {
   const updateVideo = async (id, topic, body, link) => {
     try {
       setLoading(true);
-      dispatch(
-        updateVideoData({
-          id,
-          topic: topic,
-          body: body,
-          link: link,
-        })
-      );
+      // dispatch(
+      //   updateVideoData({
+      //     id,
+      //     topic: topic,
+      //     body: body,
+      //     link: link,
+      //   })
+      // );
       Swal.fire("Congratulations!", "Video updated successfully!", "success");
       setLoading(false);
     } catch (error) {
@@ -72,7 +72,7 @@ function Videos() {
   const deleteVideo = async (id) => {
     try {
       setLoading(true);
-      dispatch(deleteVideoData(id));
+      // dispatch(deleteVideoData(id));
       Swal.fire("Congratulations!", "Video deleted successfully!", "success");
       setLoading(false);
     } catch (error) {

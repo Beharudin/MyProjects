@@ -9,7 +9,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Loader from "../../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAboutData } from "../../../store/about/aboutActions";
+// import { updateAboutData } from "../../../store/about/aboutActions";
 import Notifications from "../../../components/common/Notifications";
 
 function About() {
@@ -45,7 +45,7 @@ function About() {
 
     try {
       setLoading(true);
-      dispatch(updateAboutData(newdata));
+      // dispatch(updateAboutData(newdata));
 
       Swal.fire(
         "Congratulations!",

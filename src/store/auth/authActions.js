@@ -6,126 +6,126 @@ import { cookies } from "../../index";
 
 export const updateUserData = (data) => {
   return async (dispatch) => {
-    try {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "warning",
-          message: "Sending Request to Database!",
-        })
-      );
-      const res = await axios.patch(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/user/update`,
-        data,
-        {
-          headers: {
-            "Content-Type": "Application/json",
-          },
-        }
-      );
-      const newData = await res.data;
+    // try {
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: true,
+    //       type: "warning",
+    //       message: "Sending Request to Database!",
+    //     })
+    //   );
+    //   const res = await axios.patch(
+    //     `${process.env.REACT_APP_BACKEND_BASE_URL}/api/user/update`,
+    //     data,
+    //     {
+    //       headers: {
+    //         "Content-Type": "Application/json",
+    //       },
+    //     }
+    //   );
+    //   const newData = await res.data;
 
-      if (newData.success === 0) {
-        dispatch(
-          showNotificationMessage({
-            open: true,
-            type: "error",
-            message: newData.message
-              ? newData.message
-              : "User Update Request Failed!",
-          })
-        );
-      } else {
-        dispatch(replaceData(newData));
-        cookies.remove("token");
-        cookies.set("token", newData.accessToken, { path: "/" });
-        await fetch(
-          "https://bakkalcha-2e815-default-rtdb.firebaseio.com//user.json",
-          {
-            method: "PUT",
-            body: JSON.stringify(newData),
-            headers: {
-              "Content-Type": "Application/json",
-            },
-          }
-        );
-        dispatch(
-          showNotificationMessage({
-            open: true,
-            type: "success",
-            message: res.data
-              ? res.data.message
-              : "Request Sent Successfully to Database!",
-          })
-        );
-      }
-    } catch (error) {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "error",
-          message: error.response.data
-            ? error.response.data.message
-            : "Sending Request Failed!",
-        })
-      );
-    }
+    //   if (newData.success === 0) {
+    //     dispatch(
+    //       showNotificationMessage({
+    //         open: true,
+    //         type: "error",
+    //         message: newData.message
+    //           ? newData.message
+    //           : "User Update Request Failed!",
+    //       })
+    //     );
+    //   } else {
+    //     dispatch(replaceData(newData));
+    //     cookies.remove("token");
+    //     cookies.set("token", newData.accessToken, { path: "/" });
+    //     await fetch(
+    //       "https://bakkalcha-2e815-default-rtdb.firebaseio.com//user.json",
+    //       {
+    //         method: "PUT",
+    //         body: JSON.stringify(newData),
+    //         headers: {
+    //           "Content-Type": "Application/json",
+    //         },
+    //       }
+    //     );
+    //     dispatch(
+    //       showNotificationMessage({
+    //         open: true,
+    //         type: "success",
+    //         message: res.data
+    //           ? res.data.message
+    //           : "Request Sent Successfully to Database!",
+    //       })
+    //     );
+    //   }
+    // } catch (error) {
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: true,
+    //       type: "error",
+    //       message: error.response.data
+    //         ? error.response.data.message
+    //         : "Sending Request Failed!",
+    //     })
+    //   );
+    // }
   };
 };
 
 export const updateUserPassword = (data) => {
   return async (dispatch) => {
-    try {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "warning",
-          message: "Sending Request to Database!",
-        })
-      );
-      const res = await axios.patch(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/user/updatePwd`,
-        data,
-        {
-          headers: {
-            "Content-Type": "Application/json",
-          },
-        }
-      );
-      const newData = await res.data;
+    // try {
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: true,
+    //       type: "warning",
+    //       message: "Sending Request to Database!",
+    //     })
+    //   );
+    //   const res = await axios.patch(
+    //     `${process.env.REACT_APP_BACKEND_BASE_URL}/api/user/updatePwd`,
+    //     data,
+    //     {
+    //       headers: {
+    //         "Content-Type": "Application/json",
+    //       },
+    //     }
+    //   );
+    //   const newData = await res.data;
 
-      if (newData.success === 0) {
-        dispatch(
-          showNotificationMessage({
-            open: true,
-            type: "error",
-            message: newData.message
-              ? newData.message
-              : "User Update Request Failed!",
-          })
-        );
-      } else {
-        dispatch(
-          showNotificationMessage({
-            open: true,
-            type: "success",
-            message: res.data
-              ? res.data.message
-              : "Request Sent Successfully to Database!",
-          })
-        );
-      }
-    } catch (error) {
-      dispatch(
-        showNotificationMessage({
-          open: true,
-          type: "error",
-          message: error.response.data
-            ? error.response.data.message
-            : "Sending Request Failed!",
-        })
-      );
-    }
+    //   if (newData.success === 0) {
+    //     dispatch(
+    //       showNotificationMessage({
+    //         open: true,
+    //         type: "error",
+    //         message: newData.message
+    //           ? newData.message
+    //           : "User Update Request Failed!",
+    //       })
+    //     );
+    //   } else {
+    //     dispatch(
+    //       showNotificationMessage({
+    //         open: true,
+    //         type: "success",
+    //         message: res.data
+    //           ? res.data.message
+    //           : "Request Sent Successfully to Database!",
+    //       })
+    //     );
+    //   }
+    // } catch (error) {
+    //   dispatch(
+    //     showNotificationMessage({
+    //       open: true,
+    //       type: "error",
+    //       message: error.response.data
+    //         ? error.response.data.message
+    //         : "Sending Request Failed!",
+    //     })
+    //   );
+    // }
   };
 };
 
