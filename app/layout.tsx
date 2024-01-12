@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Theme appearance="light" accentColor="ruby" grayColor="sage" radius="large">
+        <Theme accentColor="violet" radius="large">
           <Navbar />
           <main className="p-5">{children}</main>
         {/* <ThemePanel /> */}
