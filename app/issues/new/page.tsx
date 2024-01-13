@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "@/app/validationSchema";
 import { z } from "zod";
+import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -23,7 +25,18 @@ const NewIssuePage = () => {
   });
   const router = useRouter();
   const [error, seterror] = useState("");
-  console.log(errors)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit=handleSubmit(async (data) => {
+    try {
+      setIsSubmitting(true)
+      await axios.post("/api/issues/", data);
+      router.push("/issues");
+    } catch (error) {
+      setIsSubmitting(false)
+      seterror("Something went wrong!");
+    }
+  })
 
   return (
     <div className="max-w-lg">
@@ -34,23 +47,14 @@ const NewIssuePage = () => {
       )}
       <form
         className="space-y-3"
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            await axios.post("/api/issues/", data);
-            router.push("/issues");
-          } catch (error) {
-            seterror("Something went wrong!");
-          }
-        })}
+        onSubmit={onSubmit}
       >
         <TextField.Root>
           <TextField.Input placeholder="Title" {...register("title")} />
         </TextField.Root>
-        {errors.title && (
-          <Text color="red" as="p">
-            {errors.title.message}
-          </Text>
-        )}
+
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
+
         <Controller
           name="description"
           control={control}
@@ -58,12 +62,8 @@ const NewIssuePage = () => {
             <SimpleMDE placeholder="Description" {...field} />
           )}
         />
-        {errors.description && (
-          <Text color="red" as="p">
-            {errors.description.message}
-          </Text>
-        )}
-        <Button>Submit</Button>
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
+        <Button disabled={isSubmitting}>Submit {isSubmitting && <Spinner />}</Button>
       </form>
     </div>
   );
